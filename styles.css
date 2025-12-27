@@ -113,8 +113,16 @@ img{ max-width:100%; display:block; }
 .hmenu__panel{
   position:absolute;
   top: calc(100% + 10px);
-  inset-inline-start: 0;
+
+  /* ✅ افتح القائمة للداخل (على الموبايل تحديدًا) */
+  inset-inline-end: 0;
+  inset-inline-start: auto;
+
   min-width: 280px;
+  max-width: min(92vw, 320px);
+  max-height: min(70vh, 520px);
+  overflow: auto;
+
   border-radius: 16px;
   border: 1px solid rgba(208,179,113,.14);
   background: rgba(14,21,39,.97);
@@ -492,5 +500,13 @@ img{ max-width:100%; display:block; }
 
   .container{
     width: calc(100% - 28px);
+  }
+}
+
+@media (max-width: 560px){
+  .hmenu__panel{
+    inset-inline-start: 10px;
+    inset-inline-end: 10px;
+    max-width: none;
   }
 }
