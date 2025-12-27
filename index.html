@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Select</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container header__inner">
+
+      <!-- Logo on far right -->
+      <a class="brand" href="#top" aria-label="Smart Select">
+        <img class="brand__logo" src="assets/logo.png" alt="Smart Select" />
+      </a>
+
+      <!-- Center text (NO shadow) -->
+      <div class="header__center" aria-label="Smart Select title">
+        <div class="header__title">SMART&nbsp;SELECT</div>
+      </div>
+
+      <!-- Actions on far left -->
+      <div class="header__actions">
+
+        <!-- Primary CTA -->
+        <a class="btn btn--gold btn--head" id="ctaTop" target="_blank" rel="noopener" data-i18n="cta_request">
+          اطلب تقرير وحدتك
+        </a>
+
+        <!-- Menu -->
+        <div class="hmenu" id="hmenu">
+          <button class="hmenu__btn" id="hmenuBtn" type="button" aria-haspopup="true" aria-expanded="false">
+            <span class="hmenu__label">القائمة</span> <span class="hmenu__chev">▾</span>
+          </button>
+
+          <div class="hmenu__panel" id="hmenuPanel" role="menu" aria-label="Header menu">
+            <a class="hmenu__item" role="menuitem" href="#problem" data-i18n="nav_problem">لماذا قرار شراء العقار صعب؟</a>
+            <a class="hmenu__item" role="menuitem" href="#why" data-i18n="nav_why">لماذا Smart Select؟</a>
+            <a class="hmenu__item" role="menuitem" href="#models" data-i18n="nav_models">استكشف نماذج العمارات</a>
+            <a class="hmenu__item" role="menuitem" href="#faq" data-i18n="nav_faq">الأسئلة الشائعة</a>
+            <a class="hmenu__item" role="menuitem" href="#contact" data-i18n="nav_contact">تواصل معنا</a>
+
+            <div class="hmenu__divider"></div>
+
+            <!-- Secondary actions inside menu -->
+            <div class="hmenu__row">
+              <button class="langbtn" id="langToggle" type="button" aria-label="Language">EN</button>
+
+              <a class="iconbtn iconbtn--whatsapp" id="waTop" target="_blank" rel="noopener" aria-label="WhatsApp">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#25D366" d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.46 0 .12 5.34.12 11.94c0 2.1.54 4.14 1.56 5.94L0 24l6.3-1.62a11.9 11.9 0 0 0 5.76 1.47h.01c6.6 0 11.94-5.34 11.94-11.94 0-3.19-1.24-6.2-3.49-8.43z"/>
+                  <path fill="#FFFFFF" d="M12.07 21.3h-.01c-1.85 0-3.66-.5-5.24-1.45l-.38-.23-3.74.96.99-3.65-.25-.38a9.25 9.25 0 0 1-1.42-4.95C2.02 6.55 6.6 1.98 12.06 1.98c2.47 0 4.78.96 6.53 2.71a9.14 9.14 0 0 1 2.71 6.53c0 5.06-4.58 10.08-9.23 10.08zm5.37-6.93c-.29-.15-1.71-.84-1.97-.94-.27-.1-.46-.15-.65.15-.19.29-.75.94-.92 1.13-.17.19-.34.22-.63.07-.29-.15-1.22-.45-2.33-1.44-.86-.77-1.44-1.72-1.61-2.01-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.19-.29.29-.48.1-.19.05-.36-.02-.51-.07-.15-.65-1.57-.89-2.15-.23-.56-.47-.49-.65-.5h-.55c-.19 0-.51.07-.78.36-.27.29-1.02 1-1.02 2.44 0 1.44 1.05 2.83 1.2 3.03.15.19 2.06 3.15 5 4.42.7.3 1.25.48 1.68.62.7.22 1.34.19 1.85.12.56-.08 1.71-.7 1.95-1.38.24-.68.24-1.26.17-1.38-.07-.12-.26-.19-.55-.34z"/>
+                </svg>
+              </a>
+
+              <a class="iconbtn iconbtn--facebook" id="fbTop" target="_blank" rel="noopener" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#1877F2" d="M12 2.04c-5.5 0-9.96 4.46-9.96 9.96 0 4.98 3.66 9.1 8.44 9.86v-6.98H8.9v-2.88h1.58V9.8c0-1.56.93-2.42 2.36-2.42.69 0 1.4.12 1.4.12v1.54h-.79c-.78 0-1.02.48-1.02.98v1.18h1.74l-.28 2.88h-1.46v6.98c4.78-.76 8.44-4.88 8.44-9.86 0-5.5-4.46-9.96-9.96-9.96z"/>
+                  <path fill="#FFFFFF" d="M13.34 20.86v-6.98h1.46l.28-2.88h-1.74V9.82c0-.5.24-.98 1.02-.98h.79V7.3s-.71-.12-1.4-.12c-1.43 0-2.36.86-2.36 2.42v1.2H9.81v2.88h1.58v6.98h1.95z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero__bg" id="heroBg"></div>
+    <div class="container hero__content">
+      <div class="hero__text">
+        <h1 class="hero__title" data-i18n="hero_title">إختيارك العقارى مبنى على بيانات كاملة و تحليل ذكى</h1>
+        <p class="hero__subtitle" data-i18n="hero_subtitle">نقدم تقارير تقييم عقارى بتحليل مالى و معمارى شامل يساعدك على إتخاذ قرار واعى بثقة</p>
+
+        <div class="hero__cta">
+          <a class="btn btn--gold btn--hero" id="ctaHero" target="_blank" rel="noopener" data-i18n="cta_request">اطلب تقرير وحدتك</a>
+          <a class="btn btn--gold btn--hero" id="ctaReport" target="_blank" rel="noopener" data-i18n="cta_sample">تحميل نموذج تقرير (PDF)</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: Why buying is hard -->
+  <section class="section section--alt" id="problem">
+    <div class="container grid2">
+      <div class="media">
+        <img class="media__img media__img--contain" id="problemImg" alt="" />
+      </div>
+      <div class="content">
+        <h2 class="h2" data-i18n="problem_title">لماذا قرار شراء العقار صعب؟</h2>
+        <ul class="bullets" id="problemBullets"></ul>
+        <div class="inlineCta">
+          <a class="btn btn--gold" id="ctaProblem" target="_blank" rel="noopener" data-i18n="cta_request">اطلب تقرير وحدتك</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: Why Smart Select -->
+  <section class="section" id="why">
+    <div class="container grid2">
+      <div class="media">
+        <img class="media__img media__img--contain" id="whyImg" alt="" />
+      </div>
+      <div class="content">
+        <h2 class="h2" data-i18n="why_title">لماذا Smart Select؟</h2>
+        <!-- ✅ now matches problem style -->
+        <ul class="bullets" id="whyBullets"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODELS -->
+  <section class="section section--alt" id="models">
+    <div class="container">
+      <div class="sectionHead">
+        <h2 class="h2" data-i18n="models_title">استكشف نماذج العمارات بمدينتي</h2>
+      </div>
+
+      <div class="marquee" aria-label="Models">
+        <div class="marquee__wrap">
+          <div class="marquee__track" id="cartrack"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="sectionHead">
+        <h2 class="h2" data-i18n="faq_title">الأسئلة الشائعة</h2>
+        <!-- ✅ removed subtitle line -->
+      </div>
+
+      <div class="faq" id="faqList"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="contact">
+    <div class="container footer__inner">
+      <div class="footer__left">
+        <a class="brand brand--footer" href="#top" aria-label="Smart Select">
+          <img class="brand__logo brand__logo--footer" src="assets/logo.png" alt="Smart Select" />
+        </a>
+
+        <div class="footer__copy" id="footerCopy"></div>
+        <div class="footer__note" id="footerNote"></div>
+      </div>
+
+      <div class="footer__right">
+        <div class="footer__icons">
+          <a class="iconbtn iconbtn--whatsapp" id="waFooter" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#25D366" d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.46 0 .12 5.34.12 11.94c0 2.1.54 4.14 1.56 5.94L0 24l6.3-1.62a11.9 11.9 0 0 0 5.76 1.47h.01c6.6 0 11.94-5.34 11.94-11.94 0-3.19-1.24-6.2-3.49-8.43z"/>
+              <path fill="#FFFFFF" d="M12.07 21.3h-.01c-1.85 0-3.66-.5-5.24-1.45l-.38-.23-3.74.96.99-3.65-.25-.38a9.25 9.25 0 0 1-1.42-4.95C2.02 6.55 6.6 1.98 12.06 1.98c2.47 0 4.78.96 6.53 2.71a9.14 9.14 0 0 1 2.71 6.53c0 5.06-4.58 10.08-9.23 10.08zm5.37-6.93c-.29-.15-1.71-.84-1.97-.94-.27-.1-.46-.15-.65.15-.19.29-.75.94-.92 1.13-.17.19-.34.22-.63.07-.29-.15-1.22-.45-2.33-1.44-.86-.77-1.44-1.72-1.61-2.01-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.19-.29.29-.48.10-.19.05-.36-.02-.51-.07-.15-.65-1.57-.89-2.15-.23-.56-.47-.49-.65-.5h-.55c-.19 0-.51.07-.78.36-.27.29-1.02 1-1.02 2.44 0 1.44 1.05 2.83 1.2 3.03.15.19 2.06 3.15 5 4.42.7.3 1.25.48 1.68.62.7.22 1.34.19 1.85.12.56-.08 1.71-.7 1.95-1.38.24-.68.24-1.26.17-1.38-.07-.12-.26-.19-.55-.34z"/>
+            </svg>
+          </a>
+
+          <a class="iconbtn iconbtn--facebook" id="fbFooter" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#1877F2" d="M12 2.04c-5.5 0-9.96 4.46-9.96 9.96 0 4.98 3.66 9.1 8.44 9.86v-6.98H8.9v-2.88h1.58V9.8c0-1.56.93-2.42 2.36-2.42.69 0 1.4.12 1.4.12v1.54h-.79c-.78 0-1.02.48-1.02.98v1.18h1.74l-.28 2.88h-1.46v6.98c4.78-.76 8.44-4.88 8.44-9.86 0-5.5-4.46-9.96-9.96-9.96z"/>
+              <path fill="#FFFFFF" d="M13.34 20.86v-6.98h1.46l.28-2.88h-1.74V9.82c0-.5.24-.98 1.02-.98h.79V7.3s-.71-.12-1.4-.12c-1.43 0-2.36.86-2.36 2.42v1.2H9.81v2.88h1.58v6.98h1.95z"/>
+            </svg>
+          </a>
+        </div>
+
+        <a class="btn btn--gold" id="ctaFooter" target="_blank" rel="noopener" data-i18n="cta_request">اطلب تقرير وحدتك</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
