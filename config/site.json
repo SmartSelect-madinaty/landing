@@ -51,7 +51,7 @@
 
     "en": {
       "nav_problem": "Why is buying a property hard?",
-      "nav_why": "Why Smart Select?",
+      "nav_why": "Why Nest Match?",
       "nav_models": "Explore Building Models",
       "nav_faq": "FAQ",
       "nav_contact": "Contact",
@@ -63,7 +63,7 @@
       "hero_subtitle": "A data-driven property evaluation report for a confident decision",
 
       "problem_title": "Why is buying a property hard?",
-      "why_title": "Why Smart Select?",
+      "why_title": "Why Nest Match?",
       "models_title": "Explore Madinaty Building Models",
       "faq_title": "Frequently Asked Questions",
       "faq_subtitle": "",
@@ -137,3 +137,4 @@
     }
   }
 }
+
