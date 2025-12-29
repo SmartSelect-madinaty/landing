@@ -17,8 +17,15 @@
 }
 
 *{ box-sizing:border-box; }
+
+/* ✅ NEW: better text scaling behavior on mobile (stability) */
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 html,body{ margin:0; padding:0; width:100%; overflow-x:hidden; }
-html{ scroll-behavior:smooth; }
 
 body{
   font-family: "Cairo", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -27,7 +34,7 @@ body{
   line-height: 1.65;
   text-rendering: geometricPrecision;
 
-  /* ✅ NEW: compensate for fixed header height */
+  /* ✅ compensate for fixed header height */
   padding-top: 88px;
 }
 
@@ -39,6 +46,19 @@ body.menu-open{
 a{ color:inherit; text-decoration:none; }
 img{ max-width:100%; display:block; }
 
+/* ✅ NEW: keyboard focus (accessibility + quality signal) */
+a:focus-visible,
+button:focus-visible{
+  outline: 2px solid rgba(208,179,113,.85);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+/* ✅ NEW: when clicking menu anchors, prevent header from covering section titles */
+section[id]{
+  scroll-margin-top: 104px;
+}
+
 .container{
   width:min(var(--container), calc(100% - 40px));
   margin-inline:auto;
@@ -46,12 +66,10 @@ img{ max-width:100%; display:block; }
 
 /* ================= HEADER (clean) ================= */
 .header{
-  /* ✅ CHANGED: fixed to stay visible always */
   position:fixed;
   top:0;
   left:0;
   right:0;
-
   z-index:50;
   backdrop-filter: blur(12px);
   background: rgba(14,21,39,.66);
@@ -90,18 +108,12 @@ img{ max-width:100%; display:block; }
 }
 .header__title{
   font-weight:800;
-
-  /* ✅ IMPORTANT: keep original casing (Nest Match) */
-  text-transform: none;
-
-  /* ✅ letter spacing أخف لأن الكابيتال كان محتاجها أكتر */
-  letter-spacing: .6px;
-
+  text-transform:none;
+  letter-spacing:.6px;
   color: var(--off);
   font-size: clamp(16px, 2vw, 22px);
   opacity:.96;
 }
-
 
 /* Actions */
 .header__actions{
@@ -114,7 +126,6 @@ img{ max-width:100%; display:block; }
 /* ================= MENU ================= */
 .hmenu{ position:relative; }
 
-/* overlay behind panel */
 .hmenu.is-open::before{
   content:"";
   position:fixed;
@@ -143,7 +154,6 @@ img{ max-width:100%; display:block; }
 }
 .hmenu__btn:hover{ background: rgba(245,243,238,.10); }
 
-/* ✅ NEW: hamburger icon instead of chevron */
 .hmenu__icon{
   width:18px;
   height:14px;
@@ -209,6 +219,7 @@ img{ max-width:100%; display:block; }
   transition:.18s ease;
   white-space:nowrap;
   font-size:14px;
+  will-change: transform; /* ✅ NEW: smoother interaction */
 }
 
 .btn--gold{
@@ -237,21 +248,19 @@ img{ max-width:100%; display:block; }
   border:1px solid rgba(208,179,113,.18);
   background: rgba(245,243,238,.05);
   transition:.18s ease;
+  will-change: transform; /* ✅ NEW */
 }
 .iconbtn:hover{ transform: translateY(-1px); background: rgba(245,243,238,.08); }
 .iconbtn svg{ width:20px; height:20px; }
 
-/* ✅ NEW: make Facebook SVG bigger without changing box size */
 .iconbtn--facebook svg{
   width:24px;
   height:24px;
 }
 
-/* ✅ UPDATED: center EN/AR perfectly inside the box */
+/* Language button */
 .langbtn{
   height:36px;
-
-  /* ✅ width fixed so text stays centered */
   width:44px;
   padding:0;
 
@@ -263,7 +272,6 @@ img{ max-width:100%; display:block; }
   cursor:pointer;
   font-size:13px;
 
-  /* ✅ true centering */
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -325,6 +333,14 @@ img{ max-width:100%; display:block; }
 /* ================= SECTIONS ================= */
 .section{ padding:54px 0; }
 
+/* ✅ NEW: speed up paint for below-the-fold sections (CWV) */
+@supports (content-visibility: auto){
+  #problem, #why, #models, #faq, #contact{
+    content-visibility: auto;
+    contain-intrinsic-size: 800px;
+  }
+}
+
 .section--alt{
   background: var(--off);
   color: var(--navy);
@@ -355,6 +371,9 @@ img{ max-width:100%; display:block; }
   width:100%;
   height: 320px;
   object-fit: cover;
+
+  /* ✅ NEW: reduce CLS */
+  aspect-ratio: 16 / 9;
 }
 .media__img--contain{
   object-fit: contain;
@@ -366,7 +385,6 @@ img{ max-width:100%; display:block; }
   margin:0 0 10px;
 }
 
-/* ✅ FIX: bullets spacing works in both RTL/LTR (prevents sticking in English) */
 .bullets{
   margin:0;
   padding-inline-start: 18px;
@@ -381,7 +399,6 @@ img{ max-width:100%; display:block; }
   margin-top:16px;
 }
 
-/* ✅ NEW: Center section headings (FAQ + Models) */
 .sectionHead{
   text-align:center;
   margin-bottom: 18px;
@@ -421,6 +438,9 @@ img{ max-width:100%; display:block; }
   width:100%;
   height: 260px;
   object-fit: cover;
+
+  /* ✅ NEW: reduce CLS for carousel */
+  aspect-ratio: 16 / 10;
 }
 .caption{
   padding: 10px 12px 12px;
@@ -444,7 +464,6 @@ img{ max-width:100%; display:block; }
   overflow:hidden;
 }
 
-/* ✅ FIX: align works in RTL/LTR */
 .faqQ{
   width:100%;
   text-align:start;
@@ -515,12 +534,13 @@ img{ max-width:100%; display:block; }
   .brand__logo{ height:60px; }
   .header__title{ font-size: 16px; letter-spacing: 1.4px; }
   .hero{ min-height: 54vh; }
-
-  /* ✅ NEW: slightly larger padding-top for potential taller header on smaller screens */
   body{ padding-top: 96px; }
+
+  /* ✅ NEW: keep anchor scroll correct if header height changes */
+  section[id]{ scroll-margin-top: 112px; }
 }
 
-/* ✅ mobile: convert dropdown into safe in-viewport drawer */
+/* mobile: convert dropdown into safe in-viewport drawer */
 @media (max-width: 560px){
   .header__center{ display:none; }
 
@@ -539,7 +559,6 @@ img{ max-width:100%; display:block; }
   .hero__title{ font-size: 24px; }
   .hero__subtitle{ font-size: 14px; }
 
-  /* ✅ panel as fixed drawer (prevents off-screen / overflow) */
   .hmenu__panel{
     position: fixed;
     top: calc(var(--menuTop, 88px) + 10px);
@@ -550,12 +569,18 @@ img{ max-width:100%; display:block; }
     z-index: 80;
   }
 
-  /* footer layout */
   .footer__right{
     width:100%;
     justify-content:space-between;
   }
 
-  /* ✅ NEW: keep padding-top safe on very small screens */
   body{ padding-top: 96px; }
 }
+
+/* ✅ NEW: respect reduced motion (accessibility + CWV friendliness) */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  .btn, .iconbtn{ transition: none; }
+  .btn--gold:hover, .iconbtn:hover{ transform: none; }
+}
+
