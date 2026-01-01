@@ -72,9 +72,11 @@ section[id]{
   right:0;
   z-index:50;
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   background: rgba(14,21,39,.66);
   border-bottom: 1px solid rgba(208,179,113,.10);
 }
+
 .header__inner{
   display:flex;
   align-items:center;
@@ -82,6 +84,7 @@ section[id]{
   gap:14px;
   height:88px;
 }
+
 /* Logo */
 .brand{
   display:flex;
@@ -130,6 +133,7 @@ section[id]{
   inset:0;
   background: rgba(0,0,0,.35);
   backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   z-index:70;
 }
 
@@ -217,7 +221,7 @@ section[id]{
   transition:.18s ease;
   white-space:nowrap;
   font-size:14px;
-  will-change: transform; /* ✅ NEW: smoother interaction */
+  will-change: transform;
 }
 
 .btn--gold{
@@ -246,15 +250,16 @@ section[id]{
   border:1px solid rgba(208,179,113,.18);
   background: rgba(245,243,238,.05);
   transition:.18s ease;
-  will-change: transform; /* ✅ NEW */
+  will-change: transform;
 }
 .iconbtn:hover{ transform: translateY(-1px); background: rgba(245,243,238,.08); }
 .iconbtn svg{ width:20px; height:20px; }
 
-.iconbtn--facebook svg{
-  width:24px;
-  height:24px;
-}
+/* keep FB slightly larger */
+.iconbtn--facebook svg{ width:24px; height:24px; }
+
+/* ✅ NEW: mail icon sizing to match phone (not too small) */
+.iconbtn--mail svg{ width:22px; height:22px; }
 
 /* Language button */
 .langbtn{
@@ -305,7 +310,7 @@ section[id]{
     linear-gradient(180deg, rgba(14,21,39,.32), rgba(14,21,39,.94));
 }
 
-/* ✅ Optional “camera-like” soft blur behind text only (no change needed in HTML) */
+/* ✅ “camera-like” soft blur behind text only */
 .hero__content{
   position:relative;
   padding:56px 0 44px;
@@ -315,7 +320,6 @@ section[id]{
   position:relative;
   z-index:2;
 }
-/* blur layer behind the text block */
 .hero__text::before{
   content:"";
   position:absolute;
@@ -335,11 +339,9 @@ section[id]{
   margin:0 0 12px;
   letter-spacing:.2px;
 
-  /* ✅ better line breaks on mobile */
   text-wrap: balance;
   word-spacing: .2px;
 
-  /* ✅ readability on images */
   text-shadow: 0 10px 24px rgba(0,0,0,.55);
 }
 
@@ -361,7 +363,6 @@ section[id]{
 /* ================= SECTIONS ================= */
 .section{ padding:54px 0; }
 
-/* ✅ NEW: speed up paint for below-the-fold sections (CWV) */
 @supports (content-visibility: auto){
   #problem, #why, #models, #faq, #contact{
     content-visibility: auto;
@@ -399,8 +400,6 @@ section[id]{
   width:100%;
   height: 320px;
   object-fit: cover;
-
-  /* ✅ NEW: reduce CLS */
   aspect-ratio: 16 / 9;
 }
 .media__img--contain{
@@ -440,17 +439,28 @@ section[id]{
   box-shadow: var(--shadow);
   overflow:hidden;
 }
+
+/* ✅ reduce “jitter”: isolate layer + avoid sub-pixel wobble */
 .marquee__wrap{
   position:relative;
   overflow:hidden;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
 }
+
 .marquee__track{
   display:flex;
   gap:14px;
   padding:14px;
+
+  /* ✅ smooth & stable on GPU */
+  transform: translate3d(0,0,0);
   will-change: transform;
+  backface-visibility: hidden;
 }
 
+/* ✅ Slides: stable painting */
 .slide{
   flex: 0 0 auto;
   width: min(420px, 74vw);
@@ -458,18 +468,28 @@ section[id]{
   overflow:hidden;
   border: 1px solid rgba(208,179,113,.14);
   background: rgba(14,21,39,.55);
+
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
-.section--alt .slide{
-  background: rgba(14,21,39,.08);
-}
+
+/* clickable style (for opening image) */
+.slide{ cursor: pointer; }
+.slide:active{ transform: translateZ(0) scale(.995); }
+
+.section--alt .slide{ background: rgba(14,21,39,.08); }
+
 .slide img{
   width:100%;
   height: 260px;
   object-fit: cover;
-
-  /* ✅ NEW: reduce CLS for carousel */
   aspect-ratio: 16 / 10;
+
+  /* ✅ avoid shimmer */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
+
 .caption{
   padding: 10px 12px 12px;
   color: rgba(14,21,39,.78);
@@ -477,6 +497,58 @@ section[id]{
   font-size: 13px;
 }
 .section--alt .caption{ color: rgba(14,21,39,.78); }
+
+/* ================= Lightbox (CSS part) ================= */
+/* JS will toggle: .lb.is-open */
+.lb{
+  position: fixed;
+  inset: 0;
+  display:none;
+  z-index: 200;
+}
+.lb.is-open{ display:block; }
+
+.lb__backdrop{
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,.66);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.lb__panel{
+  position:relative;
+  width: min(980px, calc(100% - 28px));
+  margin: min(6vh, 48px) auto 0;
+  border-radius: 18px;
+  overflow:hidden;
+  border: 1px solid rgba(208,179,113,.18);
+  box-shadow: 0 26px 70px rgba(0,0,0,.55);
+  background: rgba(14,21,39,.98);
+}
+
+.lb__img{
+  width:100%;
+  height: min(74vh, 720px);
+  object-fit: contain;
+  background: rgba(14,21,39,.98);
+}
+
+.lb__close{
+  position:absolute;
+  top:10px;
+  inset-inline-end: 10px;
+  width:40px;
+  height:40px;
+  border-radius: 14px;
+  border:1px solid rgba(208,179,113,.18);
+  background: rgba(245,243,238,.06);
+  color: var(--off);
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  font-size:18px;
+}
 
 /* ================= FAQ ================= */
 .faq{
@@ -508,10 +580,9 @@ section[id]{
   gap: 10px;
 
   font-weight: 900;
-  font-size: 18px;      /* ✅ السؤال أكبر */
+  font-size: 18px;
   line-height: 1.55;
 }
-
 .faqQ span:first-child{ flex: 1; }
 
 .faqA{
@@ -519,55 +590,68 @@ section[id]{
   color: rgba(245,243,238,.76);
   display:none;
 
-  font-size: 15px;      /* ✅ الإجابة أصغر */
+  font-size: 15px;
   line-height: 1.9;
 }
-
 .faqItem.is-open .faqA{ display:block; }
 
 .faqIcon{
   opacity:.85;
-  font-size: 20px;      /* ✅ علامة + / − واضحة */
+  font-size: 20px;
   line-height: 1;
 }
 
-/* ================= FOOTER ================= */
+/* ================= FOOTER (PRO) ================= */
 .footer{
   padding:22px 0;
   border-top:1px solid rgba(208,179,113,.10);
   background: rgba(14,21,39,.94);
 }
+
 .footer__inner{
   display:flex;
-  align-items:center;
+  align-items:flex-end;
   justify-content:space-between;
-  gap:16px;
+  gap:18px;
   flex-wrap:wrap;
 }
+
+/* left block: logo + note + copy */
 .footer__left{
   display:flex;
-  align-items:center;
-  gap:14px;
-  flex-wrap:wrap;
+  flex-direction:column;
+  gap:8px;
+  min-width: 260px;
+}
+.footer__note{
+  font-size:12px;
+  color: rgba(245,243,238,.58);
+  line-height: 1.7;
 }
 .footer__copy{
   font-size:12px;
   color: rgba(245,243,238,.55);
 }
-.footer__note{
-  width:100%;
-  font-size:12px;
-  color: rgba(245,243,238,.55);
-}
+
+/* right block: CTA + icons aligned */
 .footer__right{
   display:flex;
-  align-items:center;
-  gap: 10px;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.footer__ctaRow{
+  display:flex;
+  gap:10px;
   flex-wrap:wrap;
 }
+
 .footer__icons{
   display:flex;
-  gap: 10px;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
 }
 
 /* ================= MOBILE ================= */
@@ -581,11 +665,9 @@ section[id]{
   .hero{ min-height: 54vh; }
   body{ padding-top: 96px; }
 
-  /* ✅ NEW: keep anchor scroll correct if header height changes */
   section[id]{ scroll-margin-top: 112px; }
 }
 
-/* mobile: convert dropdown into safe in-viewport drawer */
 @media (max-width: 560px){
   .header__center{ display:none; }
 
@@ -594,16 +676,11 @@ section[id]{
     gap:10px;
   }
 
-  .container{
-    width: calc(100% - 28px);
-  }
+  .container{ width: calc(100% - 28px); }
 
   .hero__content{ padding: 44px 0 34px; }
-  .hero__text{
-    max-width: 100%;
-  }
+  .hero__text{ max-width: 100%; }
 
-  /* ✅ Fix hero title breaking + make it look balanced */
   .hero__title{
     font-size: 22px;
     line-height: 1.28;
@@ -616,7 +693,6 @@ section[id]{
     margin-bottom: 14px;
   }
 
-  /* ✅ Make CTA buttons consistent on mobile */
   .hero__cta{
     display:grid;
     grid-template-columns: 1fr;
@@ -629,26 +705,19 @@ section[id]{
     border-radius: 14px;
     font-size: 14px;
     padding: 11px 14px;
-    white-space: normal;     /* ✅ allow wrap instead of weird squeeze */
+    white-space: normal;
     text-align: center;
     line-height: 1.3;
   }
 
-  /* ✅ FAQ mobile sizes */
-  .faqQ{ font-size: 16.5px; }
-  .faqA{ font-size: 14.5px; }
-
-  /* ✅ Mobile: make section images fill the frame nicely */
-  .media{
-    border-radius: 18px;
-  }
+  /* ✅ Mobile: section images */
+  .media{ border-radius: 18px; }
   .media__img{
-    height: 240px;      /* كان 320 */
-    aspect-ratio: 4 / 3;/* ✅ أقرب لعرض الموبايل وبيقلل الإحساس بالقص */
+    height: 240px;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     object-position: center;
   }
-  /* الصور اللي كانت contain على الديسكتوب، نخليها cover على الموبايل */
   .media__img--contain{
     object-fit: cover;
     object-position: center;
@@ -665,12 +734,20 @@ section[id]{
     z-index: 80;
   }
 
-  /* ✅ Footer buttons consistent (if you have .footer__ctaRow) */
+  /* ✅ Footer becomes clean stacked */
+  .footer__inner{
+    align-items:flex-start;
+    gap:16px;
+  }
   .footer__right{
     width:100%;
-    justify-content:space-between;
+    align-items:flex-start;
   }
-  .footer__right .btn{
+  .footer__ctaRow{
+    width:100%;
+  }
+  .footer__ctaRow .btn{
+    width:100%;
     min-height: 46px;
     white-space: normal;
     text-align:center;
@@ -678,9 +755,12 @@ section[id]{
   }
 
   body{ padding-top: 96px; }
+
+  /* Lightbox on mobile */
+  .lb__img{ height: 70vh; }
 }
 
-/* ✅ NEW: respect reduced motion (accessibility + CWV friendliness) */
+/* ✅ NEW: respect reduced motion */
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior: auto; }
   .btn, .iconbtn{ transition: none; }
