@@ -441,7 +441,7 @@
 
   function setLinks(cfg) {
     const wa = normalizeUrl(cfg?.links?.whatsapp) || "https://wa.me/201271028216";
-    ["#waTop", "#waFooter"].forEach(id => {
+    ["#waTop", "#waFooter", "#waNav", "#waHero", "#waReport", "#waCta", "#waFinal", "#waFooterCta"].forEach(id => {
       const el = $(id);
       if (el) el.setAttribute("href", wa);
     });
