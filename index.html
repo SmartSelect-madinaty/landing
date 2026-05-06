@@ -6,955 +6,254 @@
 <title>NestMatch — قرّر بمعلومة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --navy: #0D1F3C;
-    --navy-deep: #060E1C;
-    --navy-mid: #1E3A5F;
-    --gold: #C9A84C;
-    --gold-light: #E5C86E;
-    --gold-pale: #F2E0A8;
-    --warm-white: #F5F3EE;
-    --warm-gray: #E8E5DE;
-    --divider: #C8C4BA;
-    --text-dark: #3D3D3A;
-    --text-secondary: #6B7A8D;
-    --green: #1D9E75;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--warm-white);
-    color: var(--text-dark);
-    direction: rtl;
-    line-height: 1.7;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 100;
-    background: rgba(13, 31, 60, 0.96);
-    backdrop-filter: blur(8px);
-    padding: 0 5%;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(201,168,76,0.15);
-  }
-
-  .logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-  }
-  .logo span:first-child { color: var(--gold); }
-  .logo span:last-child { color: #fff; }
-
-  .nav-cta {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--navy);
-    background: var(--gold);
-    border: none;
-    padding: 8px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-  .nav-cta:hover { background: var(--gold-light); }
-
-  /* ── HERO ── */
-  #hero {
-    background: var(--navy);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 100px 5% 80px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  #hero::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(201,168,76,0.06) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
-    pointer-events: none;
-  }
-
-  .hero-inner {
-    max-width: 760px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  .badge-no-commission {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(201,168,76,0.15);
-    border: 1px solid rgba(201,168,76,0.4);
-    color: var(--gold);
-    font-size: 13px;
-    font-weight: 500;
-    padding: 6px 18px;
-    border-radius: 100px;
-    margin-bottom: 36px;
-    letter-spacing: 0.3px;
-  }
-
-  .badge-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--gold);
-    flex-shrink: 0;
-  }
-
-  .hero-headline {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(36px, 5.5vw, 60px);
-    font-weight: 300;
-    color: #fff;
-    line-height: 1.25;
-    margin-bottom: 20px;
-    letter-spacing: -0.3px;
-  }
-
-  .hero-headline em {
-    color: var(--gold);
-    font-style: normal;
-  }
-
-  .hero-sub {
-    font-size: 17px;
-    color: rgba(255,255,255,0.6);
-    line-height: 1.7;
-    margin-bottom: 48px;
-    max-width: 580px;
-    margin-right: auto;
-    margin-left: auto;
-  }
-
-  .hero-sub strong {
-    color: rgba(255,255,255,0.9);
-    font-weight: 500;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--gold);
-    color: var(--navy-deep);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 16px 40px;
-    border-radius: 6px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-    letter-spacing: 0.2px;
-  }
-
-  .btn-primary:hover {
-    background: var(--gold-light);
-    transform: translateY(-1px);
-  }
-
-  .btn-arrow {
-    font-size: 18px;
-    line-height: 1;
-  }
-
-  .hero-trust {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 28px;
-    margin-top: 52px;
-    padding-top: 32px;
-    border-top: 1px solid rgba(255,255,255,0.08);
-  }
-
-  .trust-item {
-    text-align: center;
-  }
-
-  .trust-number {
-    display: block;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 400;
-    color: var(--gold);
-    line-height: 1;
-  }
-
-  .trust-label {
-    display: block;
-    font-size: 12px;
-    color: rgba(255,255,255,0.45);
-    margin-top: 4px;
-    letter-spacing: 0.3px;
-  }
-
-  .trust-divider {
-    width: 1px;
-    height: 36px;
-    background: rgba(255,255,255,0.1);
-  }
-
-  /* ── SECTION BASE ── */
-  section {
-    padding: 96px 5%;
-  }
-
-  .section-inner {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 20px;
-    display: block;
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 300;
-    line-height: 1.25;
-    letter-spacing: -0.3px;
-    color: var(--navy);
-    margin-bottom: 16px;
-  }
-
-  .section-sub {
-    font-size: 16px;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    max-width: 560px;
-  }
-
-  /* ── PROBLEM ── */
-  #problem {
-    background: var(--warm-white);
-  }
-
-  .problem-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    margin-top: 48px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--divider);
-  }
-
-  .problem-card {
-    background: #fff;
-    padding: 36px 40px;
-    display: flex;
-    gap: 32px;
-    align-items: flex-start;
-  }
-
-  .problem-card-accent {
-    background: var(--navy);
-  }
-
-  .problem-card-accent .problem-card-title {
-    color: #fff;
-  }
-
-  .problem-card-accent .problem-card-desc {
-    color: rgba(255,255,255,0.55);
-  }
-
-  .problem-card-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 36px;
-    font-weight: 300;
-    color: var(--divider);
-    line-height: 1;
-    flex-shrink: 0;
-    width: 48px;
-  }
-
-  .problem-card-body {
-    flex: 1;
-  }
-
-  .problem-card-title {
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--navy);
-    margin-bottom: 10px;
-    line-height: 1.3;
-  }
-
-  .problem-card-desc {
-    font-size: 15px;
-    color: var(--text-secondary);
-    line-height: 1.75;
-  }
-
-  .problem-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 16px;
-  }
-
-  .problem-tag {
-    background: var(--warm-gray);
-    color: var(--text-secondary);
-    font-size: 12px;
-    padding: 4px 12px;
-    border-radius: 100px;
-  }
-
-  @media (max-width: 600px) {
-    .problem-card { flex-direction: column; gap: 12px; padding: 28px 24px; }
-  }
-
-  /* ── HIDDEN KNOWLEDGE ── */
-  #hidden {
-    background: var(--navy-deep);
-    position: relative;
-    overflow: hidden;
-  }
-
-  #hidden::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(ellipse 50% 60% at 20% 50%, rgba(201,168,76,0.05) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  #hidden .section-title {
-    color: #fff;
-  }
-
-  #hidden .section-sub {
-    color: rgba(255,255,255,0.5);
-  }
-
-  .knowledge-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    margin-top: 52px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .knowledge-card {
-    background: rgba(13,31,60,0.8);
-    padding: 32px 36px;
-    position: relative;
-  }
-
-  .knowledge-card.full-width {
-    grid-column: 1 / -1;
-    background: rgba(201,168,76,0.08);
-    border-top: 2px solid rgba(201,168,76,0.2);
-  }
-
-  .knowledge-icon {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    color: var(--gold);
-    margin-bottom: 14px;
-    display: block;
-    text-transform: uppercase;
-  }
-
-  .knowledge-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 400;
-    color: #fff;
-    line-height: 1.3;
-    margin-bottom: 10px;
-  }
-
-  .knowledge-desc {
-    font-size: 14px;
-    color: rgba(255,255,255,0.5);
-    line-height: 1.6;
-  }
-
-  .knowledge-badge {
-    display: inline-block;
-    background: rgba(201,168,76,0.15);
-    color: var(--gold);
-    font-size: 12px;
-    font-weight: 500;
-    padding: 3px 10px;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
-
-  .factors-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 16px;
-  }
-
-  .factor-tag {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.7);
-    font-size: 13px;
-    padding: 6px 14px;
-    border-radius: 100px;
-  }
-
-  .hidden-warning {
-    margin-top: 36px;
-    padding: 24px 32px;
-    background: rgba(201,168,76,0.08);
-    border-right: 3px solid var(--gold);
-    border-radius: 0 8px 8px 0;
-  }
-
-  .hidden-warning p {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 400;
-    color: rgba(255,255,255,0.9);
-    line-height: 1.5;
-  }
-
-  .hidden-warning strong {
-    color: var(--gold);
-    font-weight: 500;
-  }
-
-  /* ── REPORT ── */
-  #report {
-    background: var(--warm-gray);
-  }
-
-  .report-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap: 52px;
-    align-items: start;
-    margin-top: 52px;
-  }
-
-  .report-intro .section-title { margin-bottom: 20px; }
-
-  .report-features {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 32px;
-  }
-
-  .report-feature {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-  }
-
-  .report-feature-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--gold);
-    flex-shrink: 0;
-    margin-top: 8px;
-  }
-
-  .report-feature-text {
-    font-size: 15px;
-    color: var(--text-dark);
-    line-height: 1.6;
-  }
-
-  .report-feature-text strong {
-    color: var(--navy);
-    font-weight: 500;
-    display: block;
-    margin-bottom: 2px;
-  }
-
-  .report-card {
-    background: var(--navy);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 24px 64px rgba(13,31,60,0.2);
-  }
-
-  .report-card-header {
-    background: var(--navy-deep);
-    padding: 20px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .report-card-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-
-  .report-badge {
-    background: var(--green);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 4px 12px;
-    border-radius: 100px;
-  }
-
-  .report-card-body {
-    padding: 28px;
-  }
-
-  .report-unit-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 400;
-    color: #fff;
-    margin-bottom: 6px;
-  }
-
-  .report-unit-sub {
-    font-size: 13px;
-    color: rgba(255,255,255,0.4);
-    margin-bottom: 28px;
-  }
-
-  .report-metrics {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 24px;
-  }
-
-  .report-metric {
-    background: rgba(13,31,60,0.6);
-    padding: 16px 18px;
-  }
-
-  .report-metric-label {
-    font-size: 11px;
-    color: rgba(255,255,255,0.35);
-    margin-bottom: 6px;
-    display: block;
-    letter-spacing: 0.5px;
-  }
-
-  .report-metric-value {
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    display: block;
-  }
-
-  .report-metric-value.positive { color: var(--green); }
-  .report-metric-value.warning  { color: #E8A020; }
-
-  .report-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  .report-bar-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .report-bar-label {
-    font-size: 12px;
-    color: rgba(255,255,255,0.45);
-    width: 110px;
-    flex-shrink: 0;
-    text-align: right;
-  }
-
-  .report-bar-track {
-    flex: 1;
-    height: 4px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .report-bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    background: var(--gold);
-    transition: width 1s ease;
-  }
-
-  .report-bar-fill.green { background: var(--green); }
-  .report-bar-fill.mid   { background: #E8A020; }
-
-  .report-bar-score {
-    font-size: 12px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.7);
-    width: 28px;
-    text-align: left;
-    flex-shrink: 0;
-  }
-
-  .report-verdict {
-    background: rgba(201,168,76,0.1);
-    border: 1px solid rgba(201,168,76,0.2);
-    border-radius: 8px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .report-verdict-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(201,168,76,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--gold);
-    font-size: 14px;
-    font-weight: 700;
-  }
-
-  .report-verdict-text {
-    font-size: 13px;
-    color: rgba(255,255,255,0.65);
-    line-height: 1.5;
-  }
-
-  .report-verdict-text strong {
-    color: var(--gold);
-    font-weight: 500;
-  }
-
-  @media (max-width: 768px) {
-    .report-wrapper { grid-template-columns: 1fr; }
-  }
-
-  .report-id-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-  .report-id-tag {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.4);
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 4px;
-  }
-  .report-id-tag span { color: var(--gold); font-weight: 500; margin-right: 4px; }
-  .report-section-title {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
-    margin-bottom: 12px;
-    margin-top: 4px;
-  }
-  .room-temps {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-  .room-temp {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(255,255,255,0.04);
-    border-radius: 6px;
-    padding: 8px 12px;
-  }
-  .room-name { font-size: 12px; color: rgba(255,255,255,0.5); }
-  .room-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
-  .room-badge.hot  { background: rgba(216,90,48,0.25); color: #F0997B; }
-  .room-badge.warm { background: rgba(232,160,32,0.2); color: #E8A020; }
-  .room-badge.cold { background: rgba(29,158,117,0.2); color: var(--green); }
-
-  #solution {
-    background: var(--warm-white);
-  }
-
-  .solution-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1px;
-    margin-top: 52px;
-    background: var(--divider);
-    border: 1px solid var(--divider);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .solution-card {
-    background: #fff;
-    padding: 36px 32px;
-    text-align: center;
-  }
-
-  .solution-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 48px;
-    font-weight: 300;
-    color: var(--gold);
-    line-height: 1;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .solution-title {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--navy);
-    margin-bottom: 8px;
-  }
-
-  .solution-desc {
-    font-size: 13px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  /* ── HOW IT WORKS ── */
-  #how {
-    background: var(--navy);
-  }
-
-  #how .section-title { color: #fff; }
-  #how .section-sub { color: rgba(255,255,255,0.5); }
-
-  .steps {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 32px;
-    margin-top: 52px;
-  }
-
-  .step {
-    position: relative;
-  }
-
-  .step-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 72px;
-    font-weight: 300;
-    color: rgba(201,168,76,0.15);
-    line-height: 1;
-    margin-bottom: 12px;
-    display: block;
-  }
-
-  .step-title {
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    margin-bottom: 8px;
-  }
-
-  .step-desc {
-    font-size: 14px;
-    color: rgba(255,255,255,0.45);
-    line-height: 1.6;
-  }
-
-  .step-connector {
-    position: absolute;
-    top: 36px;
-    left: -16px;
-    width: 32px;
-    height: 1px;
-    background: linear-gradient(to left, rgba(201,168,76,0.3), transparent);
-  }
-
-  /* ── CTA ── */
-  #cta {
-    background: var(--warm-white);
-    text-align: center;
-    padding: 100px 5%;
-  }
-
-  .cta-inner {
-    max-width: 640px;
-    margin: 0 auto;
-  }
-
-  .cta-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(32px, 5vw, 52px);
-    font-weight: 300;
-    color: var(--navy);
-    line-height: 1.25;
-    margin-bottom: 16px;
-    letter-spacing: -0.3px;
-  }
-
-  .cta-sub {
-    font-size: 16px;
-    color: var(--text-secondary);
-    margin-bottom: 40px;
-  }
-
-  .cta-free-note {
-    margin-top: 16px;
-    font-size: 13px;
-    color: var(--text-secondary);
-  }
-
-  .cta-free-note span {
-    color: var(--green);
-    font-weight: 500;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    background: var(--navy-deep);
-    padding: 32px 5%;
-    text-align: center;
-  }
-
-  .footer-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 400;
-    margin-bottom: 8px;
-  }
-  .footer-logo span:first-child { color: var(--gold); }
-  .footer-logo span:last-child { color: rgba(255,255,255,0.5); }
-
-  .footer-copy {
-    font-size: 12px;
-    color: rgba(255,255,255,0.25);
-  }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero-inner > * {
-    animation: fadeUp 0.7s ease both;
-  }
-
-  .hero-inner > *:nth-child(1) { animation-delay: 0.1s; }
-  .hero-inner > *:nth-child(2) { animation-delay: 0.25s; }
-  .hero-inner > *:nth-child(3) { animation-delay: 0.4s; }
-  .hero-inner > *:nth-child(4) { animation-delay: 0.55s; }
-  .hero-inner > *:nth-child(5) { animation-delay: 0.65s; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    .knowledge-grid { grid-template-columns: 1fr; }
-    .solution-grid { grid-template-columns: 1fr; }
-    .steps { grid-template-columns: 1fr; gap: 40px; }
-    .step-connector { display: none; }
-    .hero-trust { flex-direction: column; gap: 20px; }
-    .trust-divider { width: 40px; height: 1px; }
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:#0D1F3C; --navy-deep:#060E1C; --navy-mid:#1E3A5F;
+  --gold:#C9A84C; --gold-light:#E5C86E; --gold-pale:#F2E0A8;
+  --warm-white:#F5F3EE; --warm-gray:#E8E5DE; --divider:#D4D0C8;
+  --text-dark:#1C1C1A; --text-mid:#3D3D3A; --text-sec:#6B7A8D;
+  --green:#1D9E75; --orange:#E8A020; --red:#D85A30;
+  --font-display:'Cormorant Garamond',serif;
+  --font-body:'DM Sans',sans-serif;
+}
+html { scroll-behavior:smooth; }
+body { font-family:var(--font-body); background:var(--warm-white); color:var(--text-mid); direction:rtl; line-height:1.7; -webkit-font-smoothing:antialiased; }
+
+/* NAV */
+nav { position:fixed; top:0; width:100%; z-index:100; background:rgba(6,14,28,0.97); backdrop-filter:blur(12px); height:72px; display:flex; align-items:center; justify-content:space-between; padding:0 6%; border-bottom:1px solid rgba(201,168,76,0.12); }
+.logo { display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-decoration:none; }
+.logo-wordmark { font-family:var(--font-display); font-size:30px; font-weight:400; letter-spacing:3px; line-height:1; }
+.logo-wordmark .nest { color:var(--gold); }
+.logo-wordmark .match { color:#fff; }
+.logo-sub { font-family:var(--font-body); font-size:9px; font-weight:400; letter-spacing:4px; text-transform:uppercase; color:rgba(255,255,255,0.28); }
+.nav-cta { font-family:var(--font-body); font-size:13px; font-weight:500; color:var(--navy-deep); background:var(--gold); border:none; padding:10px 24px; border-radius:4px; cursor:pointer; text-decoration:none; transition:background .2s; }
+.nav-cta:hover { background:var(--gold-light); }
+
+/* HERO */
+#hero { background:var(--navy); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:110px 6% 90px; position:relative; overflow:hidden; }
+#hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 85% 15%,rgba(201,168,76,.07) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 10% 85%,rgba(201,168,76,.04) 0%,transparent 60%); pointer-events:none; }
+#hero::after { content:''; position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px); background-size:64px 64px; pointer-events:none; }
+.hero-inner { max-width:820px; width:100%; text-align:center; position:relative; z-index:1; }
+
+.badge { display:inline-flex; align-items:center; gap:9px; background:rgba(201,168,76,.12); border:1px solid rgba(201,168,76,.32); color:var(--gold); font-size:11px; font-weight:600; padding:7px 22px; border-radius:100px; margin-bottom:44px; letter-spacing:2.5px; text-transform:uppercase; }
+.badge-dot { width:7px; height:7px; border-radius:50%; background:var(--gold); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+
+.hero-h1 { font-family:var(--font-display); font-size:clamp(38px,5.5vw,68px); font-weight:300; color:#fff; line-height:1.18; letter-spacing:-.5px; margin-bottom:16px; }
+.hero-h1 em { color:var(--gold); font-style:normal; }
+
+.hero-h2 { font-family:var(--font-display); font-size:clamp(22px,3vw,38px); font-weight:300; font-style:italic; color:rgba(255,255,255,.5); line-height:1.35; letter-spacing:-.2px; margin-bottom:48px; }
+.hero-h2 strong { color:rgba(255,255,255,.85); font-weight:300; font-style:normal; }
+
+.btn-call { display:inline-flex; align-items:center; gap:9px; background:transparent; color:rgba(255,255,255,.6); font-family:var(--font-body); font-size:14px; font-weight:500; padding:15px 28px; border-radius:6px; text-decoration:none; border:1px solid rgba(255,255,255,.15); cursor:pointer; letter-spacing:.3px; transition:all .2s; margin-right:12px; }
+.btn-call:hover { border-color:rgba(255,255,255,.35); color:#fff; }
+.btn { display:inline-flex; align-items:center; gap:12px; background:var(--gold); color:var(--navy-deep); font-family:var(--font-body); font-size:15px; font-weight:600; padding:17px 46px; border-radius:6px; text-decoration:none; border:none; cursor:pointer; letter-spacing:.3px; transition:background .2s,transform .15s,box-shadow .2s; box-shadow:0 8px 32px rgba(201,168,76,.25); }
+.btn:hover { background:var(--gold-light); transform:translateY(-2px); box-shadow:0 14px 42px rgba(201,168,76,.35); }
+.btn-arr { font-size:20px; line-height:1; }
+
+.trust-strip { display:flex; align-items:center; justify-content:center; margin-top:64px; padding-top:44px; border-top:1px solid rgba(255,255,255,.07); }
+.trust-item { text-align:center; padding:0 48px; }
+.trust-item+.trust-item { border-right:1px solid rgba(255,255,255,.07); }
+.trust-num { display:block; font-family:var(--font-display); font-size:42px; font-weight:300; color:var(--gold); line-height:1; letter-spacing:-1px; }
+.trust-lbl { display:block; font-size:11px; color:rgba(255,255,255,.32); margin-top:7px; letter-spacing:.4px; line-height:1.5; max-width:140px; }
+
+/* SECTION BASE */
+section { padding:104px 6%; }
+.inner { max-width:980px; margin:0 auto; }
+.sec-lbl { display:block; font-size:11px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:18px; }
+.sec-title { font-family:var(--font-display); font-size:clamp(30px,4vw,52px); font-weight:300; color:var(--navy); line-height:1.2; letter-spacing:-.4px; margin-bottom:14px; }
+.sec-title.light { color:#fff; }
+.sec-sub { font-size:15px; color:var(--text-sec); line-height:1.8; max-width:620px; }
+.sec-sub.light { color:rgba(255,255,255,.42); }
+
+/* PROBLEM */
+#problem { background:var(--warm-white); }
+.p-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:52px; background:var(--divider); border:1px solid var(--divider); border-radius:14px; overflow:hidden; }
+.p-card { background:#fff; padding:38px 42px; }
+.p-card.dark { background:var(--navy); }
+.p-num { font-family:var(--font-display); font-size:54px; font-weight:300; color:var(--warm-gray); line-height:1; margin-bottom:16px; display:block; }
+.p-card.dark .p-num { color:rgba(201,168,76,.2); }
+.p-ttl { font-size:18px; font-weight:600; color:var(--navy); margin-bottom:10px; line-height:1.3; }
+.p-card.dark .p-ttl { color:#fff; }
+.p-txt { font-size:15px; color:var(--text-sec); line-height:1.75; }
+.p-card.dark .p-txt { color:rgba(255,255,255,.45); }
+.p-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+.p-tag { background:var(--warm-gray); color:var(--text-sec); font-size:11px; font-weight:500; padding:4px 13px; border-radius:100px; }
+
+/* HIDDEN */
+#hidden { background:var(--navy-deep); position:relative; overflow:hidden; }
+#hidden::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 55% 70% at 10% 50%,rgba(201,168,76,.05) 0%,transparent 65%); pointer-events:none; }
+.h-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; margin-top:52px; background:rgba(255,255,255,.05); border-radius:14px; overflow:hidden; position:relative; z-index:1; }
+.h-card { background:rgba(13,31,60,.7); padding:36px 32px; }
+.h-lbl { font-size:11px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase; color:var(--gold); margin-bottom:16px; display:block; }
+.h-ttl { font-family:var(--font-display); font-size:28px; font-weight:300; color:#fff; line-height:1.25; margin-bottom:12px; }
+.h-txt { font-size:13px; color:rgba(255,255,255,.42); line-height:1.75; }
+.h-scale { display:flex; flex-direction:column; gap:7px; margin-top:18px; }
+.h-row { display:flex; align-items:center; gap:10px; }
+.h-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.h-row-txt { font-size:12px; color:rgba(255,255,255,.42); }
+.h-rooms { display:flex; flex-direction:column; gap:7px; margin-top:16px; }
+.h-room { display:flex; align-items:center; justify-content:space-between; }
+.h-rname { font-size:12px; color:rgba(255,255,255,.4); }
+.badge-s { font-size:10px; font-weight:600; padding:2px 10px; border-radius:4px; }
+.hot  { background:rgba(216,90,48,.25); color:#F0997B; }
+.warm { background:rgba(232,160,32,.2);  color:#E8A020; }
+.cold { background:rgba(29,158,117,.2);  color:var(--green); }
+.h-italic { font-style:italic; color:rgba(255,255,255,.6); margin-top:14px; font-size:13px; line-height:1.6; }
+.h-warning { position:relative; z-index:1; margin-top:32px; padding:26px 36px; background:rgba(201,168,76,.08); border-right:3px solid var(--gold); border-radius:0 10px 10px 0; }
+.h-warning p { font-family:var(--font-display); font-size:clamp(20px,2.5vw,30px); font-weight:300; font-style:italic; color:rgba(255,255,255,.85); line-height:1.5; }
+.h-warning strong { color:var(--gold); font-style:normal; }
+
+/* REPORT */
+#report { background:var(--warm-gray); }
+.rep-wrap { display:grid; grid-template-columns:1fr 1.3fr; gap:60px; align-items:start; margin-top:52px; }
+.rep-quote { font-family:var(--font-display); font-size:16px; font-style:italic; color:var(--text-sec); margin-bottom:36px; line-height:1.75; border-right:2px solid var(--gold); padding-right:20px; }
+.rep-features { display:flex; flex-direction:column; gap:22px; }
+.rf { display:flex; gap:14px; align-items:flex-start; }
+.rf-dot { width:5px; height:5px; border-radius:50%; background:var(--gold); flex-shrink:0; margin-top:9px; }
+.rf-ttl { font-size:15px; font-weight:600; color:var(--navy); margin-bottom:3px; }
+.rf-txt { font-size:13px; color:var(--text-sec); line-height:1.65; }
+
+/* Report Card */
+.rc { background:var(--navy); border-radius:14px; overflow:hidden; box-shadow:0 28px 72px rgba(13,31,60,.22); }
+.rc-hdr { background:var(--navy-deep); padding:18px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,.06); }
+.rc-lbl { font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--gold); }
+.rc-badge { background:var(--green); color:#fff; font-size:10px; font-weight:600; padding:4px 12px; border-radius:100px; }
+.rc-bdy { padding:26px 28px; }
+.rc-ids { display:flex; gap:8px; margin-bottom:22px; }
+.rc-id { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); color:rgba(255,255,255,.32); font-size:11px; padding:4px 12px; border-radius:4px; }
+.rc-id span { color:var(--gold); font-weight:600; margin-right:3px; }
+.rc-slbl { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.22); margin-bottom:10px; display:block; }
+.rc-metrics { display:grid; grid-template-columns:1fr 1fr; gap:2px; background:rgba(255,255,255,.05); border-radius:8px; overflow:hidden; margin-bottom:20px; }
+.rc-m { background:rgba(6,14,28,.7); padding:14px 16px; }
+.rc-mlbl { display:block; font-size:10px; color:rgba(255,255,255,.28); margin-bottom:5px; }
+.rc-mval { display:block; font-size:15px; font-weight:500; color:#fff; }
+.rc-mval.g { color:var(--green); }
+.rc-mval.gld { color:var(--gold); }
+.rc-rooms { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:20px; }
+.rc-room { display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,.03); border-radius:6px; padding:8px 12px; }
+.rc-rname { font-size:12px; color:rgba(255,255,255,.42); }
+.rc-bars { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+.rc-brow { display:flex; align-items:center; gap:12px; }
+.rc-blbl { font-size:11px; color:rgba(255,255,255,.38); width:90px; flex-shrink:0; text-align:right; }
+.rc-btrack { flex:1; height:3px; background:rgba(255,255,255,.07); border-radius:2px; overflow:hidden; }
+.rc-bfill { height:100%; border-radius:2px; }
+.rc-bfill.g { background:var(--green); }
+.rc-bfill.o { background:var(--orange); }
+.rc-bval { font-size:11px; font-weight:500; width:64px; text-align:left; flex-shrink:0; }
+.rc-verdict { background:rgba(201,168,76,.09); border:1px solid rgba(201,168,76,.18); border-radius:8px; padding:14px 18px; display:flex; gap:12px; align-items:flex-start; }
+.rc-vicon { width:28px; height:28px; border-radius:50%; background:rgba(201,168,76,.18); display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:13px; font-weight:700; flex-shrink:0; }
+.rc-vtxt { font-size:12px; color:rgba(255,255,255,.5); line-height:1.6; }
+.rc-vtxt strong { color:var(--gold); font-weight:500; }
+
+/* EVALUATE */
+#evaluate { background:var(--warm-white); }
+.ev-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:2px; margin-top:52px; background:var(--divider); border:1px solid var(--divider); border-radius:14px; overflow:hidden; }
+.ev-card { background:#fff; padding:32px 22px; display:flex; flex-direction:column; gap:14px; }
+.ev-num { font-family:var(--font-display); font-size:50px; font-weight:300; color:var(--warm-gray); line-height:1; }
+.ev-ttl { font-size:14px; font-weight:600; color:var(--navy); line-height:1.35; }
+.ev-txt { font-size:13px; color:var(--text-sec); line-height:1.7; flex:1; }
+.ev-tag { display:inline-block; background:rgba(201,168,76,.1); color:var(--gold); font-size:10px; font-weight:600; padding:3px 10px; border-radius:4px; letter-spacing:.5px; align-self:flex-start; }
+
+/* SOLUTION */
+#solution { background:var(--navy); }
+.sol-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:52px; background:rgba(255,255,255,.06); border-radius:14px; overflow:hidden; }
+.sol-card { background:rgba(13,31,60,.7); padding:36px 40px; display:flex; gap:20px; align-items:flex-start; }
+.sol-icon { width:44px; height:44px; border-radius:8px; background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.18); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.sol-ttl { font-size:15px; font-weight:600; color:#fff; margin-bottom:8px; line-height:1.3; }
+.sol-txt { font-size:13px; color:rgba(255,255,255,.42); line-height:1.7; }
+
+/* HOW */
+#how { background:var(--warm-white); }
+.steps { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; margin-top:52px; position:relative; }
+.steps::before { content:''; position:absolute; top:34px; right:17%; left:17%; height:1px; background:var(--divider); z-index:0; }
+.step { text-align:center; padding:0 32px; position:relative; z-index:1; }
+.step-circle { width:68px; height:68px; border-radius:50%; background:var(--warm-white); border:2px solid var(--divider); display:flex; align-items:center; justify-content:center; margin:0 auto 24px; }
+.step-n { font-family:var(--font-display); font-size:28px; font-weight:300; color:var(--gold); line-height:1; }
+.step-ttl { font-size:15px; font-weight:600; color:var(--navy); margin-bottom:10px; line-height:1.35; }
+.step-txt { font-size:13px; color:var(--text-sec); line-height:1.7; }
+
+/* CTA */
+#cta { background:var(--navy); text-align:center; padding:110px 6%; position:relative; overflow:hidden; }
+#cta::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 65% 80% at 50% 50%,rgba(201,168,76,.06) 0%,transparent 70%); pointer-events:none; }
+.cta-inner { max-width:640px; margin:0 auto; position:relative; z-index:1; }
+.cta-ttl { font-family:var(--font-display); font-size:clamp(36px,5vw,60px); font-weight:300; color:#fff; line-height:1.2; margin-bottom:16px; letter-spacing:-.4px; }
+.cta-sub { font-size:16px; color:rgba(255,255,255,.42); margin-bottom:44px; line-height:1.75; }
+.cta-note { margin-top:18px; font-size:13px; color:rgba(255,255,255,.28); }
+.cta-note span { color:var(--green); }
+
+/* FOOTER */
+footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,.05); }
+.f-logo { font-family:var(--font-display); font-size:22px; font-weight:400; letter-spacing:2px; }
+.f-logo .nest { color:var(--gold); }
+.f-logo .match { color:rgba(255,255,255,.32); }
+.f-copy { font-size:11px; color:rgba(255,255,255,.2); letter-spacing:.5px; }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+.hero-inner>*{animation:fadeUp .8s cubic-bezier(.22,1,.36,1) both}
+.hero-inner>*:nth-child(1){animation-delay:.1s}
+.hero-inner>*:nth-child(2){animation-delay:.25s}
+.hero-inner>*:nth-child(3){animation-delay:.4s}
+.hero-inner>*:nth-child(4){animation-delay:.52s}
+.hero-inner>*:nth-child(5){animation-delay:.62s}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .p-grid,.sol-grid{grid-template-columns:1fr}
+  .h-grid{grid-template-columns:1fr}
+  .ev-grid{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr}
+  .steps::before{display:none}
+  .rep-wrap{grid-template-columns:1fr}
+  .trust-strip{flex-direction:column;gap:28px}
+  .trust-item{border-right:none!important;padding:0}
+  footer{flex-direction:column;gap:12px;text-align:center}
+}
+@media(max-width:600px){
+  .ev-grid{grid-template-columns:1fr}
+  .rc-metrics,.rc-rooms{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <div class="logo">
-    <span>Nest</span><span>Match</span>
-  </div>
-  <a href="https://wa.me/201000000000?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="nav-cta" target="_blank">
-    استشارة مجانية
+  <a href="#" class="logo">
+    <div class="logo-wordmark"><span class="nest">Nest</span><span class="match">Match</span></div>
+    <div class="logo-sub">Real Estate Evaluation</div>
   </a>
+  <a href="https://wa.me/201000000000?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="nav-cta" target="_blank">ابعتلنا على واتساب</a>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
   <div class="hero-inner">
-    <div class="badge-no-commission">
-      <span class="badge-dot"></span>
-      بدون عمولة
-    </div>
-
-    <h1 class="hero-headline">
-      تايه بين الإعلانات وسماسرة كتير؟<br>
-      <em>قرار بملايين</em> — محتاج بيانات حقيقية<br>وتحليل مش كلام بيبيع
-    </h1>
-
-    <p class="hero-sub">
-      NestMatch بتحلل كل المتاح في مدينتي بمعايير حقيقية —<br>
-      وبتوصلك لأفضل الخيارات في ميزانيتك <strong>بدون عمولة</strong>
-    </p>
-
-    <a href="https://wa.me/201000000000?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="btn-primary" target="_blank">
-      احجز استشارتك المجانية
-      <span class="btn-arrow">←</span>
+    <div class="badge"><span class="badge-dot"></span>بدون عمولة بيع</div>
+    <h1 class="hero-h1">تايه بين الإعلانات<br>وسماسرة كتير؟</h1>
+    <p class="hero-h2">قرار بملايين — <strong>محتاج بيانات حقيقية وتحليل</strong><br>مش كلام بيبيع</p>
+    <a href="https://wa.me/201000000000?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="btn" target="_blank">
+      ابعتلنا على واتساب <span class="btn-arr">←</span>
     </a>
-
-    <div class="hero-trust">
+    <a href="tel:+201000000000" class="btn-call">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      اتصل بينا
+    </a>
+    <div class="trust-strip">
       <div class="trust-item">
-        <span class="trust-number">6,000+</span>
-        <span class="trust-label">وحدة سكنية في قاعدة البيانات</span>
+        <span class="trust-num">6,000+</span>
+        <span class="trust-lbl">وحدة محلّلة في قاعدة البيانات</span>
       </div>
-      <div class="trust-divider"></div>
       <div class="trust-item">
-        <span class="trust-number">AI</span>
-        <span class="trust-label">قاعدة بيانات بالذكاء الاصطناعي</span>
+        <span class="trust-num" style="font-size:18px;letter-spacing:1px;padding-top:10px">تحليل مستقل</span>
+        <span class="trust-lbl">مبني على البيانات<br>مش على الصفقة</span>
       </div>
-      <div class="trust-divider"></div>
       <div class="trust-item">
-        <span class="trust-number">٠٪</span>
-        <span class="trust-label">عمولة</span>
+        <span class="trust-num">0%</span>
+        <span class="trust-lbl">عمولة بيع</span>
       </div>
     </div>
   </div>
@@ -962,313 +261,220 @@
 
 <!-- PROBLEM -->
 <section id="problem">
-  <div class="section-inner">
-    <span class="section-label">المشكلة</span>
-    <h2 class="section-title">ليه صعب توصل للقرار الصح؟</h2>
-    <p class="section-sub">مش مشكلة في إرادتك — المشكلة في السوق نفسه</p>
-
-    <div class="problem-cards">
-
-      <div class="problem-card">
-        <div class="problem-card-num">٠١</div>
-        <div class="problem-card-body">
-          <h3 class="problem-card-title">صعوبة الوصول للمتاح</h3>
-          <p class="problem-card-desc">
-            السوق مفتت — مفيش منصة واحدة بتعرض كل المتاح بتفاصيل حقيقية وكاملة.
-            الشقق موزعة على إعلانات وجروبات وسماسرة مختلفين —
-            وكتير من الوحدات المتاحة مش هتعرف عنها أصلاً.
-          </p>
+  <div class="inner">
+    <span class="sec-lbl">المشكلة</span>
+    <h2 class="sec-title">ليه اختيار الشقة المناسبة بقى صعب؟</h2>
+    <p class="sec-sub">المشكلة مش في قلة الخيارات — في كثرتها وتشتتها وصعوبة التأكد من قيمتها الحقيقية</p>
+    <div class="p-grid">
+      <div class="p-card">
+        <span class="p-num">٠١</span>
+        <h3 class="p-ttl">السوق مليان إعلانات متفرقة</h3>
+        <p class="p-txt">الوحدات المعروضة موزعة بين منصات وجروبات ومكاتب مختلفة — ومفيش صورة كاملة وواضحة لكل المتاح في السوق</p>
+      </div>
+      <div class="p-card">
+        <span class="p-num">٠٢</span>
+        <h3 class="p-ttl">المعلومات مش كافية للقرار الصح</h3>
+        <p class="p-txt">معظم الإعلانات بتركز على السعر والمساحة بس — بينما القرار الحقيقي محتاج معرفة صافي المساحة وكفاءة التوزيع والفيو والاتجاه والخصوصية</p>
+        <div class="p-tags">
+          <span class="p-tag">صافي المساحة</span>
+          <span class="p-tag">التحليل الحراري</span>
+          <span class="p-tag">جودة الفيو</span>
+          <span class="p-tag">الخصوصية</span>
         </div>
       </div>
-
-      <div class="problem-card">
-        <div class="problem-card-num">٠٢</div>
-        <div class="problem-card-body">
-          <h3 class="problem-card-title">المعلومات ناقصة ومش محايدة</h3>
-          <p class="problem-card-desc">
-            المتاح عن طريق سمسار — والسمسار مش محايد.
-            حتى لو كان نيته كويسة، مش بيوفرلك البيانات الحقيقية:
-            صافي المساحة، كفاءة التوزيع، جودة الفيو الحقيقية،
-            التحميل الحراري، المسافة من الخدمات.
-            المعلومة اللي عنده مش كافية للقرار الصح.
-          </p>
-          <div class="problem-tags">
-            <span class="problem-tag">صافي المساحة</span>
-            <span class="problem-tag">التحميل الحراري</span>
-            <span class="problem-tag">جودة الفيو</span>
-            <span class="problem-tag">المسافة من الخدمات</span>
-          </div>
-        </div>
+      <div class="p-card">
+        <span class="p-num">٠٣</span>
+        <h3 class="p-ttl">المقارنة بين الوحدات صعبة</h3>
+        <p class="p-txt">ممكن تلاقي وحدتين بنفس السعر والمساحة تقريباً — لكن الفرق الحقيقي يكون في الفيو والاتجاه وجودة التصميم والقيمة المستقبلية. مستحيل تقارن بمفردك</p>
       </div>
-
-      <div class="problem-card problem-card-accent">
-        <div class="problem-card-num" style="color: var(--gold);">٠٣</div>
-        <div class="problem-card-body">
-          <h3 class="problem-card-title">استحالة المقارنة</h3>
-          <p class="problem-card-desc">
-            حتى لو المعلومات كانت متاحة — استحالة تقارن بين عدد كبير من الشقق
-            وتوصل للأفضل بمفردك. القرار ده محتاج نظام، مش جهد شخصي.
-          </p>
-        </div>
+      <div class="p-card dark">
+        <span class="p-num">٠٤</span>
+        <h3 class="p-ttl">كلام البيع مش تحليل محايد</h3>
+        <p class="p-txt">الوسيط هدفه إتمام الصفقة — أما أنت فمحتاج طرف مستقل بيقيّم الخيارات بناءً على مصلحتك أنت</p>
       </div>
-
     </div>
   </div>
 </section>
 
 <!-- HIDDEN KNOWLEDGE -->
 <section id="hidden">
-  <div class="section-inner" style="position: relative; z-index: 1;">
-    <span class="section-label">اللي مش بتعرفه</span>
-    <h2 class="section-title">المساحة في العقد — مش هي المساحة الحقيقية</h2>
-    <p class="section-sub">في مدينتي تفاصيل بتأثر على قيمة الشقة وجودة سكنك — ومحدش بيقولهالك</p>
-
-    <div class="knowledge-grid">
-      <div class="knowledge-card">
-        <span class="knowledge-icon">المساحة</span>
-        <h3 class="knowledge-title">صافي المساحة الحقيقية</h3>
-        <p class="knowledge-desc">
-          في مدينتي نماذج كتير — وصافي المساحة بيختلف من نموذج لآخر.
-          حتى داخل نفس النموذج، كفاءة التوزيع بتختلف من وحدة لوحدة.
-        </p>
-        <div class="factors-list" style="margin-top: 14px;">
-          <span class="factor-tag">مساحة العقد ≠ الحقيقة</span>
-          <span class="factor-tag">كفاءة التوزيع</span>
+  <div class="inner" style="position:relative;z-index:1">
+    <span class="sec-lbl">اللي مش بتعرفه</span>
+    <h2 class="sec-title light">تفاصيل بتأثر على قيمة قرارك</h2>
+    <p class="sec-sub light">في العقار، الفرق الحقيقي مش بيظهر دايماً في الإعلان</p>
+    <div class="h-grid">
+      <div class="h-card">
+        <span class="h-lbl">المساحة</span>
+        <h3 class="h-ttl">مساحة العقد مش معيار للمقارنة</h3>
+        <p class="h-txt">في مدينتي نماذج مساحتها في العقد أكبر — لكن صافي مساحتها الحقيقية أصغر من نماذج تانية</p>
+        <div class="h-scale">
+          <div class="h-row"><div class="h-dot" style="background:var(--red)"></div><span class="h-row-txt">عقد كبير — صافي مساحة أصغر</span></div>
+          <div class="h-row"><div class="h-dot" style="background:var(--green)"></div><span class="h-row-txt">عقد أصغر — لكن صافي المساحة أكبر</span></div>
         </div>
       </div>
-
-      <div class="knowledge-card">
-        <span class="knowledge-icon">الفيو</span>
-        <h3 class="knowledge-title">جودة الفيو بتفرق 8–10% من سعر الشقة</h3>
-        <p class="knowledge-desc">
-          مش بس narrow أو garden أو wide —
-          التراث مفتوح ولا لا؟ الشبابيك بانوراما ولا لا؟ طرفية ولا وسطية؟
-          كل عامل من دول بيفرق في القيمة الحقيقية للشقة وفي إعادة بيعها.
-        </p>
-        <div class="factors-list" style="margin-top: 14px;">
-          <span class="factor-tag">8–10% فرق في السعر</span>
-          <span class="factor-tag">إعادة البيع</span>
+      <div class="h-card">
+        <span class="h-lbl">الفيو — 8–10% من سعر الشقة</span>
+        <h3 class="h-ttl">مش كل جاردن زي بعض</h3>
+        <p class="h-txt">ومعيار أساسي في إعادة البيع</p>
+        <div class="h-scale" style="margin-top:16px">
+          <div class="h-row"><div class="h-dot" style="background:var(--red)"></div><span class="h-row-txt">Narrow Garden ← الأضعف</span></div>
+          <div class="h-row"><div class="h-dot" style="background:var(--orange)"></div><span class="h-row-txt">Garden عادي</span></div>
+          <div class="h-row"><div class="h-dot" style="background:var(--green)"></div><span class="h-row-txt">Wide Garden ← الأقوى</span></div>
+          <div class="h-row" style="margin-top:4px"><div class="h-dot" style="background:var(--gold)"></div><span class="h-row-txt">فيو مفتوح / تراث مفتوح = قيمة أعلى</span></div>
         </div>
       </div>
-
-      <div class="knowledge-card full-width">
-        <span class="knowledge-icon">عوامل جودة السكن</span>
-        <h3 class="knowledge-title" style="color: rgba(255,255,255,0.9);">الاتجاه — بيفرق في حياتك كل يوم</h3>
-        <p class="knowledge-desc" style="color: rgba(255,255,255,0.55); margin-bottom: 20px;">
-          الدور — المسافة من الخدمات — الخصوصية — وكل ما بيترتب على الاتجاه
-        </p>
-        <div class="factors-list">
-          <span class="factor-tag">تدفق الهواء</span>
-          <span class="factor-tag">الإضاءة الطبيعية</span>
-          <span class="factor-tag">دخول الشمس</span>
-          <span class="factor-tag">درجة حرارة الأوضة صيفاً</span>
-          <span class="factor-tag">المسافة من الخدمات</span>
-          <span class="factor-tag">الخصوصية</span>
-          <span class="factor-tag">الدور</span>
+      <div class="h-card">
+        <span class="h-lbl">الاتجاه</span>
+        <h3 class="h-ttl">بيفرق في حياتك كل يوم</h3>
+        <p class="h-txt">مش بس اتجاه الهواء</p>
+        <div class="h-rooms">
+          <div class="h-room"><span class="h-rname">درجة حرارة الغرف صيفاً</span><span class="badge-s hot">مؤثر جداً</span></div>
+          <div class="h-room"><span class="h-rname">دخول الشمس</span><span class="badge-s warm">مؤثر</span></div>
+          <div class="h-room"><span class="h-rname">الإضاءة الطبيعية</span><span class="badge-s warm">مؤثر</span></div>
         </div>
+        <p class="h-italic">غرفة نومك ممكن تبقى جنة أو جحيم — الاتجاه بيحدد</p>
       </div>
     </div>
-
-    <div class="hidden-warning">
-      <p>ممكن <strong>تخسر ملايين</strong> لو بتشتري من غير بيانات تفهم بيها وتقارن من خلالها</p>
+    <div class="h-warning">
+      <p>ممكن <strong>تفوّت فرص أفضل</strong> — أو <strong>تخسر مئات الآلاف</strong> وأنت مش عارف</p>
+      <p style="font-size:16px; font-family:var(--font-body); color:rgba(255,255,255,.45); margin-top:12px; font-style:normal; line-height:1.7;">احصل على بيانات واشتري بناءً على مقارنة حقيقية — مش مجرد انطباعات</p>
     </div>
   </div>
 </section>
 
 <!-- REPORT -->
 <section id="report">
-  <div class="section-inner">
-    <span class="section-label">التقارير</span>
-
-    <div class="report-wrapper">
-
-      <div class="report-intro">
-        <h2 class="section-title">تقرير كامل لكل وحدة</h2>
-        <p class="section-sub">مش مجرد سعر ومساحة — تحليل معماري شامل لكل شقة بالأرقام</p>
-
-        <div class="report-features">
-          <div class="report-feature">
-            <div class="report-feature-dot"></div>
-            <div class="report-feature-text">
-              <strong>صافي المساحة الحقيقية</strong>
-              المساحة الفعلية بعد خصم الجدران والمشاعات — مش الرقم في العقد
-            </div>
+  <div class="inner">
+    <span class="sec-lbl">التقارير</span>
+    <h2 class="sec-title">تقرير واضح لكل وحدة قبل القرار</h2>
+    <p class="sec-sub">بدلاً من الاعتماد على وصف الإعلان — تحصل على تحليل منظم يساعدك تفهم نقاط القوة والضعف في كل وحدة</p>
+    <div class="rep-wrap">
+      <div>
+        <p class="rep-quote">التقرير مش بيهدف لبيع الوحدة —<br>بيساعدك تفهمها بوضوح:<br>هل تستحق سعرها؟ هل تناسب احتياجاتك؟<br>هل في بدائل أفضل في السوق؟</p>
+        <div class="rep-features">
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">البيانات الأساسية والتفاصيل المالية</div><div class="rf-txt">السعر والمدفوع والمتبقي والقيمة التحليلية للوحدة</div></div></div>
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">صافي المساحة وكفاءة التوزيع</div><div class="rf-txt">المساحة الفعلية بعد خصم الجدران — مش الرقم في العقد</div></div></div>
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">الفيو المفتوح والخصوصية</div><div class="rf-txt">نوع الفيو ومدى انفتاحه وأثره على القيمة وإعادة البيع</div></div></div>
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">التحليل الحراري لكل أوضة</div><div class="rf-txt">درجة تعرض كل غرفة للشمس وأثره على جودة السكن</div></div></div>
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">القرب من الخدمات والموقع</div><div class="rf-txt">المسافة الحقيقية من المدارس والتجاري والمداخل</div></div></div>
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">مقارنة بالبدائل المتاحة</div><div class="rf-txt">خلاصة واضحة بأسباب الترشيح ونقاط القوة والضعف</div></div></div>
+        </div>
+      </div>
+      <div class="rc">
+        <div class="rc-hdr"><span class="rc-lbl">Insight360 Report</span><span class="rc-badge">أفضل قيمة</span></div>
+        <div class="rc-bdy">
+          <div class="rc-ids">
+            <span class="rc-id">B <span>14</span></span>
+            <span class="rc-id">Group <span>143</span></span>
+            <span class="rc-id">Unit <span>21</span></span>
           </div>
-          <div class="report-feature">
-            <div class="report-feature-dot"></div>
-            <div class="report-feature-text">
-              <strong>كفاءة التوزيع</strong>
-              نسبة الاستفادة الحقيقية من المساحة وجودة تصميم الوحدة
-            </div>
+          <span class="rc-slbl">البيانات الأساسية</span>
+          <div class="rc-metrics">
+            <div class="rc-m"><span class="rc-mlbl">مساحة العقد</span><span class="rc-mval">107 م²</span></div>
+            <div class="rc-m"><span class="rc-mlbl">صافي المساحة الحقيقية</span><span class="rc-mval g">87.38 م²</span></div>
+            <div class="rc-m"><span class="rc-mlbl">كفاءة التوزيع</span><span class="rc-mval g">81.66%</span></div>
+            <div class="rc-m"><span class="rc-mlbl">القيمة التحليلية</span><span class="rc-mval gld">5,812,011 ج</span></div>
           </div>
-          <div class="report-feature">
-            <div class="report-feature-dot"></div>
-            <div class="report-feature-text">
-              <strong>التحليل الحراري</strong>
-              درجة تعرض كل غرفة للشمس — وأثره على جودة السكن صيفاً وشتاءً
-            </div>
+          <span class="rc-slbl">التحليل الحراري للغرف</span>
+          <div class="rc-rooms">
+            <div class="rc-room"><span class="rc-rname">معيشة</span><span class="badge-s hot">حار</span></div>
+            <div class="rc-room"><span class="rc-rname">غرفة نوم رئيسية</span><span class="badge-s warm">دافئ</span></div>
+            <div class="rc-room"><span class="rc-rname">غرفة نوم ١</span><span class="badge-s hot">حار</span></div>
+            <div class="rc-room"><span class="rc-rname">مطبخ</span><span class="badge-s cold">بارد</span></div>
           </div>
-          <div class="report-feature">
-            <div class="report-feature-dot"></div>
-            <div class="report-feature-text">
-              <strong>جودة الفيو — بيفرق 8–10% من سعر الشقة</strong>
-              مش بس narrow أو garden أو wide — التراث مفتوح ولا لا، الشبابيك بانوراما ولا لا، طرفية ولا وسطية. كل ده بيفرق في القيمة الحقيقية للشقة
-            </div>
+          <span class="rc-slbl">الفيو والموقع</span>
+          <div class="rc-bars">
+            <div class="rc-brow"><span class="rc-blbl">نوع الفيو</span><div class="rc-btrack"><div class="rc-bfill g" style="width:90%"></div></div><span class="rc-bval" style="color:var(--green)">جاردن واسع</span></div>
+            <div class="rc-brow"><span class="rc-blbl">انفتاح الفيو</span><div class="rc-btrack"><div class="rc-bfill g" style="width:85%"></div></div><span class="rc-bval" style="color:var(--green)">فيو مفتوح</span></div>
+            <div class="rc-brow"><span class="rc-blbl">الخدمات</span><div class="rc-btrack"><div class="rc-bfill g" style="width:95%"></div></div><span class="rc-bval" style="color:var(--green)">أمام الوحدة</span></div>
+            <div class="rc-brow"><span class="rc-blbl">الخصوصية</span><div class="rc-btrack"><div class="rc-bfill o" style="width:60%"></div></div><span class="rc-bval" style="color:var(--orange)">متوسطة</span></div>
           </div>
-          <div class="report-feature">
-            <div class="report-feature-dot"></div>
-            <div class="report-feature-text">
-              <strong>الاتجاه وتدفق الهواء</strong>
-              تحليل الإضاءة الطبيعية ودخول الشمس ودرجات الحرارة
-            </div>
-          </div>
-          <div class="report-feature">
-            <div class="report-feature-dot"></div>
-            <div class="report-feature-text">
-              <strong>المسافة من الخدمات</strong>
-              المسافة الحقيقية من المدارس والتجاري والمداخل الرئيسية
-            </div>
+          <div class="rc-verdict">
+            <div class="rc-vicon">✓</div>
+            <p class="rc-vtxt"><strong>القيمة التحليلية: 5,812,011 ج</strong> — تحليل مالي كامل يشمل القيمة الحقيقية والمبالغ المتبقية</p>
           </div>
         </div>
       </div>
-
-      <div class="report-card">
-        <div class="report-card-header">
-          <span class="report-card-label">Insight360 Report — NestMatch</span>
-          <span class="report-badge">أفضل قيمة</span>
-        </div>
-        <div class="report-card-body">
-          <div class="report-id-row">
-            <div class="report-id-tag">B <span>14</span></div>
-            <div class="report-id-tag">Group <span>143</span></div>
-            <div class="report-id-tag">Unit <span>21</span></div>
-          </div>
-
-          <div class="report-metrics">
-            <div class="report-metric">
-              <span class="report-metric-label">مساحة العقد</span>
-              <span class="report-metric-value">107 م²</span>
-            </div>
-            <div class="report-metric">
-              <span class="report-metric-label">صافي المساحة الحقيقية</span>
-              <span class="report-metric-value positive">87.38 م²</span>
-            </div>
-            <div class="report-metric">
-              <span class="report-metric-label">كفاءة التوزيع</span>
-              <span class="report-metric-value positive">81.66%</span>
-            </div>
-            <div class="report-metric">
-              <span class="report-metric-label">موقع الوحدة</span>
-              <span class="report-metric-value">Corner — دور ٢</span>
-            </div>
-          </div>
-
-          <div class="report-section-title">درجة حرارة الأوضة — صيفاً</div>
-          <div class="room-temps">
-            <div class="room-temp">
-              <span class="room-name">معيشة</span>
-              <span class="room-badge hot">Hot</span>
-            </div>
-            <div class="room-temp">
-              <span class="room-name">غرفة نوم رئيسية</span>
-              <span class="room-badge warm">Warm</span>
-            </div>
-            <div class="room-temp">
-              <span class="room-name">غرفة نوم ١</span>
-              <span class="room-badge hot">Hot</span>
-            </div>
-            <div class="room-temp">
-              <span class="room-name">مطبخ</span>
-              <span class="room-badge cold">Coldest</span>
-            </div>
-          </div>
-
-          <div class="report-section-title" style="margin-top: 20px;">الفيو والموقع</div>
-          <div class="report-bars">
-            <div class="report-bar-row">
-              <span class="report-bar-label">نوع الفيو</span>
-              <div class="report-bar-track"><div class="report-bar-fill green" style="width:90%"></div></div>
-              <span class="report-bar-score" style="font-size:11px; width: 70px; color: var(--green);">Wide Garden</span>
-            </div>
-            <div class="report-bar-row">
-              <span class="report-bar-label">انفتاح الفيو</span>
-              <div class="report-bar-track"><div class="report-bar-fill green" style="width:85%"></div></div>
-              <span class="report-bar-score" style="font-size:11px; width: 70px; color: var(--green);">Open</span>
-            </div>
-            <div class="report-bar-row">
-              <span class="report-bar-label">الخدمات</span>
-              <div class="report-bar-track"><div class="report-bar-fill green" style="width:95%"></div></div>
-              <span class="report-bar-score" style="font-size:11px; width: 70px; color: var(--green);">In Front</span>
-            </div>
-            <div class="report-bar-row">
-              <span class="report-bar-label">الخصوصية</span>
-              <div class="report-bar-track"><div class="report-bar-fill mid" style="width:60%"></div></div>
-              <span class="report-bar-score" style="font-size:11px; width: 70px; color: #E8A020;">Standard</span>
-            </div>
-          </div>
-
-          <div class="report-verdict">
-            <div class="report-verdict-icon">✓</div>
-            <p class="report-verdict-text">
-              <strong>Real Value: 5,812,011 ج</strong> —
-              تحليل مالي كامل يشمل القيمة الحقيقية والأقساط المتبقية
-            </p>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
 
+<!-- EVALUATE -->
+<section id="evaluate">
+  <div class="inner">
+    <span class="sec-lbl">منهجية التقييم</span>
+    <h2 class="sec-title">كيف بنقيّم الوحدات؟</h2>
+    <p class="sec-sub">مش بنعتمد على السعر وحده ولا على وصف الإعلان — بنحلل كل وحدة بمعايير مالية ومعمارية وسكنية</p>
+    <div class="ev-grid">
+      <div class="ev-card">
+        <span class="ev-num">١</span>
+        <div class="ev-ttl">التحليل المالي</div>
+        <div class="ev-txt">بنراجع السعر والمدفوع والمتبقي ونحدد هل السعر بيعكس قيمة حقيقية</div>
+        <span class="ev-tag">القيمة التحليلية · NPV</span>
+      </div>
+      <div class="ev-card">
+        <span class="ev-num">٢</span>
+        <div class="ev-ttl">صافي المساحة وكفاءة التوزيع</div>
+        <div class="ev-txt">مش بنكتفي بمساحة العقد — بنحلل صافي المساحة وجودة استغلال كل متر</div>
+        <span class="ev-tag">مساحة حقيقية</span>
+      </div>
+      <div class="ev-card">
+        <span class="ev-num">٣</span>
+        <div class="ev-ttl">الفيو والموقع داخل المجموعة</div>
+        <div class="ev-txt">نوع الفيو ومدى انفتاحه وقرب الوحدة من الخدمات ومستوى الخصوصية</div>
+        <span class="ev-tag">8–10% فرق في القيمة</span>
+      </div>
+      <div class="ev-card">
+        <span class="ev-num">٤</span>
+        <div class="ev-ttl">الاتجاه وجودة السكن</div>
+        <div class="ev-txt">الاتجاه ودخول الشمس والتهوية ودرجة الراحة الحرارية داخل كل أوضة</div>
+        <span class="ev-tag">تحليل حراري</span>
+      </div>
+      <div class="ev-card">
+        <span class="ev-num">٥</span>
+        <div class="ev-ttl">المقارنة بين البدائل</div>
+        <div class="ev-txt">بنقارن كل وحدة بالوحدات المشابهة في السوق للوصول لأفضل قيمة حقيقية</div>
+        <span class="ev-tag">Shortlist مرتبة</span>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- SOLUTION -->
 <section id="solution">
-  <div class="section-inner">
-    <span class="section-label">الحل</span>
-    <h2 class="section-title">قاعدة بيانات تضم كل المتاح في السوق</h2>
-    <p class="section-sub">مدارة بالذكاء الاصطناعي — بتوصلك لأفضل الخيارات ضمن ميزانيتك</p>
-
-    <div class="solution-grid">
-      <div class="solution-card">
-        <span class="solution-num">6K</span>
-        <p class="solution-title">وحدة سكنية في قاعدة البيانات</p>
-        <p class="solution-desc">كل المتاح في مدينتي في مكان واحد — بتفاصيل حقيقية وكاملة</p>
-      </div>
-      <div class="solution-card">
-        <span class="solution-num">AI</span>
-        <p class="solution-title">تحديد الأفضل بدقة</p>
-        <p class="solution-desc">قاعدة بيانات مدارة بالذكاء الاصطناعي — بتحدد الأفضل في ميزانيتك بدقة</p>
-      </div>
-      <div class="solution-card">
-        <span class="solution-num">٠٪</span>
-        <p class="solution-title">بدون عمولة</p>
-        <p class="solution-desc">مصلحتنا في قرارك الصح — مش في إتمام الصفقة</p>
-      </div>
+  <div class="inner">
+    <span class="sec-lbl">الحل</span>
+    <h2 class="sec-title light">من إعلانات كثيرة لاختيار واضح</h2>
+    <p class="sec-sub light">NestMatch بتجمع وتحلّل الوحدات المعروضة في السوق وبترتّب الخيارات حسب القيمة الحقيقية</p>
+    <div class="sol-grid">
+      <div class="sol-card"><div class="sol-icon">🗂</div><div><div class="sol-ttl">قاعدة بيانات واسعة</div><div class="sol-txt">بنرصد الوحدات المعروضة وبننظم بياناتها لتكوين صورة أوضح عن السوق — كل المتاح في مكان واحد</div></div></div>
+      <div class="sol-card"><div class="sol-icon">🔍</div><div><div class="sol-ttl">تحليل مستقل</div><div class="sol-txt">بنقيّم كل وحدة بمعايير مالية ومعمارية وسكنية — مش بس السعر والمساحة</div></div></div>
+      <div class="sol-card"><div class="sol-icon">🏆</div><div><div class="sol-ttl">ترشيح أفضل قيمة</div><div class="sol-txt">بنساعدك توصل للخيارات اللي بتقدم أفضل توازن بين السعر والجودة والموقع</div></div></div>
+      <div class="sol-card"><div class="sol-icon">⚖️</div><div><div class="sol-ttl">حياد كامل — بدون عمولة بيع</div><div class="sol-txt">مصلحتنا في قرارك الصح مش في إتمام الصفقة — التوصية مبنية على مصلحتك أنت</div></div></div>
     </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
 <section id="how">
-  <div class="section-inner">
-    <span class="section-label">كيف بتشتغل</span>
-    <h2 class="section-title">٣ خطوات بس</h2>
-
+  <div class="inner">
+    <span class="sec-lbl">كيف تبدأ</span>
+    <h2 class="sec-title">٣ خطوات بس</h2>
     <div class="steps">
       <div class="step">
-        <span class="step-num">١</span>
-        <h3 class="step-title">قولنا ميزانيتك</h3>
-        <p class="step-desc">استشارة مجانية نعرف فيها ميزانيتك وما تدور عليه في مدينتي</p>
+        <div class="step-circle"><span class="step-n">١</span></div>
+        <h3 class="step-ttl">قولنا ميزانيتك واللي بتدور عليه</h3>
+        <p class="step-txt">بتخبرنا بالميزانية ونوع الوحدة وأهم أولوياتك في السكن أو الاستثمار</p>
       </div>
       <div class="step">
-        <span class="step-num">٢</span>
-        <h3 class="step-title">استشارة مجانية</h3>
-        <p class="step-desc">بنشرحلك المعايير الحقيقية ونوريك إيه المتاح في ميزانيتك بالبيانات</p>
+        <div class="step-circle"><span class="step-n">٢</span></div>
+        <h3 class="step-ttl">بنحلل الخيارات المتاحة</h3>
+        <p class="step-txt">بنراجع الوحدات المطابقة ونقيّمها ماليًا ومعماريًا وسكنيًا بناءً على بيانات واضحة</p>
       </div>
       <div class="step">
-        <span class="step-num">٣</span>
-        <h3 class="step-title">شورت ليست + تحليل كامل</h3>
-        <p class="step-desc">أفضل الخيارات مرتبة بالتحليل الكامل — وتقدر تشتري بثقة كاملة</p>
+        <div class="step-circle"><span class="step-n">٣</span></div>
+        <h3 class="step-ttl">بنرشحلك الأفضل بالأسباب</h3>
+        <p class="step-txt">تحصل على قائمة مختصرة بأفضل الخيارات مع شرح واضح لأسباب الترشيح ونقاط القوة والضعف</p>
       </div>
     </div>
   </div>
@@ -1277,22 +483,23 @@
 <!-- CTA -->
 <section id="cta">
   <div class="cta-inner">
-    <h2 class="cta-title">ابدأ دلوقتي<br>الاستشارة الأولى مجانية</h2>
-    <p class="cta-sub">قولنا ميزانيتك — وهنقولك أفضل المتاح ليك</p>
-    <a href="https://wa.me/201000000000?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="btn-primary" target="_blank">
-      احجز استشارتك المجانية
-      <span class="btn-arrow">←</span>
+    <h2 class="cta-ttl">ابدأ قرارك<br>ببيانات أوضح</h2>
+    <p class="cta-sub">قولنا ميزانيتك — وهنساعدك تعرف أفضل المتاح ليك بناءً على تحليل مستقل</p>
+    <a href="https://wa.me/201000000000?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="btn" target="_blank">
+      ابعتلنا على واتساب <span class="btn-arr">←</span>
     </a>
-    <p class="cta-free-note"><span>مجانية تماماً</span> — بدون أي التزام</p>
+    <a href="tel:+201000000000" class="btn-call">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      اتصل بينا
+    </a>
+    <p class="cta-note"><span>مجانية تماماً</span> — بدون عمولة بيع وبدون التزام</p>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">
-    <span>Nest</span><span>Match</span>
-  </div>
-  <p class="footer-copy">مدينتي — القاهرة الجديدة</p>
+  <div class="f-logo"><span class="nest">Nest</span><span class="match">Match</span></div>
+  <p class="f-copy">مدينتي — القاهرة الجديدة © 2025</p>
 </footer>
 
 </body>
