@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NestMatch — قرّارمبنى على بيانات</title>
+<title>NestMatch — قرّر بمعلومة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -49,6 +49,16 @@ nav { position:fixed; top:0; width:100%; z-index:100; background:rgba(6,14,28,0.
 
 .btn-call { display:inline-flex; align-items:center; gap:9px; background:transparent; color:rgba(255,255,255,.6); font-family:var(--font-body); font-size:14px; font-weight:500; padding:15px 28px; border-radius:6px; text-decoration:none; border:1px solid rgba(255,255,255,.15); cursor:pointer; letter-spacing:.3px; transition:all .2s; margin-right:12px; }
 .btn-call:hover { border-color:rgba(255,255,255,.35); color:#fff; }
+.btn-report { display:inline-flex; align-items:center; gap:10px; background:transparent; color:var(--navy); font-family:var(--font-body); font-size:14px; font-weight:600; padding:13px 28px; border-radius:6px; text-decoration:none; border:2px solid var(--navy); cursor:pointer; letter-spacing:.3px; transition:all .2s; margin-top:4px; }
+.btn-report:hover { background:var(--navy); color:#fff; }
+
+/* OVERVIEW */
+.ov-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; margin-top:44px; background:var(--divider); border:1px solid var(--divider); border-radius:14px; overflow:hidden; }
+.ov-card { background:#fff; padding:36px 32px; }
+.ov-icon { font-size:28px; margin-bottom:18px; display:block; }
+.ov-ttl { font-size:16px; font-weight:600; color:var(--navy); margin-bottom:10px; line-height:1.35; }
+.ov-txt { font-size:14px; color:var(--text-sec); line-height:1.75; }
+@media(max-width:900px){ .ov-grid{grid-template-columns:1fr} }
 .btn { display:inline-flex; align-items:center; gap:12px; background:var(--gold); color:var(--navy-deep); font-family:var(--font-body); font-size:15px; font-weight:600; padding:17px 46px; border-radius:6px; text-decoration:none; border:none; cursor:pointer; letter-spacing:.3px; transition:background .2s,transform .15s,box-shadow .2s; box-shadow:0 8px 32px rgba(201,168,76,.25); }
 .btn:hover { background:var(--gold-light); transform:translateY(-2px); box-shadow:0 14px 42px rgba(201,168,76,.35); }
 .btn-arr { font-size:20px; line-height:1; }
@@ -226,7 +236,7 @@ footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items
     <div class="logo-wordmark"><span class="nest">Nest</span><span class="match">Match</span></div>
     <div class="logo-sub">Real Estate Evaluation</div>
   </a>
-  <a href="https://wa.me/201000000000?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="nav-cta" target="_blank">ابعتلنا على واتساب</a>
+  <a href="https://wa.me/201271028216?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="nav-cta" target="_blank">ابعتلنا على واتساب</a>
 </nav>
 
 <!-- HERO -->
@@ -235,10 +245,10 @@ footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items
     <div class="badge"><span class="badge-dot"></span>بدون عمولة بيع</div>
     <h1 class="hero-h1">تايه بين الإعلانات<br>وسماسرة كتير؟</h1>
     <p class="hero-h2">قرار بملايين — <strong>محتاج بيانات حقيقية وتحليل</strong><br>مش كلام بيبيع</p>
-    <a href="https://wa.me/201000000000?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="btn" target="_blank">
+    <a href="https://wa.me/201871028216?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="btn" target="_blank">
       ابعتلنا على واتساب <span class="btn-arr">←</span>
     </a>
-    <a href="tel:+201000000000" class="btn-call">
+    <a href="tel:+201271028216" class="btn-call">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
       اتصل بينا
     </a>
@@ -266,31 +276,52 @@ footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items
     <h2 class="sec-title">ليه اختيار الشقة المناسبة بقى صعب؟</h2>
     <p class="sec-sub">المشكلة مش في قلة الخيارات — في كثرتها وتشتتها وصعوبة التأكد من قيمتها الحقيقية</p>
     <div class="p-grid">
-      <div class="p-card">
+      <div class="p-card dark">
         <span class="p-num">٠١</span>
-        <h3 class="p-ttl">السوق مليان إعلانات متفرقة</h3>
-        <p class="p-txt">الوحدات المعروضة موزعة بين منصات وجروبات ومكاتب مختلفة — ومفيش صورة كاملة وواضحة لكل المتاح في السوق</p>
+        <h3 class="p-ttl">السوق مليان إعلانات متفرقة — والمتاح عندك مش محايد</h3>
+        <p class="p-txt">الوحدات موزعة بين منصات وجروبات ومكاتب مختلفة — ومفيش صورة كاملة لكل المتاح. والمعلومات اللي بتوصلك عادةً بتيجي عن طريق وسيط هدفه إتمام الصفقة مش مصلحتك</p>
       </div>
-      <div class="p-card">
+      <div class="p-card" style="grid-column: 1 / -1;">
         <span class="p-num">٠٢</span>
-        <h3 class="p-ttl">المعلومات مش كافية للقرار الصح</h3>
-        <p class="p-txt">معظم الإعلانات بتركز على السعر والمساحة بس — بينما القرار الحقيقي محتاج معرفة صافي المساحة وكفاءة التوزيع والفيو والاتجاه والخصوصية</p>
+        <h3 class="p-ttl">المعلومات مش كافية — والمقارنة مستحيلة بمفردك</h3>
+        <p class="p-txt">معظم الإعلانات بتركز على السعر والمساحة بس — بينما القرار الحقيقي محتاج معرفة عوامل كتير. وحتى لو البيانات متاحة، صعب تقارن بين مئات الشقق بكل المعايير دي بمفردك</p>
         <div class="p-tags">
           <span class="p-tag">صافي المساحة</span>
-          <span class="p-tag">التحليل الحراري</span>
+          <span class="p-tag">كفاءة توزيع المساحات</span>
           <span class="p-tag">جودة الفيو</span>
           <span class="p-tag">الخصوصية</span>
+          <span class="p-tag">الدور</span>
+          <span class="p-tag">الاتجاه</span>
+          <span class="p-tag">المسافة من الخدمات</span>
+          <span class="p-tag">درجات حرارة الغرف</span>
+          <span class="p-tag">التهوية</span>
+          <span class="p-tag">الإضاءة الطبيعية</span>
+          <span class="p-tag">التشطيب</span>
         </div>
       </div>
-      <div class="p-card">
-        <span class="p-num">٠٣</span>
-        <h3 class="p-ttl">المقارنة بين الوحدات صعبة</h3>
-        <p class="p-txt">ممكن تلاقي وحدتين بنفس السعر والمساحة تقريباً — لكن الفرق الحقيقي يكون في الفيو والاتجاه وجودة التصميم والقيمة المستقبلية. مستحيل تقارن بمفردك</p>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section id="overview" style="background:var(--warm-gray); padding:80px 6%;">
+  <div class="inner">
+    <span class="sec-lbl">الحل</span>
+    <div class="ov-grid">
+      <div class="ov-card">
+        <div class="ov-icon">📊</div>
+        <h3 class="ov-ttl">تحليل مستقل — مش مجرد بحث</h3>
+        <p class="ov-txt">من خلال قاعدة بيانات تضم كل المتاح في السوق — بنحلل 6,000 وحدة تم تقييمهم بمعايير حقيقية</p>
       </div>
-      <div class="p-card dark">
-        <span class="p-num">٠٤</span>
-        <h3 class="p-ttl">كلام البيع مش تحليل محايد</h3>
-        <p class="p-txt">الوسيط هدفه إتمام الصفقة — أما أنت فمحتاج طرف مستقل بيقيّم الخيارات بناءً على مصلحتك أنت</p>
+      <div class="ov-card">
+        <div class="ov-icon">🎯</div>
+        <h3 class="ov-ttl">أفضل الخيارات في ميزانيتك</h3>
+        <p class="ov-txt">بنوصلك لأفضل الخيارات المتاحة بناءً على تفضيلاتك — مع تقارير بالتفاصيل والأسباب</p>
+      </div>
+      <div class="ov-card">
+        <div class="ov-icon">⚖️</div>
+        <h3 class="ov-ttl">حياد كامل</h3>
+        <p class="ov-txt">بدون عمولة بيع — مصلحتنا في قرارك الصح مش في إتمام الصفقة</p>
       </div>
     </div>
   </div>
@@ -348,11 +379,17 @@ footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items
     <span class="sec-lbl">التقارير</span>
     <h2 class="sec-title">تقرير واضح لكل وحدة قبل القرار</h2>
     <p class="sec-sub">بدلاً من الاعتماد على وصف الإعلان — تحصل على تحليل منظم يساعدك تفهم نقاط القوة والضعف في كل وحدة</p>
+    <div style="margin-top:28px;">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfh8JNb-HuA3ZWxytHsrQakt5GODYgCl-DB96AoFIQJ4fr2mg/viewform?usp=header" target="_blank" class="btn-report">
+        احصل على تقرير لوحدتك
+        <span class="btn-arr">←</span>
+      </a>
+    </div>
     <div class="rep-wrap">
       <div>
         <p class="rep-quote">التقرير مش بيهدف لبيع الوحدة —<br>بيساعدك تفهمها بوضوح:<br>هل تستحق سعرها؟ هل تناسب احتياجاتك؟<br>هل في بدائل أفضل في السوق؟</p>
         <div class="rep-features">
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">البيانات الأساسية والتفاصيل المالية</div><div class="rf-txt">السعر والمدفوع والمتبقي والقيمة التحليلية للوحدة</div></div></div>
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">البيانات الأساسية والتفاصيل المالية</div><div class="rf-txt">السعر والمدفوع والمتبقي والقيمة التحليلية للوحدة · NPV</div></div></div>
           <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">صافي المساحة وكفاءة التوزيع</div><div class="rf-txt">المساحة الفعلية بعد خصم الجدران — مش الرقم في العقد</div></div></div>
           <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">الفيو المفتوح والخصوصية</div><div class="rf-txt">نوع الفيو ومدى انفتاحه وأثره على القيمة وإعادة البيع</div></div></div>
           <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">التحليل الحراري لكل أوضة</div><div class="rf-txt">درجة تعرض كل غرفة للشمس وأثره على جودة السكن</div></div></div>
@@ -399,62 +436,6 @@ footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items
   </div>
 </section>
 
-<!-- EVALUATE -->
-<section id="evaluate">
-  <div class="inner">
-    <span class="sec-lbl">منهجية التقييم</span>
-    <h2 class="sec-title">كيف بنقيّم الوحدات؟</h2>
-    <p class="sec-sub">مش بنعتمد على السعر وحده ولا على وصف الإعلان — بنحلل كل وحدة بمعايير مالية ومعمارية وسكنية</p>
-    <div class="ev-grid">
-      <div class="ev-card">
-        <span class="ev-num">١</span>
-        <div class="ev-ttl">التحليل المالي</div>
-        <div class="ev-txt">بنراجع السعر والمدفوع والمتبقي ونحدد هل السعر بيعكس قيمة حقيقية</div>
-        <span class="ev-tag">القيمة التحليلية · NPV</span>
-      </div>
-      <div class="ev-card">
-        <span class="ev-num">٢</span>
-        <div class="ev-ttl">صافي المساحة وكفاءة التوزيع</div>
-        <div class="ev-txt">مش بنكتفي بمساحة العقد — بنحلل صافي المساحة وجودة استغلال كل متر</div>
-        <span class="ev-tag">مساحة حقيقية</span>
-      </div>
-      <div class="ev-card">
-        <span class="ev-num">٣</span>
-        <div class="ev-ttl">الفيو والموقع داخل المجموعة</div>
-        <div class="ev-txt">نوع الفيو ومدى انفتاحه وقرب الوحدة من الخدمات ومستوى الخصوصية</div>
-        <span class="ev-tag">8–10% فرق في القيمة</span>
-      </div>
-      <div class="ev-card">
-        <span class="ev-num">٤</span>
-        <div class="ev-ttl">الاتجاه وجودة السكن</div>
-        <div class="ev-txt">الاتجاه ودخول الشمس والتهوية ودرجة الراحة الحرارية داخل كل أوضة</div>
-        <span class="ev-tag">تحليل حراري</span>
-      </div>
-      <div class="ev-card">
-        <span class="ev-num">٥</span>
-        <div class="ev-ttl">المقارنة بين البدائل</div>
-        <div class="ev-txt">بنقارن كل وحدة بالوحدات المشابهة في السوق للوصول لأفضل قيمة حقيقية</div>
-        <span class="ev-tag">Shortlist مرتبة</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SOLUTION -->
-<section id="solution">
-  <div class="inner">
-    <span class="sec-lbl">الحل</span>
-    <h2 class="sec-title light">من إعلانات كثيرة لاختيار واضح</h2>
-    <p class="sec-sub light">NestMatch بتجمع وتحلّل الوحدات المعروضة في السوق وبترتّب الخيارات حسب القيمة الحقيقية</p>
-    <div class="sol-grid">
-      <div class="sol-card"><div class="sol-icon">🗂</div><div><div class="sol-ttl">قاعدة بيانات واسعة</div><div class="sol-txt">بنرصد الوحدات المعروضة وبننظم بياناتها لتكوين صورة أوضح عن السوق — كل المتاح في مكان واحد</div></div></div>
-      <div class="sol-card"><div class="sol-icon">🔍</div><div><div class="sol-ttl">تحليل مستقل</div><div class="sol-txt">بنقيّم كل وحدة بمعايير مالية ومعمارية وسكنية — مش بس السعر والمساحة</div></div></div>
-      <div class="sol-card"><div class="sol-icon">🏆</div><div><div class="sol-ttl">ترشيح أفضل قيمة</div><div class="sol-txt">بنساعدك توصل للخيارات اللي بتقدم أفضل توازن بين السعر والجودة والموقع</div></div></div>
-      <div class="sol-card"><div class="sol-icon">⚖️</div><div><div class="sol-ttl">حياد كامل — بدون عمولة بيع</div><div class="sol-txt">مصلحتنا في قرارك الصح مش في إتمام الصفقة — التوصية مبنية على مصلحتك أنت</div></div></div>
-    </div>
-  </div>
-</section>
-
 <!-- HOW IT WORKS -->
 <section id="how">
   <div class="inner">
@@ -485,14 +466,14 @@ footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items
   <div class="cta-inner">
     <h2 class="cta-ttl">ابدأ قرارك<br>ببيانات أوضح</h2>
     <p class="cta-sub">قولنا ميزانيتك — وهنساعدك تعرف أفضل المتاح ليك بناءً على تحليل مستقل</p>
-    <a href="https://wa.me/201000000000?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="btn" target="_blank">
+    <a href="https://wa.me/201271028216?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="btn" target="_blank">
       ابعتلنا على واتساب <span class="btn-arr">←</span>
     </a>
-    <a href="tel:+201000000000" class="btn-call">
+    <a href="tel:+201271028216" class="btn-call">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
       اتصل بينا
     </a>
-    <p class="cta-note"><span>مجانية تماماً</span> — بدون عمولة بيع وبدون التزام</p>
+    <p class="cta-note">بدون عمولة بيع — بدون التزام</p>
   </div>
 </section>
 
@@ -501,6 +482,7 @@ footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items
   <div class="f-logo"><span class="nest">Nest</span><span class="match">Match</span></div>
   <p class="f-copy">مدينتي — القاهرة الجديدة © 2025</p>
 </footer>
+
 
 </body>
 </html>
