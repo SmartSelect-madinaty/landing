@@ -6,259 +6,922 @@
 <title>NestMatch — قرّر بمعلومة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+
 <style>
+/* ── RESET ──────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+/* ── DESIGN TOKENS ──────────────────────────────────── */
 :root {
-  --navy:#0D1F3C; --navy-deep:#060E1C; --navy-mid:#1E3A5F;
-  --gold:#C9A84C; --gold-light:#E5C86E; --gold-pale:#F2E0A8;
-  --warm-white:#F5F3EE; --warm-gray:#E8E5DE; --divider:#D4D0C8;
-  --text-dark:#1C1C1A; --text-mid:#3D3D3A; --text-sec:#6B7A8D;
-  --green:#1D9E75; --orange:#E8A020; --red:#D85A30;
-  --font-display:'Cormorant Garamond',serif;
-  --font-body:'DM Sans',sans-serif;
+  /* Brand Colors */
+  --navy:        #0D1F3C;
+  --navy-deep:   #060E1C;
+  --navy-mid:    #1E3A5F;
+  --navy-light:  #2A4B75;
+  --gold:        #C9A84C;
+  --gold-light:  #E5C86E;
+  --gold-pale:   #F2E0A8;
+  --gold-faint:  #FBF5E6;
+
+  /* Neutrals */
+  --warm-white:  #F5F3EE;
+  --warm-100:    #E8E5DE;
+  --warm-200:    #D4D0C8;
+  --warm-400:    #9B9689;
+  --warm-600:    #6B7A8D;
+  --warm-800:    #3D3D3A;
+  --warm-900:    #1C1C1A;
+
+  /* Semantic */
+  --green:  #1D9E75;
+  --orange: #E8A020;
+  --red:    #D85A30;
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  /* Spacing scale */
+  --sp-xs:  8px;
+  --sp-sm:  16px;
+  --sp-md:  24px;
+  --sp-lg:  40px;
+  --sp-xl:  64px;
+  --sp-2xl: 96px;
+
+  /* Layout */
+  --page-px:   5%;
+  --max-w:     1040px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
 }
-html { scroll-behavior:smooth; }
-body { font-family:var(--font-body); background:var(--warm-white); color:var(--text-mid); direction:rtl; line-height:1.7; -webkit-font-smoothing:antialiased; }
 
-/* NAV */
-nav { position:fixed; top:0; width:100%; z-index:100; background:rgba(6,14,28,0.97); backdrop-filter:blur(12px); height:72px; display:flex; align-items:center; justify-content:space-between; padding:0 6%; border-bottom:1px solid rgba(201,168,76,0.12); }
-.logo { display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-decoration:none; }
-.logo-wordmark { font-family:var(--font-display); font-size:30px; font-weight:400; letter-spacing:3px; line-height:1; }
-.logo-wordmark .nest { color:var(--gold); }
-.logo-wordmark .match { color:#fff; }
-.logo-sub { font-family:var(--font-body); font-size:9px; font-weight:400; letter-spacing:4px; text-transform:uppercase; color:rgba(255,255,255,0.28); }
-.nav-cta { font-family:var(--font-body); font-size:13px; font-weight:500; color:var(--navy-deep); background:var(--gold); border:none; padding:10px 24px; border-radius:4px; cursor:pointer; text-decoration:none; transition:background .2s; }
-.nav-cta:hover { background:var(--gold-light); }
-
-/* HERO */
-#hero { background:var(--navy); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:110px 6% 90px; position:relative; overflow:hidden; }
-#hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 85% 15%,rgba(201,168,76,.07) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 10% 85%,rgba(201,168,76,.04) 0%,transparent 60%); pointer-events:none; }
-#hero::after { content:''; position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px); background-size:64px 64px; pointer-events:none; }
-.hero-inner { max-width:820px; width:100%; text-align:center; position:relative; z-index:1; }
-
-.badge { display:inline-flex; align-items:center; gap:9px; background:rgba(201,168,76,.12); border:1px solid rgba(201,168,76,.32); color:var(--gold); font-size:11px; font-weight:600; padding:7px 22px; border-radius:100px; margin-bottom:44px; letter-spacing:2.5px; text-transform:uppercase; }
-.badge-dot { width:7px; height:7px; border-radius:50%; background:var(--gold); animation:pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
-
-.hero-h1 { font-family:var(--font-display); font-size:clamp(38px,5.5vw,68px); font-weight:300; color:#fff; line-height:1.18; letter-spacing:-.5px; margin-bottom:16px; }
-.hero-h1 em { color:var(--gold); font-style:normal; }
-
-.hero-h2 { font-family:var(--font-display); font-size:clamp(22px,3vw,38px); font-weight:300; font-style:italic; color:rgba(255,255,255,.5); line-height:1.35; letter-spacing:-.2px; margin-bottom:48px; }
-.hero-h2 strong { color:rgba(255,255,255,.85); font-weight:300; font-style:normal; }
-
-.btn-call { display:inline-flex; align-items:center; gap:9px; background:transparent; color:rgba(255,255,255,.6); font-family:var(--font-body); font-size:14px; font-weight:500; padding:15px 28px; border-radius:6px; text-decoration:none; border:1px solid rgba(255,255,255,.15); cursor:pointer; letter-spacing:.3px; transition:all .2s; margin-right:12px; }
-.btn-call:hover { border-color:rgba(255,255,255,.35); color:#fff; }
-.btn-report { display:inline-flex; align-items:center; gap:10px; background:transparent; color:var(--navy); font-family:var(--font-body); font-size:14px; font-weight:600; padding:13px 28px; border-radius:6px; text-decoration:none; border:2px solid var(--navy); cursor:pointer; letter-spacing:.3px; transition:all .2s; margin-top:4px; }
-.btn-report:hover { background:var(--navy); color:#fff; }
-
-/* OVERVIEW */
-.ov-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; margin-top:44px; background:var(--divider); border:1px solid var(--divider); border-radius:14px; overflow:hidden; }
-.ov-card { background:#fff; padding:36px 32px; }
-.ov-icon { font-size:28px; margin-bottom:18px; display:block; }
-.ov-ttl { font-size:16px; font-weight:600; color:var(--navy); margin-bottom:10px; line-height:1.35; }
-.ov-txt { font-size:14px; color:var(--text-sec); line-height:1.75; }
-@media(max-width:900px){ .ov-grid{grid-template-columns:1fr} }
-.btn { display:inline-flex; align-items:center; gap:12px; background:var(--gold); color:var(--navy-deep); font-family:var(--font-body); font-size:15px; font-weight:600; padding:17px 46px; border-radius:6px; text-decoration:none; border:none; cursor:pointer; letter-spacing:.3px; transition:background .2s,transform .15s,box-shadow .2s; box-shadow:0 8px 32px rgba(201,168,76,.25); }
-.btn:hover { background:var(--gold-light); transform:translateY(-2px); box-shadow:0 14px 42px rgba(201,168,76,.35); }
-.btn-arr { font-size:20px; line-height:1; }
-
-.trust-strip { display:flex; align-items:center; justify-content:center; margin-top:64px; padding-top:44px; border-top:1px solid rgba(255,255,255,.07); }
-.trust-item { text-align:center; padding:0 48px; }
-.trust-item+.trust-item { border-right:1px solid rgba(255,255,255,.07); }
-.trust-num { display:block; font-family:var(--font-display); font-size:42px; font-weight:300; color:var(--gold); line-height:1; letter-spacing:-1px; }
-.trust-lbl { display:block; font-size:11px; color:rgba(255,255,255,.32); margin-top:7px; letter-spacing:.4px; line-height:1.5; max-width:140px; }
-
-/* SECTION BASE */
-section { padding:104px 6%; }
-.inner { max-width:980px; margin:0 auto; }
-.sec-lbl { display:block; font-size:11px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:18px; }
-.sec-title { font-family:var(--font-display); font-size:clamp(30px,4vw,52px); font-weight:300; color:var(--navy); line-height:1.2; letter-spacing:-.4px; margin-bottom:14px; }
-.sec-title.light { color:#fff; }
-.sec-sub { font-size:15px; color:var(--text-sec); line-height:1.8; max-width:620px; }
-.sec-sub.light { color:rgba(255,255,255,.42); }
-
-/* PROBLEM */
-#problem { background:var(--warm-white); }
-.p-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:52px; background:var(--divider); border:1px solid var(--divider); border-radius:14px; overflow:hidden; }
-.p-card { background:#fff; padding:38px 42px; }
-.p-card.dark { background:var(--navy); }
-.p-num { font-family:var(--font-display); font-size:54px; font-weight:300; color:var(--warm-gray); line-height:1; margin-bottom:16px; display:block; }
-.p-card.dark .p-num { color:rgba(201,168,76,.2); }
-.p-ttl { font-size:18px; font-weight:600; color:var(--navy); margin-bottom:10px; line-height:1.3; }
-.p-card.dark .p-ttl { color:#fff; }
-.p-txt { font-size:15px; color:var(--text-sec); line-height:1.75; }
-.p-card.dark .p-txt { color:rgba(255,255,255,.45); }
-.p-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
-.p-tag { background:var(--warm-gray); color:var(--text-sec); font-size:11px; font-weight:500; padding:4px 13px; border-radius:100px; }
-
-/* HIDDEN */
-#hidden { background:var(--navy-deep); position:relative; overflow:hidden; }
-#hidden::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 55% 70% at 10% 50%,rgba(201,168,76,.05) 0%,transparent 65%); pointer-events:none; }
-.h-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; margin-top:52px; background:rgba(255,255,255,.05); border-radius:14px; overflow:hidden; position:relative; z-index:1; }
-.h-card { background:rgba(13,31,60,.7); padding:36px 32px; }
-.h-lbl { font-size:11px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase; color:var(--gold); margin-bottom:16px; display:block; }
-.h-ttl { font-family:var(--font-display); font-size:28px; font-weight:300; color:#fff; line-height:1.25; margin-bottom:12px; }
-.h-txt { font-size:13px; color:rgba(255,255,255,.42); line-height:1.75; }
-.h-scale { display:flex; flex-direction:column; gap:7px; margin-top:18px; }
-.h-row { display:flex; align-items:center; gap:10px; }
-.h-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-.h-row-txt { font-size:12px; color:rgba(255,255,255,.42); }
-.h-rooms { display:flex; flex-direction:column; gap:7px; margin-top:16px; }
-.h-room { display:flex; align-items:center; justify-content:space-between; }
-.h-rname { font-size:12px; color:rgba(255,255,255,.4); }
-.badge-s { font-size:10px; font-weight:600; padding:2px 10px; border-radius:4px; }
-.hot  { background:rgba(216,90,48,.25); color:#F0997B; }
-.warm { background:rgba(232,160,32,.2);  color:#E8A020; }
-.cold { background:rgba(29,158,117,.2);  color:var(--green); }
-.h-italic { font-style:italic; color:rgba(255,255,255,.6); margin-top:14px; font-size:13px; line-height:1.6; }
-.h-warning { position:relative; z-index:1; margin-top:32px; padding:26px 36px; background:rgba(201,168,76,.08); border-right:3px solid var(--gold); border-radius:0 10px 10px 0; }
-.h-warning p { font-family:var(--font-display); font-size:clamp(20px,2.5vw,30px); font-weight:300; font-style:italic; color:rgba(255,255,255,.85); line-height:1.5; }
-.h-warning strong { color:var(--gold); font-style:normal; }
-
-/* REPORT */
-#report { background:var(--warm-gray); }
-.rep-wrap { display:grid; grid-template-columns:1fr 1.3fr; gap:60px; align-items:start; margin-top:52px; }
-.rep-quote { font-family:var(--font-display); font-size:16px; font-style:italic; color:var(--text-sec); margin-bottom:36px; line-height:1.75; border-right:2px solid var(--gold); padding-right:20px; }
-.rep-features { display:flex; flex-direction:column; gap:22px; }
-.rf { display:flex; gap:14px; align-items:flex-start; }
-.rf-dot { width:5px; height:5px; border-radius:50%; background:var(--gold); flex-shrink:0; margin-top:9px; }
-.rf-ttl { font-size:15px; font-weight:600; color:var(--navy); margin-bottom:3px; }
-.rf-txt { font-size:13px; color:var(--text-sec); line-height:1.65; }
-
-/* Report Card */
-.rc { background:var(--navy); border-radius:14px; overflow:hidden; box-shadow:0 28px 72px rgba(13,31,60,.22); }
-.rc-hdr { background:var(--navy-deep); padding:18px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,.06); }
-.rc-lbl { font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--gold); }
-.rc-badge { background:var(--green); color:#fff; font-size:10px; font-weight:600; padding:4px 12px; border-radius:100px; }
-.rc-bdy { padding:26px 28px; }
-.rc-ids { display:flex; gap:8px; margin-bottom:22px; }
-.rc-id { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); color:rgba(255,255,255,.32); font-size:11px; padding:4px 12px; border-radius:4px; }
-.rc-id span { color:var(--gold); font-weight:600; margin-right:3px; }
-.rc-slbl { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.22); margin-bottom:10px; display:block; }
-.rc-metrics { display:grid; grid-template-columns:1fr 1fr; gap:2px; background:rgba(255,255,255,.05); border-radius:8px; overflow:hidden; margin-bottom:20px; }
-.rc-m { background:rgba(6,14,28,.7); padding:14px 16px; }
-.rc-mlbl { display:block; font-size:10px; color:rgba(255,255,255,.28); margin-bottom:5px; }
-.rc-mval { display:block; font-size:15px; font-weight:500; color:#fff; }
-.rc-mval.g { color:var(--green); }
-.rc-mval.gld { color:var(--gold); }
-.rc-rooms { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:20px; }
-.rc-room { display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,.03); border-radius:6px; padding:8px 12px; }
-.rc-rname { font-size:12px; color:rgba(255,255,255,.42); }
-.rc-bars { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
-.rc-brow { display:flex; align-items:center; gap:12px; }
-.rc-blbl { font-size:11px; color:rgba(255,255,255,.38); width:90px; flex-shrink:0; text-align:right; }
-.rc-btrack { flex:1; height:3px; background:rgba(255,255,255,.07); border-radius:2px; overflow:hidden; }
-.rc-bfill { height:100%; border-radius:2px; }
-.rc-bfill.g { background:var(--green); }
-.rc-bfill.o { background:var(--orange); }
-.rc-bval { font-size:11px; font-weight:500; width:64px; text-align:left; flex-shrink:0; }
-.rc-verdict { background:rgba(201,168,76,.09); border:1px solid rgba(201,168,76,.18); border-radius:8px; padding:14px 18px; display:flex; gap:12px; align-items:flex-start; }
-.rc-vicon { width:28px; height:28px; border-radius:50%; background:rgba(201,168,76,.18); display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:13px; font-weight:700; flex-shrink:0; }
-.rc-vtxt { font-size:12px; color:rgba(255,255,255,.5); line-height:1.6; }
-.rc-vtxt strong { color:var(--gold); font-weight:500; }
-
-/* EVALUATE */
-#evaluate { background:var(--warm-white); }
-.ev-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:2px; margin-top:52px; background:var(--divider); border:1px solid var(--divider); border-radius:14px; overflow:hidden; }
-.ev-card { background:#fff; padding:32px 22px; display:flex; flex-direction:column; gap:14px; }
-.ev-num { font-family:var(--font-display); font-size:50px; font-weight:300; color:var(--warm-gray); line-height:1; }
-.ev-ttl { font-size:14px; font-weight:600; color:var(--navy); line-height:1.35; }
-.ev-txt { font-size:13px; color:var(--text-sec); line-height:1.7; flex:1; }
-.ev-tag { display:inline-block; background:rgba(201,168,76,.1); color:var(--gold); font-size:10px; font-weight:600; padding:3px 10px; border-radius:4px; letter-spacing:.5px; align-self:flex-start; }
-
-/* SOLUTION */
-#solution { background:var(--navy); }
-.sol-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:52px; background:rgba(255,255,255,.06); border-radius:14px; overflow:hidden; }
-.sol-card { background:rgba(13,31,60,.7); padding:36px 40px; display:flex; gap:20px; align-items:flex-start; }
-.sol-icon { width:44px; height:44px; border-radius:8px; background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.18); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
-.sol-ttl { font-size:15px; font-weight:600; color:#fff; margin-bottom:8px; line-height:1.3; }
-.sol-txt { font-size:13px; color:rgba(255,255,255,.42); line-height:1.7; }
-
-/* HOW */
-#how { background:var(--warm-white); }
-.steps { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; margin-top:52px; position:relative; }
-.steps::before { content:''; position:absolute; top:34px; right:17%; left:17%; height:1px; background:var(--divider); z-index:0; }
-.step { text-align:center; padding:0 32px; position:relative; z-index:1; }
-.step-circle { width:68px; height:68px; border-radius:50%; background:var(--warm-white); border:2px solid var(--divider); display:flex; align-items:center; justify-content:center; margin:0 auto 24px; }
-.step-n { font-family:var(--font-display); font-size:28px; font-weight:300; color:var(--gold); line-height:1; }
-.step-ttl { font-size:15px; font-weight:600; color:var(--navy); margin-bottom:10px; line-height:1.35; }
-.step-txt { font-size:13px; color:var(--text-sec); line-height:1.7; }
-
-/* CTA */
-#cta { background:var(--navy); text-align:center; padding:110px 6%; position:relative; overflow:hidden; }
-#cta::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 65% 80% at 50% 50%,rgba(201,168,76,.06) 0%,transparent 70%); pointer-events:none; }
-.cta-inner { max-width:640px; margin:0 auto; position:relative; z-index:1; }
-.cta-ttl { font-family:var(--font-display); font-size:clamp(36px,5vw,60px); font-weight:300; color:#fff; line-height:1.2; margin-bottom:16px; letter-spacing:-.4px; }
-.cta-sub { font-size:16px; color:rgba(255,255,255,.42); margin-bottom:44px; line-height:1.75; }
-.cta-note { margin-top:18px; font-size:13px; color:rgba(255,255,255,.28); }
-.cta-note span { color:var(--green); }
-
-/* FOOTER */
-footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,.05); }
-.f-logo { font-family:var(--font-display); font-size:22px; font-weight:400; letter-spacing:2px; }
-.f-logo .nest { color:var(--gold); }
-.f-logo .match { color:rgba(255,255,255,.32); }
-.f-copy { font-size:11px; color:rgba(255,255,255,.2); letter-spacing:.5px; }
-
-/* ANIMATIONS */
-@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-.hero-inner>*{animation:fadeUp .8s cubic-bezier(.22,1,.36,1) both}
-.hero-inner>*:nth-child(1){animation-delay:.1s}
-.hero-inner>*:nth-child(2){animation-delay:.25s}
-.hero-inner>*:nth-child(3){animation-delay:.4s}
-.hero-inner>*:nth-child(4){animation-delay:.52s}
-.hero-inner>*:nth-child(5){animation-delay:.62s}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .p-grid,.sol-grid{grid-template-columns:1fr}
-  .h-grid{grid-template-columns:1fr}
-  .ev-grid{grid-template-columns:1fr 1fr}
-  .steps{grid-template-columns:1fr}
-  .steps::before{display:none}
-  .rep-wrap{grid-template-columns:1fr}
-  .trust-strip{flex-direction:column;gap:28px}
-  .trust-item{border-right:none!important;padding:0}
-  footer{flex-direction:column;gap:12px;text-align:center}
+/* ── BASE ───────────────────────────────────────────── */
+body {
+  font-family: var(--font-body);
+  background: var(--warm-white);
+  color: var(--warm-800);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-@media(max-width:600px){
-  .ev-grid{grid-template-columns:1fr}
-  .rc-metrics,.rc-rooms{grid-template-columns:1fr}
+img { display: block; max-width: 100%; }
+a { text-decoration: none; }
+
+/* ── UTILITY ────────────────────────────────────────── */
+.inner {
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding-inline: var(--page-px);
+}
+.sec-label {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.sec-title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.4px;
+  color: var(--navy);
+  margin-bottom: 12px;
+  font-size: clamp(28px, 4vw, 48px);
+}
+.sec-title--light { color: #fff; }
+.sec-sub {
+  font-size: 15px;
+  color: var(--warm-600);
+  line-height: 1.8;
+  max-width: 580px;
+}
+.sec-sub--light { color: rgba(255,255,255,.45); }
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: var(--warm-100);
+  color: var(--warm-600);
+}
+
+/* ── BUTTONS ────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--gold);
+  color: var(--navy-deep);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 32px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  transition: background .2s, transform .15s, box-shadow .2s;
+  box-shadow: 0 6px 24px rgba(201,168,76,.3);
+  white-space: nowrap;
+}
+.btn-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(201,168,76,.38);
+}
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: rgba(255,255,255,.65);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 13px 24px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,.18);
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+  white-space: nowrap;
+}
+.btn-ghost:hover { border-color: rgba(255,255,255,.4); color: #fff; }
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--navy);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--navy);
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  white-space: nowrap;
+}
+.btn-outline:hover { background: var(--navy); color: #fff; }
+
+/* ── NAV ────────────────────────────────────────────── */
+nav {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 200;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--page-px);
+  background: rgba(6, 14, 28, .96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(201,168,76,.1);
+}
+.nav-logo { display: flex; flex-direction: column; gap: 2px; }
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 2.5px;
+  line-height: 1;
+}
+.nav-wordmark .n  { color: var(--gold); }
+.nav-wordmark .m  { color: #fff; }
+.nav-sub {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.25);
+  line-height: 1;
+}
+.nav-cta {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy-deep);
+  background: var(--gold);
+  border: none;
+  padding: 9px 20px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background .2s;
+  white-space: nowrap;
+}
+.nav-cta:hover { background: var(--gold-light); }
+
+/* ── HERO ───────────────────────────────────────────── */
+#hero {
+  background: var(--navy);
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-block: calc(68px + 60px) 72px;
+  padding-inline: var(--page-px);
+  position: relative;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 55% at 80% 10%, rgba(201,168,76,.07) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 45% at 15% 85%, rgba(201,168,76,.04) 0%, transparent 60%);
+}
+.hero-grid-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.016) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.016) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--max-w);
+  margin-inline: auto;
+  width: 100%;
+  text-align: center;
+}
+
+/* Hero — badge */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(201,168,76,.1);
+  border: 1px solid rgba(201,168,76,.28);
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 6px 20px;
+  border-radius: 100px;
+  margin-bottom: 36px;
+}
+.badge-pulse {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: .45; transform: scale(.75); }
+}
+
+/* Hero — headings */
+.hero-h1 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.18;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+  font-size: clamp(34px, 5.5vw, 66px);
+}
+.hero-h1 em { color: var(--gold); font-style: normal; }
+.hero-h2 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,.5);
+  line-height: 1.4;
+  letter-spacing: -0.2px;
+  margin-bottom: 44px;
+  font-size: clamp(18px, 2.8vw, 34px);
+}
+.hero-h2 strong { color: rgba(255,255,255,.82); font-weight: 300; font-style: normal; }
+
+/* Hero — CTA row */
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 56px;
+}
+
+/* Hero — trust strip */
+.trust-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 540px;
+  margin-inline: auto;
+}
+.trust-item {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: var(--radius-md);
+  padding: 20px 14px;
+  text-align: center;
+}
+.trust-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: -1px;
+  margin-bottom: 7px;
+}
+.trust-lbl {
+  display: block;
+  font-size: 10.5px;
+  color: rgba(255,255,255,.38);
+  letter-spacing: 0.2px;
+  line-height: 1.55;
+}
+
+/* Hero animations */
+.hero-inner > * {
+  animation: fadeUp .85s cubic-bezier(.22,1,.36,1) both;
+}
+.hero-inner > *:nth-child(1) { animation-delay: .08s; }
+.hero-inner > *:nth-child(2) { animation-delay: .22s; }
+.hero-inner > *:nth-child(3) { animation-delay: .36s; }
+.hero-inner > *:nth-child(4) { animation-delay: .48s; }
+.hero-inner > *:nth-child(5) { animation-delay: .58s; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SECTION PADDING ────────────────────────────────── */
+.section { padding-block: var(--sp-xl); }
+.section--lg { padding-block: var(--sp-2xl); }
+.section--dark { background: var(--navy-deep); }
+.section--navy { background: var(--navy); }
+.section--gray { background: var(--warm-100); }
+.section--white { background: #fff; }
+
+/* Section header spacing */
+.sec-hdr { margin-bottom: var(--sp-lg); }
+
+/* ── PROBLEM SECTION ────────────────────────────────── */
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--warm-200);
+  border: 1px solid var(--warm-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.p-card {
+  background: #fff;
+  padding: 36px;
+}
+.p-card--dark { background: var(--navy); }
+.p-card--full { grid-column: 1 / -1; }
+.p-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 300;
+  color: var(--warm-100);
+  line-height: 1;
+  margin-bottom: 14px;
+}
+.p-card--dark .p-num { color: rgba(201,168,76,.15); }
+.p-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+.p-card--dark .p-title { color: #fff; }
+.p-text {
+  font-size: 14px;
+  color: var(--warm-600);
+  line-height: 1.8;
+}
+.p-card--dark .p-text { color: rgba(255,255,255,.42); }
+.p-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+/* ── OVERVIEW ───────────────────────────────────────── */
+.ov-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--warm-200);
+  border: 1px solid var(--warm-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.ov-card {
+  background: #fff;
+  padding: 32px 28px;
+}
+.ov-icon {
+  font-size: 26px;
+  margin-bottom: 16px;
+  display: block;
+}
+.ov-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+.ov-text {
+  font-size: 13px;
+  color: var(--warm-600);
+  line-height: 1.75;
+}
+
+/* ── HIDDEN KNOWLEDGE ───────────────────────────────── */
+.h-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: rgba(255,255,255,.04);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.h-card {
+  background: rgba(13,31,60,.65);
+  padding: 32px 28px;
+}
+.h-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: block;
+}
+.h-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.28;
+  margin-bottom: 10px;
+}
+.h-text {
+  font-size: 13px;
+  color: rgba(255,255,255,.4);
+  line-height: 1.75;
+}
+.h-scale { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.h-row { display: flex; align-items: center; gap: 9px; }
+.h-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.h-row-text { font-size: 12px; color: rgba(255,255,255,.4); }
+
+.badge-sm {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: var(--radius-sm);
+}
+.badge-hot  { background: rgba(216,90,48,.22);  color: #F09970; }
+.badge-warm { background: rgba(232,160,32,.18); color: #E8A020; }
+.badge-cold { background: rgba(29,158,117,.18); color: var(--green); }
+
+.h-rooms { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.h-room  { display: flex; align-items: center; justify-content: space-between; }
+.h-room-name { font-size: 12px; color: rgba(255,255,255,.4); }
+.h-italic {
+  font-style: italic;
+  color: rgba(255,255,255,.55);
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin-top: 14px;
+}
+
+.h-warning {
+  padding: 24px 32px;
+  background: rgba(201,168,76,.08);
+  border-inline-end: 3px solid var(--gold);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.h-warning-title {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.5vw, 28px);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,.85);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.h-warning-title strong { color: var(--gold); font-style: normal; }
+.h-warning-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,.4);
+  line-height: 1.7;
+}
+
+/* ── REPORT ─────────────────────────────────────────── */
+.report-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 52px;
+  align-items: start;
+}
+.rep-quote {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-style: italic;
+  color: var(--warm-600);
+  line-height: 1.8;
+  border-inline-end: 2px solid var(--gold);
+  padding-inline-end: 20px;
+  margin-bottom: 32px;
+}
+.rep-features { display: flex; flex-direction: column; gap: 20px; }
+.rf { display: flex; gap: 14px; align-items: flex-start; }
+.rf-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+.rf-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 3px;
+}
+.rf-text { font-size: 13px; color: var(--warm-600); line-height: 1.65; }
+
+/* Report card mock */
+.rc {
+  background: var(--navy);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(6,14,28,.25);
+}
+.rc-head {
+  background: var(--navy-deep);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.rc-head-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.rc-head-badge {
+  background: var(--green);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+.rc-body { padding: 22px 24px; }
+.rc-ids { display: flex; gap: 7px; margin-bottom: 20px; }
+.rc-id {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.3);
+  font-size: 11px;
+  padding: 4px 11px;
+  border-radius: var(--radius-sm);
+}
+.rc-id span { color: var(--gold); font-weight: 600; margin-inline-end: 3px; }
+.rc-section-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.2);
+  margin-bottom: 10px;
+}
+.rc-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: rgba(255,255,255,.05);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.rc-metric {
+  background: rgba(6,14,28,.65);
+  padding: 12px 14px;
+}
+.rc-metric-label { display: block; font-size: 10px; color: rgba(255,255,255,.26); margin-bottom: 5px; }
+.rc-metric-value { display: block; font-size: 14px; font-weight: 500; color: #fff; }
+.rc-metric-value.c-green { color: var(--green); }
+.rc-metric-value.c-gold  { color: var(--gold); }
+.rc-rooms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin-bottom: 18px;
+}
+.rc-room {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,.03);
+  border-radius: var(--radius-sm);
+  padding: 7px 10px;
+}
+.rc-room-name { font-size: 11px; color: rgba(255,255,255,.38); }
+.rc-bars { display: flex; flex-direction: column; gap: 9px; margin-bottom: 18px; }
+.rc-bar-row { display: flex; align-items: center; gap: 10px; }
+.rc-bar-label  { font-size: 11px; color: rgba(255,255,255,.35); width: 82px; flex-shrink: 0; text-align: end; }
+.rc-bar-track  { flex: 1; height: 3px; background: rgba(255,255,255,.07); border-radius: 2px; overflow: hidden; }
+.rc-bar-fill   { height: 100%; border-radius: 2px; }
+.rc-bar-fill.g { background: var(--green); }
+.rc-bar-fill.o { background: var(--orange); }
+.rc-bar-value  { font-size: 11px; font-weight: 500; width: 60px; text-align: start; flex-shrink: 0; }
+.rc-verdict {
+  background: rgba(201,168,76,.08);
+  border: 1px solid rgba(201,168,76,.16);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+}
+.rc-verdict-icon {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: rgba(201,168,76,.16);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.rc-verdict-text { font-size: 12px; color: rgba(255,255,255,.48); line-height: 1.6; }
+.rc-verdict-text strong { color: var(--gold); font-weight: 500; }
+
+/* ── HOW IT WORKS ───────────────────────────────────── */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  position: relative;
+}
+.steps-line {
+  position: absolute;
+  top: 34px;
+  inset-inline: 17%;
+  height: 1px;
+  background: var(--warm-200);
+  z-index: 0;
+}
+.step {
+  text-align: center;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+.step-circle {
+  width: 66px; height: 66px;
+  border-radius: 50%;
+  background: var(--warm-white);
+  border: 2px solid var(--warm-200);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 22px;
+}
+.step-num {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+}
+.step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 9px;
+  line-height: 1.38;
+}
+.step-text { font-size: 13px; color: var(--warm-600); line-height: 1.7; }
+
+/* ── CTA SECTION ────────────────────────────────────── */
+.cta-wrap {
+  max-width: 600px;
+  margin-inline: auto;
+  text-align: center;
+}
+.cta-title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.22;
+  letter-spacing: -0.4px;
+  margin-bottom: 14px;
+  font-size: clamp(32px, 5vw, 58px);
+}
+.cta-sub {
+  font-size: 15px;
+  color: rgba(255,255,255,.4);
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+.cta-note {
+  margin-top: 16px;
+  font-size: 12.5px;
+  color: rgba(255,255,255,.26);
+}
+.cta-note span { color: var(--green); }
+.cta-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 60% 75% at 50% 50%, rgba(201,168,76,.055) 0%, transparent 70%);
+}
+.cta-section-inner { position: relative; z-index: 1; }
+
+/* ── FOOTER ─────────────────────────────────────────── */
+footer {
+  background: var(--navy-deep);
+  padding: 28px var(--page-px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid rgba(255,255,255,.05);
+}
+.f-logo { font-family: var(--font-display); font-size: 20px; font-weight: 400; letter-spacing: 2px; }
+.f-logo .n { color: var(--gold); }
+.f-logo .m { color: rgba(255,255,255,.3); }
+.f-copy { font-size: 11px; color: rgba(255,255,255,.18); letter-spacing: 0.4px; }
+
+/* ── RESPONSIVE — Mobile First ──────────────────────── */
+
+/* ≤ 480px — small phones */
+@media (max-width: 480px) {
+  :root {
+    --page-px: 18px;
+    --sp-xl:  52px;
+    --sp-2xl: 72px;
+  }
+
+  nav { height: 60px; }
+  .nav-sub { display: none; }
+  .nav-wordmark { font-size: 22px; }
+  .nav-cta { font-size: 12px; padding: 8px 16px; }
+
+  #hero { padding-block: calc(60px + 52px) 60px; }
+  .hero-badge { font-size: 9px; letter-spacing: 2px; padding: 5px 16px; margin-bottom: 28px; }
+
+  .trust-strip {
+    grid-template-columns: 1fr 1fr;
+    max-width: 100%;
+  }
+  .trust-strip .trust-item:last-child {
+    grid-column: 1 / -1;
+  }
+  .trust-num { font-size: 26px; }
+  .trust-lbl { font-size: 10px; }
+
+  .problem-grid { grid-template-columns: 1fr; }
+  .p-card--full { grid-column: 1; }
+
+  .ov-grid    { grid-template-columns: 1fr; }
+  .h-grid     { grid-template-columns: 1fr; }
+  .report-wrap { grid-template-columns: 1fr; gap: 36px; }
+
+  .steps-grid { grid-template-columns: 1fr; gap: 32px; }
+  .steps-line { display: none; }
+
+  .rc-metrics { grid-template-columns: 1fr; }
+  .rc-rooms   { grid-template-columns: 1fr; }
+
+  footer { flex-direction: column; text-align: center; padding-block: 24px; }
+}
+
+/* 481px – 767px — large phones / small tablets */
+@media (min-width: 481px) and (max-width: 767px) {
+  :root {
+    --page-px: 22px;
+    --sp-xl:   60px;
+  }
+  .problem-grid { grid-template-columns: 1fr; }
+  .p-card--full { grid-column: 1; }
+  .ov-grid  { grid-template-columns: 1fr; }
+  .h-grid   { grid-template-columns: 1fr; }
+  .report-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .steps-grid  { grid-template-columns: 1fr; gap: 32px; }
+  .steps-line  { display: none; }
+  footer { flex-direction: column; text-align: center; }
+}
+
+/* 768px – 1023px — tablets */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .h-grid { grid-template-columns: 1fr 1fr; }
+  .ov-grid { grid-template-columns: 1fr 1fr; }
+  .ov-grid .ov-card:last-child { grid-column: 1 / -1; }
+  .report-wrap { grid-template-columns: 1fr; gap: 44px; }
+  .steps-grid  { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ≥ 1024px — desktop (full layout) */
+@media (min-width: 1024px) {
+  .report-wrap { grid-template-columns: 1fr 1.25fr; }
+}
+
+/* Shared ≤ 1023px */
+@media (max-width: 1023px) {
+  .p-card { padding: 28px; }
+  .h-card { padding: 26px 24px; }
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ═══════════════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════════════ -->
 <nav>
-  <a href="#" class="logo">
-    <div class="logo-wordmark"><span class="nest">Nest</span><span class="match">Match</span></div>
-    <div class="logo-sub">Real Estate Evaluation</div>
+  <a href="#" class="nav-logo" aria-label="NestMatch — الصفحة الرئيسية">
+    <div class="nav-wordmark"><span class="n">Nest</span><span class="m">Match</span></div>
+    <div class="nav-sub">Real Estate Intelligence</div>
   </a>
-  <a href="https://wa.me/201271028216?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="nav-cta" target="_blank">ابعتلنا على واتساب</a>
+  <a href="https://wa.me/201000000000?text=مرحباً%20—%20عايز%20أعرف%20أفضل%20المتاح%20في%20ميزانيتي%20في%20مدينتي"
+     class="nav-cta" target="_blank" rel="noopener">
+    ابعتلنا واتساب
+  </a>
 </nav>
 
-<!-- HERO -->
-<section id="hero">
+
+<!-- ═══════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════ -->
+<section id="hero" aria-labelledby="hero-h1">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-grid-overlay" aria-hidden="true"></div>
+
   <div class="hero-inner">
-    <div class="badge"><span class="badge-dot"></span>بدون عمولة بيع</div>
-    <h1 class="hero-h1">تايه بين الإعلانات<br>وسماسرة كتير؟</h1>
-    <p class="hero-h2">قرار بملايين — <strong>محتاج بيانات حقيقية وتحليل</strong><br>مش كلام بيبيع</p>
-    <a href="https://wa.me/201871028216?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="btn" target="_blank">
-      ابعتلنا على واتساب <span class="btn-arr">←</span>
-    </a>
-    <a href="tel:+201271028216" class="btn-call">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-      اتصل بينا
-    </a>
+    <div class="hero-badge" role="note">
+      <span class="badge-pulse" aria-hidden="true"></span>
+      بدون عمولة بيع
+    </div>
+
+    <h1 class="hero-h1" id="hero-h1">
+      تايه بين الإعلانات<br>وسماسرة كتير؟
+    </h1>
+
+    <p class="hero-h2">
+      قرار بملايين — <strong>محتاج بيانات حقيقية وتحليل</strong><br>
+      مش كلام بيبيع
+    </p>
+
+    <div class="hero-ctas">
+      <a href="https://wa.me/201000000000?text=مرحباً%20—%20عايز%20أعرف%20أفضل%20المتاح%20في%20ميزانيتي%20في%20مدينتي"
+         class="btn-primary" target="_blank" rel="noopener">
+        ابعتلنا على واتساب
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+      <a href="tel:+201000000000" class="btn-ghost">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        اتصل بينا
+      </a>
+    </div>
+
     <div class="trust-strip">
       <div class="trust-item">
         <span class="trust-num">6,000+</span>
         <span class="trust-lbl">وحدة محلّلة في قاعدة البيانات</span>
       </div>
       <div class="trust-item">
-        <span class="trust-num" style="font-size:18px;letter-spacing:1px;padding-top:10px">تحليل مستقل</span>
+        <span class="trust-num" style="font-size:15px;letter-spacing:.5px;padding-top:8px;line-height:1.4;">تحليل مستقل</span>
         <span class="trust-lbl">مبني على البيانات<br>مش على الصفقة</span>
       </div>
       <div class="trust-item">
@@ -269,166 +932,296 @@ footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items
   </div>
 </section>
 
-<!-- PROBLEM -->
-<section id="problem">
+
+<!-- ═══════════════════════════════════════════════════
+     PROBLEM
+═══════════════════════════════════════════════════ -->
+<section class="section section--white" id="problem" aria-labelledby="problem-title">
   <div class="inner">
-    <span class="sec-lbl">المشكلة</span>
-    <h2 class="sec-title">ليه اختيار الشقة المناسبة بقى صعب؟</h2>
-    <p class="sec-sub">المشكلة مش في قلة الخيارات — في كثرتها وتشتتها وصعوبة التأكد من قيمتها الحقيقية</p>
-    <div class="p-grid">
-      <div class="p-card dark">
-        <span class="p-num">٠١</span>
-        <h3 class="p-ttl">السوق مليان إعلانات متفرقة — والمتاح عندك مش محايد</h3>
-        <p class="p-txt">الوحدات موزعة بين منصات وجروبات ومكاتب مختلفة — ومفيش صورة كاملة لكل المتاح. والمعلومات اللي بتوصلك عادةً بتيجي عن طريق وسيط هدفه إتمام الصفقة مش مصلحتك</p>
+    <header class="sec-hdr">
+      <span class="sec-label">المشكلة</span>
+      <h2 class="sec-title" id="problem-title">ليه اختيار الشقة المناسبة بقى صعب؟</h2>
+      <p class="sec-sub">المشكلة مش في قلة الخيارات — في كثرتها وتشتتها وصعوبة التأكد من قيمتها الحقيقية</p>
+    </header>
+
+    <div class="problem-grid">
+      <div class="p-card p-card--dark">
+        <span class="p-num" aria-hidden="true">٠١</span>
+        <h3 class="p-title">السوق مليان إعلانات متفرقة — والمتاح عندك مش محايد</h3>
+        <p class="p-text">الوحدات موزعة بين منصات وجروبات ومكاتب مختلفة — ومفيش صورة كاملة لكل المتاح. والمعلومات اللي بتوصلك عادةً بتيجي عن طريق وسيط هدفه إتمام الصفقة مش مصلحتك.</p>
       </div>
-      <div class="p-card" style="grid-column: 1 / -1;">
-        <span class="p-num">٠٢</span>
-        <h3 class="p-ttl">المعلومات مش كافية — والمقارنة مستحيلة بمفردك</h3>
-        <p class="p-txt">معظم الإعلانات بتركز على السعر والمساحة بس — بينما القرار الحقيقي محتاج معرفة عوامل كتير. وحتى لو البيانات متاحة، صعب تقارن بين مئات الشقق بكل المعايير دي بمفردك</p>
+
+      <div class="p-card">
+        <span class="p-num" aria-hidden="true">٠٢</span>
+        <h3 class="p-title">المقارنة مستحيلة بمفردك</h3>
+        <p class="p-text">صعب تقارن بين مئات الشقق بكل المعايير المؤثرة على القرار — حتى لو البيانات متاحة.</p>
         <div class="p-tags">
-          <span class="p-tag">صافي المساحة</span>
-          <span class="p-tag">كفاءة توزيع المساحات</span>
-          <span class="p-tag">جودة الفيو</span>
-          <span class="p-tag">الخصوصية</span>
-          <span class="p-tag">الدور</span>
-          <span class="p-tag">الاتجاه</span>
-          <span class="p-tag">المسافة من الخدمات</span>
-          <span class="p-tag">درجات حرارة الغرف</span>
-          <span class="p-tag">التهوية</span>
-          <span class="p-tag">الإضاءة الطبيعية</span>
-          <span class="p-tag">التشطيب</span>
+          <span class="tag">صافي المساحة</span>
+          <span class="tag">جودة الفيو</span>
+          <span class="tag">الخصوصية</span>
+          <span class="tag">الاتجاه</span>
+          <span class="tag">الدور</span>
+          <span class="tag">المسافة من الخدمات</span>
+          <span class="tag">التحليل الحراري</span>
+          <span class="tag">التهوية</span>
+          <span class="tag">الإضاءة الطبيعية</span>
         </div>
+      </div>
+
+      <div class="p-card p-card--full" style="border-top: 2px solid rgba(201,168,76,.18); background: var(--gold-faint);">
+        <span class="p-num" aria-hidden="true" style="color: rgba(201,168,76,.3);">٠٣</span>
+        <h3 class="p-title" style="color: var(--navy);">قرار بملايين — مبني على معلومة ناقصة</h3>
+        <p class="p-text">معظم الناس بتتخذ قرار شراء شقة بناءً على الانطباع والكلام — مش على تحليل حقيقي للقيمة.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- OVERVIEW -->
-<section id="overview" style="background:var(--warm-gray); padding:80px 6%;">
+
+<!-- ═══════════════════════════════════════════════════
+     OVERVIEW (SOLUTION SUMMARY)
+═══════════════════════════════════════════════════ -->
+<section class="section" style="background: var(--warm-100);" id="overview" aria-labelledby="ov-title">
   <div class="inner">
-    <span class="sec-lbl">الحل</span>
+    <header class="sec-hdr">
+      <span class="sec-label">الحل</span>
+      <h2 class="sec-title" id="ov-title">تحليل مستقل — مش مجرد بحث</h2>
+    </header>
+
     <div class="ov-grid">
       <div class="ov-card">
-        <div class="ov-icon">📊</div>
-        <h3 class="ov-ttl">تحليل مستقل — مش مجرد بحث</h3>
-        <p class="ov-txt">من خلال قاعدة بيانات تضم كل المتاح في السوق — بنحلل 6,000 وحدة تم تقييمهم بمعايير حقيقية</p>
+        <span class="ov-icon" aria-hidden="true">📊</span>
+        <h3 class="ov-title">رؤية السوق الكاملة</h3>
+        <p class="ov-text">من خلال قاعدة بيانات تضم 6,000 وحدة محللة — بنشوف كل المتاح مش جزء منه.</p>
       </div>
       <div class="ov-card">
-        <div class="ov-icon">🎯</div>
-        <h3 class="ov-ttl">أفضل الخيارات في ميزانيتك</h3>
-        <p class="ov-txt">بنوصلك لأفضل الخيارات المتاحة بناءً على تفضيلاتك — مع تقارير بالتفاصيل والأسباب</p>
+        <span class="ov-icon" aria-hidden="true">🎯</span>
+        <h3 class="ov-title">أفضل الخيارات في ميزانيتك</h3>
+        <p class="ov-text">بنوصلك لأفضل 20 شقة بناءً على أولوياتك — مع تقارير تفصيلية بالأسباب.</p>
       </div>
       <div class="ov-card">
-        <div class="ov-icon">⚖️</div>
-        <h3 class="ov-ttl">حياد كامل</h3>
-        <p class="ov-txt">بدون عمولة بيع — مصلحتنا في قرارك الصح مش في إتمام الصفقة</p>
+        <span class="ov-icon" aria-hidden="true">⚖️</span>
+        <h3 class="ov-title">حياد كامل بلا عمولة</h3>
+        <p class="ov-text">مصلحتنا في قرارك الصح — مش في إتمام الصفقة. بدون عمولة بيع.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HIDDEN KNOWLEDGE -->
-<section id="hidden">
-  <div class="inner" style="position:relative;z-index:1">
-    <span class="sec-lbl">اللي مش بتعرفه</span>
-    <h2 class="sec-title light">تفاصيل بتأثر على قيمة قرارك</h2>
-    <p class="sec-sub light">في العقار، الفرق الحقيقي مش بيظهر دايماً في الإعلان</p>
+
+<!-- ═══════════════════════════════════════════════════
+     HIDDEN KNOWLEDGE
+═══════════════════════════════════════════════════ -->
+<section class="section section--dark" id="hidden" aria-labelledby="hidden-title">
+  <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 65% at 10% 50%, rgba(201,168,76,.045) 0%, transparent 65%);"></div>
+  <div class="inner" style="position:relative;z-index:1;">
+    <header class="sec-hdr">
+      <span class="sec-label">اللي مش بتعرفه</span>
+      <h2 class="sec-title sec-title--light" id="hidden-title">تفاصيل بتأثر على قيمة قرارك</h2>
+      <p class="sec-sub sec-sub--light">في العقار، الفرق الحقيقي مش بيظهر دايماً في الإعلان</p>
+    </header>
+
     <div class="h-grid">
+      <!-- Card 1: Space -->
       <div class="h-card">
-        <span class="h-lbl">المساحة</span>
-        <h3 class="h-ttl">مساحة العقد مش معيار للمقارنة</h3>
-        <p class="h-txt">في مدينتي نماذج مساحتها في العقد أكبر — لكن صافي مساحتها الحقيقية أصغر من نماذج تانية</p>
+        <span class="h-label">المساحة</span>
+        <h3 class="h-title">مساحة العقد مش معيار للمقارنة</h3>
+        <p class="h-text">في مدينتي نماذج مساحتها في العقد أكبر — لكن صافي مساحتها الحقيقية أصغر.</p>
         <div class="h-scale">
-          <div class="h-row"><div class="h-dot" style="background:var(--red)"></div><span class="h-row-txt">عقد كبير — صافي مساحة أصغر</span></div>
-          <div class="h-row"><div class="h-dot" style="background:var(--green)"></div><span class="h-row-txt">عقد أصغر — لكن صافي المساحة أكبر</span></div>
+          <div class="h-row">
+            <div class="h-dot" style="background:var(--red)"></div>
+            <span class="h-row-text">عقد كبير — صافي مساحة أصغر</span>
+          </div>
+          <div class="h-row">
+            <div class="h-dot" style="background:var(--green)"></div>
+            <span class="h-row-text">عقد أصغر — صافي المساحة أكبر</span>
+          </div>
         </div>
       </div>
+
+      <!-- Card 2: View -->
       <div class="h-card">
-        <span class="h-lbl">الفيو — 8–10% من سعر الشقة</span>
-        <h3 class="h-ttl">مش كل جاردن زي بعض</h3>
-        <p class="h-txt">ومعيار أساسي في إعادة البيع</p>
+        <span class="h-label">الفيو — 8–10% من سعر الشقة</span>
+        <h3 class="h-title">مش كل جاردن زي بعض</h3>
+        <p class="h-text">ومعيار أساسي في إعادة البيع.</p>
         <div class="h-scale" style="margin-top:16px">
-          <div class="h-row"><div class="h-dot" style="background:var(--red)"></div><span class="h-row-txt">Narrow Garden ← الأضعف</span></div>
-          <div class="h-row"><div class="h-dot" style="background:var(--orange)"></div><span class="h-row-txt">Garden عادي</span></div>
-          <div class="h-row"><div class="h-dot" style="background:var(--green)"></div><span class="h-row-txt">Wide Garden ← الأقوى</span></div>
-          <div class="h-row" style="margin-top:4px"><div class="h-dot" style="background:var(--gold)"></div><span class="h-row-txt">فيو مفتوح / تراث مفتوح = قيمة أعلى</span></div>
+          <div class="h-row">
+            <div class="h-dot" style="background:var(--red)"></div>
+            <span class="h-row-text">Narrow Garden ← الأضعف</span>
+          </div>
+          <div class="h-row">
+            <div class="h-dot" style="background:var(--orange)"></div>
+            <span class="h-row-text">Garden عادي</span>
+          </div>
+          <div class="h-row">
+            <div class="h-dot" style="background:var(--green)"></div>
+            <span class="h-row-text">Wide Garden ← الأقوى</span>
+          </div>
+          <div class="h-row" style="margin-top:4px">
+            <div class="h-dot" style="background:var(--gold)"></div>
+            <span class="h-row-text">فيو مفتوح = قيمة أعلى</span>
+          </div>
         </div>
       </div>
+
+      <!-- Card 3: Direction / Heat -->
       <div class="h-card">
-        <span class="h-lbl">الاتجاه</span>
-        <h3 class="h-ttl">بيفرق في حياتك كل يوم</h3>
-        <p class="h-txt">مش بس اتجاه الهواء</p>
+        <span class="h-label">الاتجاه والتحليل الحراري</span>
+        <h3 class="h-title">بيفرق في حياتك كل يوم</h3>
+        <p class="h-text">مش بس اتجاه الهواء — الغرف بتختلف في درجة الحرارة بشكل كبير.</p>
         <div class="h-rooms">
-          <div class="h-room"><span class="h-rname">درجة حرارة الغرف صيفاً</span><span class="badge-s hot">مؤثر جداً</span></div>
-          <div class="h-room"><span class="h-rname">دخول الشمس</span><span class="badge-s warm">مؤثر</span></div>
-          <div class="h-room"><span class="h-rname">الإضاءة الطبيعية</span><span class="badge-s warm">مؤثر</span></div>
+          <div class="h-room">
+            <span class="h-room-name">درجة الحرارة صيفاً</span>
+            <span class="badge-sm badge-hot">مؤثر جداً</span>
+          </div>
+          <div class="h-room">
+            <span class="h-room-name">دخول الشمس</span>
+            <span class="badge-sm badge-warm">مؤثر</span>
+          </div>
+          <div class="h-room">
+            <span class="h-room-name">الإضاءة الطبيعية</span>
+            <span class="badge-sm badge-warm">مؤثر</span>
+          </div>
         </div>
         <p class="h-italic">غرفة نومك ممكن تبقى جنة أو جحيم — الاتجاه بيحدد</p>
       </div>
     </div>
+
     <div class="h-warning">
-      <p>ممكن <strong>تفوّت فرص أفضل</strong> — أو <strong>تخسر مئات الآلاف</strong> وأنت مش عارف</p>
-      <p style="font-size:16px; font-family:var(--font-body); color:rgba(255,255,255,.45); margin-top:12px; font-style:normal; line-height:1.7;">احصل على بيانات واشتري بناءً على مقارنة حقيقية — مش مجرد انطباعات</p>
+      <p class="h-warning-title">
+        ممكن <strong>تفوّت فرص أفضل</strong> — أو <strong>تخسر مئات الآلاف</strong> وأنت مش عارف
+      </p>
+      <p class="h-warning-sub">احصل على بيانات واشتري بناءً على مقارنة حقيقية — مش مجرد انطباعات</p>
     </div>
   </div>
 </section>
 
-<!-- REPORT -->
-<section id="report">
+
+<!-- ═══════════════════════════════════════════════════
+     REPORT
+═══════════════════════════════════════════════════ -->
+<section class="section" style="background: var(--warm-100);" id="report" aria-labelledby="report-title">
   <div class="inner">
-    <span class="sec-lbl">التقارير</span>
-    <h2 class="sec-title">تقرير واضح لكل وحدة قبل القرار</h2>
-    <p class="sec-sub">بدلاً من الاعتماد على وصف الإعلان — تحصل على تحليل منظم يساعدك تفهم نقاط القوة والضعف في كل وحدة</p>
-    <div style="margin-top:28px;">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfh8JNb-HuA3ZWxytHsrQakt5GODYgCl-DB96AoFIQJ4fr2mg/viewform?usp=header" target="_blank" class="btn-report">
-        احصل على تقرير لوحدتك
-        <span class="btn-arr">←</span>
-      </a>
-    </div>
-    <div class="rep-wrap">
+    <header class="sec-hdr">
+      <span class="sec-label">التقارير</span>
+      <h2 class="sec-title" id="report-title">تقرير واضح لكل وحدة قبل القرار</h2>
+      <p class="sec-sub">بدلاً من الاعتماد على وصف الإعلان — تحصل على تحليل منظم يساعدك تفهم نقاط القوة والضعف في كل وحدة</p>
+      <div style="margin-top:22px;">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfh8JNb-HuA3ZWxytHsrQakt5GODYgCl-DB96AoFIQJ4fr2mg/viewform?usp=header"
+           target="_blank" rel="noopener" class="btn-outline">
+          احصل على تقرير لوحدتك
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <div class="report-wrap">
+      <!-- Left: features list -->
       <div>
-        <p class="rep-quote">التقرير مش بيهدف لبيع الوحدة —<br>بيساعدك تفهمها بوضوح:<br>هل تستحق سعرها؟ هل تناسب احتياجاتك؟<br>هل في بدائل أفضل في السوق؟</p>
+        <blockquote class="rep-quote">
+          التقرير مش بيهدف لبيع الوحدة —<br>
+          بيساعدك تفهمها بوضوح:<br>
+          هل تستحق سعرها؟ هل تناسب احتياجاتك؟<br>
+          هل في بدائل أفضل في السوق؟
+        </blockquote>
         <div class="rep-features">
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">البيانات الأساسية والتفاصيل المالية</div><div class="rf-txt">السعر والمدفوع والمتبقي والقيمة التحليلية للوحدة · NPV</div></div></div>
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">صافي المساحة وكفاءة التوزيع</div><div class="rf-txt">المساحة الفعلية بعد خصم الجدران — مش الرقم في العقد</div></div></div>
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">الفيو المفتوح والخصوصية</div><div class="rf-txt">نوع الفيو ومدى انفتاحه وأثره على القيمة وإعادة البيع</div></div></div>
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">التحليل الحراري لكل أوضة</div><div class="rf-txt">درجة تعرض كل غرفة للشمس وأثره على جودة السكن</div></div></div>
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">القرب من الخدمات والموقع</div><div class="rf-txt">المسافة الحقيقية من المدارس والتجاري والمداخل</div></div></div>
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-ttl">مقارنة بالبدائل المتاحة</div><div class="rf-txt">خلاصة واضحة بأسباب الترشيح ونقاط القوة والضعف</div></div></div>
+          <div class="rf"><div class="rf-dot"></div><div>
+            <div class="rf-title">البيانات الأساسية والتفاصيل المالية</div>
+            <div class="rf-text">السعر والمدفوع والمتبقي والقيمة التحليلية للوحدة</div>
+          </div></div>
+          <div class="rf"><div class="rf-dot"></div><div>
+            <div class="rf-title">صافي المساحة وكفاءة التوزيع</div>
+            <div class="rf-text">المساحة الفعلية بعد خصم الجدران — مش الرقم في العقد</div>
+          </div></div>
+          <div class="rf"><div class="rf-dot"></div><div>
+            <div class="rf-title">الفيو المفتوح والخصوصية</div>
+            <div class="rf-text">نوع الفيو ومدى انفتاحه وأثره على القيمة وإعادة البيع</div>
+          </div></div>
+          <div class="rf"><div class="rf-dot"></div><div>
+            <div class="rf-title">التحليل الحراري لكل أوضة</div>
+            <div class="rf-text">درجة تعرض كل غرفة للشمس وأثره على جودة السكن</div>
+          </div></div>
+          <div class="rf"><div class="rf-dot"></div><div>
+            <div class="rf-title">القرب من الخدمات والموقع</div>
+            <div class="rf-text">المسافة الحقيقية من المدارس والتجاري والمداخل</div>
+          </div></div>
+          <div class="rf"><div class="rf-dot"></div><div>
+            <div class="rf-title">مقارنة بالبدائل المتاحة</div>
+            <div class="rf-text">خلاصة واضحة بأسباب الترشيح ونقاط القوة والضعف</div>
+          </div></div>
         </div>
       </div>
-      <div class="rc">
-        <div class="rc-hdr"><span class="rc-lbl">Insight360 Report</span><span class="rc-badge">أفضل قيمة</span></div>
-        <div class="rc-bdy">
+
+      <!-- Right: report card mock -->
+      <div class="rc" role="img" aria-label="نموذج تقرير NestMatch">
+        <div class="rc-head">
+          <span class="rc-head-label">Insight360 Report</span>
+          <span class="rc-head-badge">أفضل قيمة</span>
+        </div>
+        <div class="rc-body">
           <div class="rc-ids">
             <span class="rc-id">B <span>14</span></span>
             <span class="rc-id">Group <span>143</span></span>
             <span class="rc-id">Unit <span>21</span></span>
           </div>
-          <span class="rc-slbl">البيانات الأساسية</span>
+
+          <span class="rc-section-label">البيانات الأساسية</span>
           <div class="rc-metrics">
-            <div class="rc-m"><span class="rc-mlbl">مساحة العقد</span><span class="rc-mval">107 م²</span></div>
-            <div class="rc-m"><span class="rc-mlbl">صافي المساحة الحقيقية</span><span class="rc-mval g">87.38 م²</span></div>
-            <div class="rc-m"><span class="rc-mlbl">كفاءة التوزيع</span><span class="rc-mval g">81.66%</span></div>
-            <div class="rc-m"><span class="rc-mlbl">القيمة التحليلية</span><span class="rc-mval gld">5,812,011 ج</span></div>
+            <div class="rc-metric">
+              <span class="rc-metric-label">مساحة العقد</span>
+              <span class="rc-metric-value">107 م²</span>
+            </div>
+            <div class="rc-metric">
+              <span class="rc-metric-label">صافي المساحة الحقيقية</span>
+              <span class="rc-metric-value c-green">87.38 م²</span>
+            </div>
+            <div class="rc-metric">
+              <span class="rc-metric-label">كفاءة التوزيع</span>
+              <span class="rc-metric-value c-green">81.66%</span>
+            </div>
+            <div class="rc-metric">
+              <span class="rc-metric-label">القيمة التحليلية</span>
+              <span class="rc-metric-value c-gold">5,812,011 ج</span>
+            </div>
           </div>
-          <span class="rc-slbl">التحليل الحراري للغرف</span>
+
+          <span class="rc-section-label">التحليل الحراري للغرف</span>
           <div class="rc-rooms">
-            <div class="rc-room"><span class="rc-rname">معيشة</span><span class="badge-s hot">حار</span></div>
-            <div class="rc-room"><span class="rc-rname">غرفة نوم رئيسية</span><span class="badge-s warm">دافئ</span></div>
-            <div class="rc-room"><span class="rc-rname">غرفة نوم ١</span><span class="badge-s hot">حار</span></div>
-            <div class="rc-room"><span class="rc-rname">مطبخ</span><span class="badge-s cold">بارد</span></div>
+            <div class="rc-room"><span class="rc-room-name">معيشة</span><span class="badge-sm badge-hot">حار</span></div>
+            <div class="rc-room"><span class="rc-room-name">غرفة نوم رئيسية</span><span class="badge-sm badge-warm">دافئ</span></div>
+            <div class="rc-room"><span class="rc-room-name">غرفة نوم ١</span><span class="badge-sm badge-hot">حار</span></div>
+            <div class="rc-room"><span class="rc-room-name">مطبخ</span><span class="badge-sm badge-cold">بارد</span></div>
           </div>
-          <span class="rc-slbl">الفيو والموقع</span>
+
+          <span class="rc-section-label">الفيو والموقع</span>
           <div class="rc-bars">
-            <div class="rc-brow"><span class="rc-blbl">نوع الفيو</span><div class="rc-btrack"><div class="rc-bfill g" style="width:90%"></div></div><span class="rc-bval" style="color:var(--green)">جاردن واسع</span></div>
-            <div class="rc-brow"><span class="rc-blbl">انفتاح الفيو</span><div class="rc-btrack"><div class="rc-bfill g" style="width:85%"></div></div><span class="rc-bval" style="color:var(--green)">فيو مفتوح</span></div>
-            <div class="rc-brow"><span class="rc-blbl">الخدمات</span><div class="rc-btrack"><div class="rc-bfill g" style="width:95%"></div></div><span class="rc-bval" style="color:var(--green)">أمام الوحدة</span></div>
-            <div class="rc-brow"><span class="rc-blbl">الخصوصية</span><div class="rc-btrack"><div class="rc-bfill o" style="width:60%"></div></div><span class="rc-bval" style="color:var(--orange)">متوسطة</span></div>
+            <div class="rc-bar-row">
+              <span class="rc-bar-label">نوع الفيو</span>
+              <div class="rc-bar-track"><div class="rc-bar-fill g" style="width:90%"></div></div>
+              <span class="rc-bar-value" style="color:var(--green)">جاردن واسع</span>
+            </div>
+            <div class="rc-bar-row">
+              <span class="rc-bar-label">انفتاح الفيو</span>
+              <div class="rc-bar-track"><div class="rc-bar-fill g" style="width:85%"></div></div>
+              <span class="rc-bar-value" style="color:var(--green)">فيو مفتوح</span>
+            </div>
+            <div class="rc-bar-row">
+              <span class="rc-bar-label">الخدمات</span>
+              <div class="rc-bar-track"><div class="rc-bar-fill g" style="width:95%"></div></div>
+              <span class="rc-bar-value" style="color:var(--green)">أمام الوحدة</span>
+            </div>
+            <div class="rc-bar-row">
+              <span class="rc-bar-label">الخصوصية</span>
+              <div class="rc-bar-track"><div class="rc-bar-fill o" style="width:58%"></div></div>
+              <span class="rc-bar-value" style="color:var(--orange)">متوسطة</span>
+            </div>
           </div>
+
           <div class="rc-verdict">
-            <div class="rc-vicon">✓</div>
-            <p class="rc-vtxt"><strong>القيمة التحليلية: 5,812,011 ج</strong> — تحليل مالي كامل يشمل القيمة الحقيقية والمبالغ المتبقية</p>
+            <div class="rc-verdict-icon" aria-hidden="true">✓</div>
+            <p class="rc-verdict-text">
+              <strong>القيمة التحليلية: 5,812,011 ج</strong> — تحليل مالي كامل يشمل القيمة الحقيقية والمبالغ المتبقية
+            </p>
           </div>
         </div>
       </div>
@@ -436,53 +1229,79 @@ footer { background:var(--navy-deep); padding:36px 6%; display:flex; align-items
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section id="how">
+
+<!-- ═══════════════════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════════════════ -->
+<section class="section section--white" id="how" aria-labelledby="how-title">
   <div class="inner">
-    <span class="sec-lbl">كيف تبدأ</span>
-    <h2 class="sec-title">٣ خطوات بس</h2>
-    <div class="steps">
+    <header class="sec-hdr" style="text-align:center;">
+      <span class="sec-label">كيف تبدأ</span>
+      <h2 class="sec-title" id="how-title" style="margin-inline:auto;">٣ خطوات بس</h2>
+    </header>
+
+    <div class="steps-grid">
+      <div class="steps-line" aria-hidden="true"></div>
+
       <div class="step">
-        <div class="step-circle"><span class="step-n">١</span></div>
-        <h3 class="step-ttl">قولنا ميزانيتك واللي بتدور عليه</h3>
-        <p class="step-txt">بتخبرنا بالميزانية ونوع الوحدة وأهم أولوياتك في السكن أو الاستثمار</p>
+        <div class="step-circle"><span class="step-num">١</span></div>
+        <h3 class="step-title">قولنا ميزانيتك واللي بتدور عليه</h3>
+        <p class="step-text">بتخبرنا بالميزانية ونوع الوحدة وأهم أولوياتك في السكن أو الاستثمار</p>
       </div>
+
       <div class="step">
-        <div class="step-circle"><span class="step-n">٢</span></div>
-        <h3 class="step-ttl">بنحلل الخيارات المتاحة</h3>
-        <p class="step-txt">بنراجع الوحدات المطابقة ونقيّمها ماليًا ومعماريًا وسكنيًا بناءً على بيانات واضحة</p>
+        <div class="step-circle"><span class="step-num">٢</span></div>
+        <h3 class="step-title">بنحلل الخيارات المتاحة</h3>
+        <p class="step-text">بنراجع الوحدات المطابقة ونقيّمها ماليًا ومعماريًا وسكنيًا بناءً على بيانات واضحة</p>
       </div>
+
       <div class="step">
-        <div class="step-circle"><span class="step-n">٣</span></div>
-        <h3 class="step-ttl">بنرشحلك الأفضل بالأسباب</h3>
-        <p class="step-txt">تحصل على قائمة مختصرة بأفضل الخيارات مع شرح واضح لأسباب الترشيح ونقاط القوة والضعف</p>
+        <div class="step-circle"><span class="step-num">٣</span></div>
+        <h3 class="step-title">بنرشحلك الأفضل بالأسباب</h3>
+        <p class="step-text">تحصل على قائمة مختصرة بأفضل الخيارات مع شرح واضح لأسباب الترشيح</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section id="cta">
-  <div class="cta-inner">
-    <h2 class="cta-ttl">ابدأ قرارك<br>ببيانات أوضح</h2>
-    <p class="cta-sub">قولنا ميزانيتك — وهنساعدك تعرف أفضل المتاح ليك بناءً على تحليل مستقل</p>
-    <a href="https://wa.me/201271028216?text=مرحباً — عايز أعرف أفضل المتاح في ميزانيتي في مدينتي" class="btn" target="_blank">
-      ابعتلنا على واتساب <span class="btn-arr">←</span>
-    </a>
-    <a href="tel:+201271028216" class="btn-call">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-      اتصل بينا
-    </a>
-    <p class="cta-note">بدون عمولة بيع — بدون التزام</p>
+
+<!-- ═══════════════════════════════════════════════════
+     CTA
+═══════════════════════════════════════════════════ -->
+<section class="section section--navy" id="cta" style="position:relative;overflow:hidden;" aria-labelledby="cta-title">
+  <div class="cta-glow" aria-hidden="true"></div>
+  <div class="inner cta-section-inner">
+    <div class="cta-wrap">
+      <h2 class="cta-title" id="cta-title">
+        ابدأ قرارك<br>ببيانات أوضح
+      </h2>
+      <p class="cta-sub">
+        قولنا ميزانيتك — وهنساعدك تعرف أفضل المتاح ليك بناءً على تحليل مستقل
+      </p>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;">
+        <a href="https://wa.me/20127102821?text=مرحباً%20—%20عايز%20أعرف%20أفضل%20المتاح%20في%20ميزانيتي%20في%20مدينتي"
+           class="btn-primary" target="_blank" rel="noopener" style="min-width:200px;">
+          ابعتلنا على واتساب
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="tel:+201271028216" class="btn-ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          اتصل بينا
+        </a>
+      </div>
+      <p class="cta-note">بدون عمولة بيع — <span>بدون التزام</span></p>
+    </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="f-logo"><span class="nest">Nest</span><span class="match">Match</span></div>
-  <p class="f-copy">مدينتي — القاهرة الجديدة © 2025</p>
-</footer>
 
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════ -->
+<footer>
+  <div class="f-logo" aria-label="NestMatch"><span class="n">Nest</span><span class="m">Match</span></div>
+  <p class="f-copy">مدينتي — القاهرة الجديدة &copy; 2025</p>
+</footer>
 
 </body>
 </html>
