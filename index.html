@@ -1,62 +1,65 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NestMatch — قرّر بمعلومة</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NestMatch — ابدأ بميزانيتك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
 <style>
 /* ── RESET ──────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
+body { min-height: 100vh; overflow-x: hidden; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button, input, textarea { font: inherit; }
 
 /* ── DESIGN TOKENS ──────────────────────────────────── */
 :root {
-  /* Brand Colors */
   --navy:        #0D1F3C;
   --navy-deep:   #060E1C;
-  --navy-mid:    #1E3A5F;
+  --navy-mid:    #153153;
   --navy-light:  #2A4B75;
   --gold:        #C9A84C;
-  --gold-light:  #E5C86E;
+  --gold-light:  #E8CD73;
   --gold-pale:   #F2E0A8;
   --gold-faint:  #FBF5E6;
 
-  /* Neutrals */
-  --warm-white:  #F5F3EE;
-  --warm-100:    #E8E5DE;
-  --warm-200:    #D4D0C8;
-  --warm-400:    #9B9689;
-  --warm-600:    #6B7A8D;
-  --warm-800:    #3D3D3A;
-  --warm-900:    #1C1C1A;
+  --warm-white:  #F7F4ED;
+  --warm-50:     #FCFAF6;
+  --warm-100:    #EDE8DD;
+  --warm-200:    #D8D0C1;
+  --warm-400:    #A39A8A;
+  --warm-600:    #6E7684;
+  --warm-800:    #363B42;
+  --warm-900:    #181A1C;
 
-  /* Semantic */
   --green:  #1D9E75;
   --orange: #E8A020;
   --red:    #D85A30;
+  --blue:   #7AA7FF;
 
-  /* Typography */
   --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'DM Sans', system-ui, sans-serif;
+  --font-body: 'Noto Sans Arabic', 'DM Sans', system-ui, sans-serif;
 
-  /* Spacing scale */
   --sp-xs:  8px;
   --sp-sm:  16px;
   --sp-md:  24px;
   --sp-lg:  40px;
-  --sp-xl:  64px;
-  --sp-2xl: 96px;
+  --sp-xl:  72px;
+  --sp-2xl: 112px;
 
-  /* Layout */
   --page-px:   5%;
-  --max-w:     1040px;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  --max-w:     1120px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-xl: 34px;
+  --shadow-soft: 0 24px 70px rgba(6,14,28,.12);
+  --shadow-deep: 0 30px 90px rgba(6,14,28,.28);
 }
 
 /* ── BASE ───────────────────────────────────────────── */
@@ -64,12 +67,38 @@ body {
   font-family: var(--font-body);
   background: var(--warm-white);
   color: var(--warm-800);
-  line-height: 1.7;
+  line-height: 1.8;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-img { display: block; max-width: 100%; }
-a { text-decoration: none; }
+
+::selection { background: rgba(201,168,76,.35); color: var(--navy-deep); }
+
+/* ── GLOBAL INTERACTION LAYERS ─────────────────────── */
+.progress-bar {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  height: 3px;
+  width: 0%;
+  z-index: 500;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  box-shadow: 0 0 18px rgba(201,168,76,.55);
+}
+.cursor-glow {
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .12;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--gold), transparent 62%);
+  filter: blur(12px);
+  transition: opacity .25s ease;
+}
+@media (hover: none) { .cursor-glow { display: none; } }
 
 /* ── UTILITY ────────────────────────────────────────── */
 .inner {
@@ -77,124 +106,158 @@ a { text-decoration: none; }
   margin-inline: auto;
   padding-inline: var(--page-px);
 }
+.section { padding-block: var(--sp-xl); position: relative; }
+.section--lg { padding-block: var(--sp-2xl); }
+.section--dark { background: var(--navy-deep); color: #fff; overflow: hidden; }
+.section--navy { background: var(--navy); color: #fff; overflow: hidden; }
+.section--gray { background: var(--warm-100); }
+.section--white { background: var(--warm-50); }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .75s cubic-bezier(.22,1,.36,1), transform .75s cubic-bezier(.22,1,.36,1);
+}
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: .08s; }
+.reveal-delay-2 { transition-delay: .16s; }
+.reveal-delay-3 { transition-delay: .24s; }
+
 .sec-label {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 14px;
 }
+.sec-label::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 6px rgba(201,168,76,.12);
+}
 .sec-title {
   font-family: var(--font-display);
   font-weight: 300;
-  line-height: 1.2;
-  letter-spacing: -0.4px;
+  line-height: 1.18;
+  letter-spacing: -0.6px;
   color: var(--navy);
-  margin-bottom: 12px;
-  font-size: clamp(28px, 4vw, 48px);
+  margin-bottom: 14px;
+  font-size: clamp(34px, 4.8vw, 58px);
 }
 .sec-title--light { color: #fff; }
 .sec-sub {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--warm-600);
-  line-height: 1.8;
-  max-width: 580px;
+  line-height: 2;
+  max-width: 680px;
 }
-.sec-sub--light { color: rgba(255,255,255,.45); }
+.sec-sub--light { color: rgba(255,255,255,.52); }
+.sec-hdr { margin-bottom: var(--sp-lg); }
+.sec-hdr--center { text-align: center; }
+.sec-hdr--center .sec-sub { margin-inline: auto; }
+
 .tag {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 500;
-  padding: 4px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 13px;
   border-radius: 100px;
-  background: var(--warm-100);
-  color: var(--warm-600);
+  background: rgba(13,31,60,.06);
+  color: var(--navy);
+  border: 1px solid rgba(13,31,60,.08);
+}
+.tag--light {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.12);
+  color: rgba(255,255,255,.78);
 }
 
 /* ── BUTTONS ────────────────────────────────────────── */
-.btn-primary {
+.btn-primary,
+.btn-ghost,
+.btn-outline {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: var(--gold);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 800;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform .18s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease, color .2s ease;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
   color: var(--navy-deep);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 600;
-  padding: 14px 32px;
-  border-radius: var(--radius-sm);
+  padding: 15px 34px;
   border: none;
-  cursor: pointer;
-  letter-spacing: 0.2px;
-  transition: background .2s, transform .15s, box-shadow .2s;
-  box-shadow: 0 6px 24px rgba(201,168,76,.3);
-  white-space: nowrap;
+  box-shadow: 0 14px 40px rgba(201,168,76,.28);
 }
-.btn-primary:hover {
-  background: var(--gold-light);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 32px rgba(201,168,76,.38);
+.btn-primary::after,
+.btn-outline::after,
+.btn-ghost::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(110%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+  transition: transform .6s ease;
 }
+.btn-primary:hover,
+.btn-outline:hover,
+.btn-ghost:hover { transform: translateY(-2px); }
+.btn-primary:hover::after,
+.btn-outline:hover::after,
+.btn-ghost:hover::after { transform: translateX(-110%); }
+.btn-primary:hover { box-shadow: 0 18px 52px rgba(201,168,76,.38); }
 .btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: transparent;
-  color: rgba(255,255,255,.65);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
-  padding: 13px 24px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(255,255,255,.18);
-  cursor: pointer;
-  transition: border-color .2s, color .2s;
-  white-space: nowrap;
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.72);
+  padding: 14px 26px;
+  border: 1px solid rgba(255,255,255,.16);
 }
-.btn-ghost:hover { border-color: rgba(255,255,255,.4); color: #fff; }
+.btn-ghost:hover { border-color: rgba(255,255,255,.35); color: #fff; }
 .btn-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   background: transparent;
   color: var(--navy);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 600;
-  padding: 12px 28px;
-  border-radius: var(--radius-sm);
-  border: 2px solid var(--navy);
-  cursor: pointer;
-  transition: background .2s, color .2s;
-  white-space: nowrap;
+  padding: 13px 30px;
+  border: 1.5px solid rgba(13,31,60,.28);
 }
-.btn-outline:hover { background: var(--navy); color: #fff; }
+.btn-outline:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
 
 /* ── NAV ────────────────────────────────────────────── */
 nav {
   position: fixed;
   inset-block-start: 0;
   inset-inline: 0;
-  z-index: 200;
-  height: 68px;
+  z-index: 300;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-inline: var(--page-px);
-  background: rgba(6, 14, 28, .96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(201,168,76,.1);
+  background: rgba(6, 14, 28, .90);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(201,168,76,.12);
 }
 .nav-logo { display: flex; flex-direction: column; gap: 2px; }
 .nav-wordmark {
   font-family: var(--font-display);
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 400;
   letter-spacing: 2.5px;
   line-height: 1;
@@ -203,26 +266,50 @@ nav {
 .nav-wordmark .m  { color: #fff; }
 .nav-sub {
   font-size: 9px;
-  font-weight: 400;
-  letter-spacing: 3.5px;
+  font-weight: 700;
+  letter-spacing: 3.2px;
   text-transform: uppercase;
-  color: rgba(255,255,255,.25);
+  color: rgba(255,255,255,.26);
   line-height: 1;
 }
-.nav-cta {
-  font-family: var(--font-body);
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.nav-links a {
+  position: relative;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
+  color: rgba(255,255,255,.48);
+  transition: color .2s ease;
+}
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: -7px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .25s ease;
+}
+.nav-links a:hover { color: #fff; }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+  font-size: 13px;
+  font-weight: 800;
   color: var(--navy-deep);
   background: var(--gold);
   border: none;
-  padding: 9px 20px;
+  padding: 10px 20px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background .2s;
+  transition: background .2s, transform .18s;
   white-space: nowrap;
 }
-.nav-cta:hover { background: var(--gold-light); }
+.nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
 
 /* ── HERO ───────────────────────────────────────────── */
 #hero {
@@ -230,7 +317,7 @@ nav {
   min-height: 100svh;
   display: flex;
   align-items: center;
-  padding-block: calc(68px + 60px) 72px;
+  padding-block: calc(72px + 72px) 76px;
   padding-inline: var(--page-px);
   position: relative;
   overflow: hidden;
@@ -240,17 +327,18 @@ nav {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 60% 55% at 80% 10%, rgba(201,168,76,.07) 0%, transparent 65%),
-    radial-gradient(ellipse 45% 45% at 15% 85%, rgba(201,168,76,.04) 0%, transparent 60%);
+    radial-gradient(ellipse 60% 55% at 82% 8%, rgba(201,168,76,.14) 0%, transparent 66%),
+    radial-gradient(ellipse 42% 52% at 12% 88%, rgba(122,167,255,.08) 0%, transparent 60%);
 }
 .hero-grid-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255,255,255,.016) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.016) 1px, transparent 1px);
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
   background-size: 56px 56px;
+  mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
 }
 .hero-inner {
   position: relative;
@@ -258,88 +346,103 @@ nav {
   max-width: var(--max-w);
   margin-inline: auto;
   width: 100%;
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1.02fr .98fr;
+  gap: clamp(38px, 5vw, 72px);
+  align-items: center;
 }
-
-/* Hero — badge */
+.hero-copy { max-width: 660px; }
 .hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(201,168,76,.1);
+  gap: 10px;
+  background: rgba(201,168,76,.10);
   border: 1px solid rgba(201,168,76,.28);
   color: var(--gold);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2.5px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
-  padding: 6px 20px;
+  padding: 7px 18px;
   border-radius: 100px;
-  margin-bottom: 36px;
+  margin-bottom: 30px;
 }
 .badge-pulse {
-  width: 6px; height: 6px;
+  width: 7px; height: 7px;
   border-radius: 50%;
   background: var(--gold);
   animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: .45; transform: scale(.75); }
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(201,168,76,.42); }
+  50% { opacity: .55; transform: scale(.8); box-shadow: 0 0 0 8px rgba(201,168,76,0); }
 }
-
-/* Hero — headings */
 .hero-h1 {
   font-family: var(--font-display);
   font-weight: 300;
   color: #fff;
-  line-height: 1.18;
-  letter-spacing: -0.5px;
-  margin-bottom: 16px;
-  font-size: clamp(34px, 5.5vw, 66px);
+  line-height: 1.1;
+  letter-spacing: -0.7px;
+  margin-bottom: 18px;
+  font-size: clamp(42px, 6vw, 76px);
 }
 .hero-h1 em { color: var(--gold); font-style: normal; }
 .hero-h2 {
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-style: italic;
-  color: rgba(255,255,255,.5);
-  line-height: 1.4;
-  letter-spacing: -0.2px;
-  margin-bottom: 44px;
-  font-size: clamp(18px, 2.8vw, 34px);
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: rgba(255,255,255,.82);
+  line-height: 1.9;
+  margin-bottom: 16px;
+  font-size: clamp(17px, 2vw, 22px);
 }
-.hero-h2 strong { color: rgba(255,255,255,.82); font-weight: 300; font-style: normal; }
-
-/* Hero — CTA row */
+.hero-text {
+  color: rgba(255,255,255,.52);
+  max-width: 610px;
+  font-size: 16px;
+  line-height: 2;
+  margin-bottom: 28px;
+}
+.value-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 36px;
+}
 .hero-ctas {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
   gap: 12px;
-  margin-bottom: 56px;
+  margin-bottom: 42px;
 }
-
-/* Hero — trust strip */
 .trust-strip {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0,1fr));
   gap: 10px;
-  max-width: 540px;
-  margin-inline: auto;
+  max-width: 620px;
 }
 .trust-item {
-  background: rgba(255,255,255,.06);
+  position: relative;
+  background: rgba(255,255,255,.055);
   border: 1px solid rgba(255,255,255,.09);
   border-radius: var(--radius-md);
   padding: 20px 14px;
-  text-align: center;
+  overflow: hidden;
 }
+.trust-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201,168,76,.10), transparent 48%);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.trust-item:hover::before { opacity: 1; }
 .trust-num {
+  position: relative;
   display: block;
   font-family: var(--font-display);
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 300;
   color: var(--gold);
   line-height: 1;
@@ -347,42 +450,201 @@ nav {
   margin-bottom: 7px;
 }
 .trust-lbl {
+  position: relative;
   display: block;
-  font-size: 10.5px;
-  color: rgba(255,255,255,.38);
-  letter-spacing: 0.2px;
-  line-height: 1.55;
+  font-size: 11px;
+  color: rgba(255,255,255,.45);
+  line-height: 1.65;
 }
 
-/* Hero animations */
-.hero-inner > * {
-  animation: fadeUp .85s cubic-bezier(.22,1,.36,1) both;
+/* Hero decision visual */
+.hero-visual {
+  position: relative;
+  min-height: 560px;
 }
-.hero-inner > *:nth-child(1) { animation-delay: .08s; }
-.hero-inner > *:nth-child(2) { animation-delay: .22s; }
-.hero-inner > *:nth-child(3) { animation-delay: .36s; }
-.hero-inner > *:nth-child(4) { animation-delay: .48s; }
-.hero-inner > *:nth-child(5) { animation-delay: .58s; }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
+.decision-orbit {
+  position: absolute;
+  inset: 36px 0 0 0;
+  border-radius: 42px;
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+.decision-orbit::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(circle at 75% 10%, rgba(201,168,76,.18), transparent 36%), radial-gradient(circle at 15% 85%, rgba(122,167,255,.12), transparent 38%);
+}
+.chaos-card, .recommend-card, .score-card, .neutral-card {
+  position: absolute;
+  z-index: 2;
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.18);
+  backdrop-filter: blur(16px);
+}
+.chaos-card {
+  inset-block-start: 0;
+  inset-inline-end: 8px;
+  width: min(320px, 76%);
+  padding: 18px;
+}
+.chaos-title, .recommend-title, .score-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 14px;
+}
+.chaos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.chaos-pill {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 9px;
+  border-radius: 14px;
+  background: var(--warm-100);
+  color: var(--warm-600);
+  font-size: 11px;
+  font-weight: 700;
+  animation: floatSoft 4s ease-in-out infinite;
+}
+.chaos-pill:nth-child(2n) { animation-delay: .4s; }
+.chaos-pill:nth-child(3n) { animation-delay: .8s; }
+@keyframes floatSoft {
+  0%,100% { transform: translateY(0); opacity: .95; }
+  50% { transform: translateY(-5px); opacity: 1; }
+}
+.score-card {
+  inset-block-start: 150px;
+  inset-inline-start: 0;
+  width: min(310px, 72%);
+  padding: 20px;
+}
+.metric-line { margin-bottom: 13px; }
+.metric-meta { display: flex; justify-content: space-between; margin-bottom: 5px; color: var(--warm-600); font-size: 11px; font-weight: 700; }
+.metric-track { height: 5px; border-radius: 999px; background: var(--warm-100); overflow: hidden; }
+.metric-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--gold), var(--green)); transform-origin: right; animation: growBar 1.2s ease both; }
+@keyframes growBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.recommend-card {
+  inset-block-end: 42px;
+  inset-inline-end: 22px;
+  width: min(350px, 86%);
+  padding: 20px;
+}
+.rec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(13,31,60,.05);
+  margin-top: 8px;
+  border: 1px solid rgba(13,31,60,.06);
+}
+.rec-name { font-size: 12px; font-weight: 900; color: var(--navy); }
+.rec-reason { font-size: 10px; color: var(--warm-600); }
+.rec-badge { font-size: 10px; font-weight: 900; color: var(--green); background: rgba(29,158,117,.11); padding: 4px 8px; border-radius: 99px; }
+.neutral-card {
+  inset-block-end: 6px;
+  inset-inline-start: 52px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 900;
+}
+.neutral-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(201,168,76,.16);
+  color: var(--gold);
 }
 
-/* ── SECTION PADDING ────────────────────────────────── */
-.section { padding-block: var(--sp-xl); }
-.section--lg { padding-block: var(--sp-2xl); }
-.section--dark { background: var(--navy-deep); }
-.section--navy { background: var(--navy); }
-.section--gray { background: var(--warm-100); }
-.section--white { background: #fff; }
-
-/* Section header spacing */
-.sec-hdr { margin-bottom: var(--sp-lg); }
+/* ── VALUE CARDS ───────────────────────────────────── */
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+.value-card {
+  grid-column: span 2;
+  position: relative;
+  overflow: hidden;
+  min-height: 300px;
+  background: #fff;
+  border: 1px solid rgba(13,31,60,.08);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  box-shadow: 0 18px 50px rgba(6,14,28,.06);
+  transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s ease, border-color .28s ease;
+}
+.value-card:nth-child(2) { grid-column: span 4; }
+.value-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 28px 80px rgba(6,14,28,.14);
+  border-color: rgba(201,168,76,.38);
+}
+.value-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -40px -80px auto;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(201,168,76,.10);
+  transition: transform .35s ease;
+}
+.value-card:hover::after { transform: scale(1.4); }
+.v-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--gold-faint);
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin-bottom: 24px;
+}
+.v-title {
+  color: var(--navy);
+  font-size: 19px;
+  font-weight: 900;
+  margin-bottom: 12px;
+  line-height: 1.45;
+}
+.v-text {
+  color: var(--warm-600);
+  font-size: 14px;
+  line-height: 2;
+  position: relative;
+  z-index: 1;
+}
 
 /* ── PROBLEM SECTION ────────────────────────────────── */
 .problem-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.1fr .9fr;
   gap: 2px;
   background: var(--warm-200);
   border: 1px solid var(--warm-200);
@@ -392,6 +654,8 @@ nav {
 .p-card {
   background: #fff;
   padding: 36px;
+  min-height: 230px;
+  position: relative;
 }
 .p-card--dark { background: var(--navy); }
 .p-card--full { grid-column: 1 / -1; }
@@ -400,295 +664,177 @@ nav {
   font-family: var(--font-display);
   font-size: 48px;
   font-weight: 300;
-  color: var(--warm-100);
+  color: rgba(13,31,60,.10);
   line-height: 1;
   margin-bottom: 14px;
 }
-.p-card--dark .p-num { color: rgba(201,168,76,.15); }
+.p-card--dark .p-num { color: rgba(201,168,76,.18); }
 .p-title {
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 900;
   color: var(--navy);
   margin-bottom: 10px;
-  line-height: 1.35;
+  line-height: 1.55;
 }
 .p-card--dark .p-title { color: #fff; }
-.p-text {
-  font-size: 14px;
-  color: var(--warm-600);
-  line-height: 1.8;
-}
-.p-card--dark .p-text { color: rgba(255,255,255,.42); }
-.p-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-top: 16px;
-}
+.p-text { font-size: 14px; color: var(--warm-600); line-height: 2; }
+.p-card--dark .p-text { color: rgba(255,255,255,.52); }
 
-/* ── OVERVIEW ───────────────────────────────────────── */
-.ov-grid {
+/* ── BEFORE / AFTER ─────────────────────────────────── */
+.ba-wrap {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  background: var(--warm-200);
-  border: 1px solid var(--warm-200);
-  border-radius: var(--radius-lg);
+  grid-template-columns: 1fr auto 1fr;
+  gap: 18px;
+  align-items: stretch;
+}
+.ba-col {
+  min-height: 520px;
+  border-radius: var(--radius-xl);
+  padding: clamp(24px, 3vw, 34px);
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.045);
+  position: relative;
   overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,.16);
 }
-.ov-card {
-  background: #fff;
-  padding: 32px 28px;
+.ba-col::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .9;
 }
-.ov-icon {
-  font-size: 26px;
-  margin-bottom: 16px;
-  display: block;
+.ba-col--before::before {
+  background: radial-gradient(circle at 20% 20%, rgba(216,90,48,.16), transparent 38%);
 }
-.ov-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--navy);
-  margin-bottom: 8px;
-  line-height: 1.35;
+.ba-col--after::before {
+  background: radial-gradient(circle at 78% 18%, rgba(29,158,117,.16), transparent 38%), radial-gradient(circle at 20% 85%, rgba(201,168,76,.12), transparent 42%);
 }
-.ov-text {
-  font-size: 13px;
-  color: var(--warm-600);
-  line-height: 1.75;
-}
-
-/* ── HIDDEN KNOWLEDGE ───────────────────────────────── */
-.h-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  background: rgba(255,255,255,.04);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  margin-bottom: 28px;
-}
-.h-card {
-  background: rgba(13,31,60,.65);
-  padding: 32px 28px;
-}
-.h-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 14px;
-  display: block;
-}
-.h-title {
-  font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 300;
-  color: #fff;
-  line-height: 1.28;
+.ba-head { position: relative; z-index: 2; margin-bottom: 24px; }
+.ba-kicker {
+  display: inline-flex;
   margin-bottom: 10px;
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 1.5px;
 }
-.h-text {
-  font-size: 13px;
-  color: rgba(255,255,255,.4);
-  line-height: 1.75;
-}
-.h-scale { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-.h-row { display: flex; align-items: center; gap: 9px; }
-.h-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.h-row-text { font-size: 12px; color: rgba(255,255,255,.4); }
-
-.badge-sm {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 9px;
-  border-radius: var(--radius-sm);
-}
-.badge-hot  { background: rgba(216,90,48,.22);  color: #F09970; }
-.badge-warm { background: rgba(232,160,32,.18); color: #E8A020; }
-.badge-cold { background: rgba(29,158,117,.18); color: var(--green); }
-
-.h-rooms { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
-.h-room  { display: flex; align-items: center; justify-content: space-between; }
-.h-room-name { font-size: 12px; color: rgba(255,255,255,.4); }
-.h-italic {
-  font-style: italic;
-  color: rgba(255,255,255,.55);
-  font-size: 12.5px;
-  line-height: 1.6;
-  margin-top: 14px;
-}
-
-.h-warning {
-  padding: 24px 32px;
-  background: rgba(201,168,76,.08);
-  border-inline-end: 3px solid var(--gold);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-}
-.h-warning-title {
+.ba-head h3 {
   font-family: var(--font-display);
-  font-size: clamp(18px, 2.5vw, 28px);
+  font-size: clamp(28px, 3vw, 40px);
+  color: #fff;
   font-weight: 300;
-  font-style: italic;
-  color: rgba(255,255,255,.85);
-  line-height: 1.5;
-  margin-bottom: 8px;
+  line-height: 1.25;
 }
-.h-warning-title strong { color: var(--gold); font-style: normal; }
-.h-warning-sub {
-  font-size: 14px;
-  color: rgba(255,255,255,.4);
-  line-height: 1.7;
+.ba-chaos {
+  position: relative;
+  z-index: 2;
+  min-height: 178px;
+  margin-bottom: 24px;
 }
-
-/* ── REPORT ─────────────────────────────────────────── */
-.report-wrap {
+.ba-chaos span {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.11);
+  color: rgba(255,255,255,.58);
+  font-size: 11px;
+  font-weight: 800;
+  animation: baFloat 4s ease-in-out infinite;
+}
+.ba-chaos span:nth-child(1) { top: 0; right: 0; }
+.ba-chaos span:nth-child(2) { top: 16px; left: 18px; animation-delay:.2s; }
+.ba-chaos span:nth-child(3) { top: 62px; right: 24%; animation-delay:.4s; }
+.ba-chaos span:nth-child(4) { top: 104px; right: 4px; animation-delay:.6s; }
+.ba-chaos span:nth-child(5) { top: 118px; left: 22px; animation-delay:.8s; }
+.ba-chaos span:nth-child(6) { top: 68px; left: 2px; animation-delay:1s; }
+.ba-chaos span:nth-child(7) { top: 142px; right: 34%; animation-delay:1.2s; }
+.ba-chaos span:nth-child(8) { top: 36px; right: 44%; animation-delay:1.4s; }
+@keyframes baFloat {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(-1.5deg); }
+}
+.ba-shortlist {
+  position: relative;
+  z-index: 2;
   display: grid;
-  grid-template-columns: 1fr 1.25fr;
-  gap: 52px;
-  align-items: start;
+  gap: 10px;
+  margin-bottom: 24px;
 }
-.rep-quote {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-style: italic;
-  color: var(--warm-600);
-  line-height: 1.8;
-  border-inline-end: 2px solid var(--gold);
-  padding-inline-end: 20px;
-  margin-bottom: 32px;
+.ba-rec {
+  display: grid;
+  grid-template-columns: 82px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 13px 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.13);
+  transform: translateX(0);
+  transition: transform .25s ease, background .25s ease;
 }
-.rep-features { display: flex; flex-direction: column; gap: 20px; }
-.rf { display: flex; gap: 14px; align-items: flex-start; }
-.rf-dot {
-  width: 5px; height: 5px;
+.ba-rec:hover { transform: translateX(-6px); background: rgba(255,255,255,.12); }
+.ba-rec b { color: #fff; font-size: 12px; }
+.ba-rec span { color: rgba(255,255,255,.56); font-size: 12px; }
+.ba-rec em {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--green);
+  background: rgba(29,158,117,.14);
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+.ba-list {
+  position: relative;
+  z-index: 2;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  color: rgba(255,255,255,.55);
+  font-size: 13.5px;
+  line-height: 1.85;
+}
+.ba-list li {
+  position: relative;
+  padding-inline-start: 20px;
+}
+.ba-list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 12px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--gold);
-  flex-shrink: 0;
-  margin-top: 8px;
 }
-.rf-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--navy);
-  margin-bottom: 3px;
-}
-.rf-text { font-size: 13px; color: var(--warm-600); line-height: 1.65; }
-
-/* Report card mock */
-.rc {
-  background: var(--navy);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: 0 24px 60px rgba(6,14,28,.25);
-}
-.rc-head {
-  background: var(--navy-deep);
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-}
-.rc-head-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+.ba-col--before .ba-list li::before { background: var(--red); }
+.ba-col--after .ba-list li::before { background: var(--green); }
+.ba-arrow {
+  display: grid;
+  place-items: center;
   color: var(--gold);
+  min-width: 52px;
+  position: relative;
 }
-.rc-head-badge {
-  background: var(--green);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 100px;
-}
-.rc-body { padding: 22px 24px; }
-.rc-ids { display: flex; gap: 7px; margin-bottom: 20px; }
-.rc-id {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.08);
-  color: rgba(255,255,255,.3);
-  font-size: 11px;
-  padding: 4px 11px;
-  border-radius: var(--radius-sm);
-}
-.rc-id span { color: var(--gold); font-weight: 600; margin-inline-end: 3px; }
-.rc-section-label {
-  display: block;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.2);
-  margin-bottom: 10px;
-}
-.rc-metrics {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
-  background: rgba(255,255,255,.05);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  margin-bottom: 18px;
-}
-.rc-metric {
-  background: rgba(6,14,28,.65);
-  padding: 12px 14px;
-}
-.rc-metric-label { display: block; font-size: 10px; color: rgba(255,255,255,.26); margin-bottom: 5px; }
-.rc-metric-value { display: block; font-size: 14px; font-weight: 500; color: #fff; }
-.rc-metric-value.c-green { color: var(--green); }
-.rc-metric-value.c-gold  { color: var(--gold); }
-.rc-rooms {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5px;
-  margin-bottom: 18px;
-}
-.rc-room {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(255,255,255,.03);
-  border-radius: var(--radius-sm);
-  padding: 7px 10px;
-}
-.rc-room-name { font-size: 11px; color: rgba(255,255,255,.38); }
-.rc-bars { display: flex; flex-direction: column; gap: 9px; margin-bottom: 18px; }
-.rc-bar-row { display: flex; align-items: center; gap: 10px; }
-.rc-bar-label  { font-size: 11px; color: rgba(255,255,255,.35); width: 82px; flex-shrink: 0; text-align: end; }
-.rc-bar-track  { flex: 1; height: 3px; background: rgba(255,255,255,.07); border-radius: 2px; overflow: hidden; }
-.rc-bar-fill   { height: 100%; border-radius: 2px; }
-.rc-bar-fill.g { background: var(--green); }
-.rc-bar-fill.o { background: var(--orange); }
-.rc-bar-value  { font-size: 11px; font-weight: 500; width: 60px; text-align: start; flex-shrink: 0; }
-.rc-verdict {
-  background: rgba(201,168,76,.08);
-  border: 1px solid rgba(201,168,76,.16);
-  border-radius: var(--radius-sm);
-  padding: 12px 16px;
-  display: flex;
-  gap: 11px;
-  align-items: flex-start;
-}
-.rc-verdict-icon {
-  width: 26px; height: 26px;
+.ba-arrow span {
+  position: absolute;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: rgba(201,168,76,.16);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--gold);
-  font-size: 12px;
-  font-weight: 700;
-  flex-shrink: 0;
+  background: rgba(201,168,76,.10);
+  border: 1px solid rgba(201,168,76,.24);
 }
-.rc-verdict-text { font-size: 12px; color: rgba(255,255,255,.48); line-height: 1.6; }
-.rc-verdict-text strong { color: var(--gold); font-weight: 500; }
+.ba-arrow svg { position: relative; z-index: 1; }
 
 /* ── HOW IT WORKS ───────────────────────────────────── */
+.steps-wrap { position: relative; }
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -697,10 +843,10 @@ nav {
 }
 .steps-line {
   position: absolute;
-  top: 34px;
+  top: 35px;
   inset-inline: 17%;
   height: 1px;
-  background: var(--warm-200);
+  background: linear-gradient(90deg, transparent, var(--warm-200), transparent);
   z-index: 0;
 }
 .step {
@@ -710,176 +856,303 @@ nav {
   z-index: 1;
 }
 .step-circle {
-  width: 66px; height: 66px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: var(--warm-white);
   border: 2px solid var(--warm-200);
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0 auto 22px;
+  transition: border-color .25s ease, transform .25s ease, background .25s ease;
 }
+.step:hover .step-circle { border-color: var(--gold); transform: translateY(-4px); background: var(--gold-faint); }
 .step-num {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 300;
   color: var(--gold);
   line-height: 1;
 }
-.step-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--navy);
-  margin-bottom: 9px;
-  line-height: 1.38;
-}
-.step-text { font-size: 13px; color: var(--warm-600); line-height: 1.7; }
+.step-title { font-size: 16px; font-weight: 900; color: var(--navy); margin-bottom: 9px; line-height: 1.5; }
+.step-text { font-size: 13.5px; color: var(--warm-600); line-height: 1.9; }
 
-/* ── CTA SECTION ────────────────────────────────────── */
-.cta-wrap {
-  max-width: 600px;
+/* ── DELIVERABLES ───────────────────────────────────── */
+.deliver-grid {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  gap: 44px;
+  align-items: start;
+}
+.deliver-list { display: grid; gap: 12px; }
+.deliver-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid rgba(13,31,60,.08);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: 0 16px 46px rgba(6,14,28,.05);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.deliver-item:hover { transform: translateX(-5px); box-shadow: 0 24px 70px rgba(6,14,28,.10); }
+.deliver-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--gold-faint);
+  color: var(--gold);
+  font-weight: 900;
+}
+.deliver-title { font-size: 17px; font-weight: 900; color: var(--navy); margin-bottom: 4px; }
+.deliver-text { font-size: 13.5px; line-height: 1.9; color: var(--warm-600); }
+
+/* ── REPORT PREVIEW ─────────────────────────────────── */
+.report-wrap {
+  display: grid;
+  grid-template-columns: .86fr 1.14fr;
+  gap: 52px;
+  align-items: start;
+}
+.rep-quote {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-style: italic;
+  color: var(--warm-800);
+  line-height: 1.9;
+  border-inline-end: 2px solid var(--gold);
+  padding-inline-end: 22px;
+  margin-bottom: 30px;
+}
+.rep-features { display: flex; flex-direction: column; gap: 18px; }
+.rf { display: flex; gap: 14px; align-items: flex-start; }
+.rf-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 10px; }
+.rf-title { font-size: 14px; font-weight: 900; color: var(--navy); margin-bottom: 3px; }
+.rf-text { font-size: 13px; color: var(--warm-600); line-height: 1.8; }
+
+.rc {
+  background: var(--navy);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-deep);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.rc-head {
+  background: rgba(6,14,28,.72);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.rc-head-label { font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+.rc-tabs { display: flex; gap: 7px; }
+.rc-tab {
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.50);
+  padding: 5px 10px;
+  border-radius: 99px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 900;
+  transition: background .2s ease, color .2s ease;
+}
+.rc-tab.is-active { background: var(--green); border-color: var(--green); color: #fff; }
+.rc-body { padding: 24px; }
+.rc-ids { display: flex; gap: 7px; margin-bottom: 20px; flex-wrap: wrap; }
+.rc-id { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); color: rgba(255,255,255,.34); font-size: 11px; padding: 5px 11px; border-radius: var(--radius-sm); }
+.rc-id span { color: var(--gold); font-weight: 900; margin-inline-end: 3px; }
+.rc-section-label { display: block; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.24); margin-bottom: 10px; }
+.rc-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: rgba(255,255,255,.05); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 18px; }
+.rc-metric { background: rgba(6,14,28,.62); padding: 13px 14px; }
+.rc-metric-label { display: block; font-size: 10px; color: rgba(255,255,255,.30); margin-bottom: 5px; }
+.rc-metric-value { display: block; font-size: 14px; font-weight: 900; color: #fff; }
+.rc-metric-value.c-green { color: var(--green); }
+.rc-metric-value.c-gold  { color: var(--gold); }
+.rc-bars { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+.rc-bar-row { display: flex; align-items: center; gap: 10px; }
+.rc-bar-label { font-size: 11px; color: rgba(255,255,255,.38); width: 92px; flex-shrink: 0; text-align: end; }
+.rc-bar-track { flex: 1; height: 4px; background: rgba(255,255,255,.08); border-radius: 2px; overflow: hidden; }
+.rc-bar-fill { height: 100%; border-radius: 2px; background: var(--gold); width: var(--w); transition: width .45s ease; }
+.rc-bar-fill.g { background: var(--green); }
+.rc-bar-fill.o { background: var(--orange); }
+.rc-bar-value { font-size: 11px; font-weight: 800; width: 72px; text-align: start; flex-shrink: 0; }
+.rc-verdict { background: rgba(201,168,76,.08); border: 1px solid rgba(201,168,76,.16); border-radius: var(--radius-md); padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+.rc-verdict-icon { width: 28px; height: 28px; border-radius: 50%; background: rgba(201,168,76,.16); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 13px; font-weight: 900; flex-shrink: 0; }
+.rc-verdict-text { font-size: 12.5px; color: rgba(255,255,255,.54); line-height: 1.8; }
+.rc-verdict-text strong { color: var(--gold); font-weight: 900; }
+
+/* ── TRUST SECTION ──────────────────────────────────── */
+.trust-panel {
+  max-width: 860px;
   margin-inline: auto;
   text-align: center;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: var(--radius-xl);
+  padding: clamp(34px, 6vw, 68px);
+  background: rgba(255,255,255,.045);
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(14px);
 }
+.trust-tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 28px; }
+
+/* ── CTA SECTION ────────────────────────────────────── */
+.cta-wrap { max-width: 760px; margin-inline: auto; text-align: center; }
 .cta-title {
   font-family: var(--font-display);
   font-weight: 300;
   color: #fff;
-  line-height: 1.22;
-  letter-spacing: -0.4px;
-  margin-bottom: 14px;
-  font-size: clamp(32px, 5vw, 58px);
+  line-height: 1.16;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+  font-size: clamp(38px, 5.4vw, 68px);
 }
-.cta-sub {
-  font-size: 15px;
-  color: rgba(255,255,255,.4);
-  line-height: 1.8;
-  margin-bottom: 40px;
+.cta-sub { font-size: 16px; color: rgba(255,255,255,.50); line-height: 2; margin-bottom: 34px; }
+.cta-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
 }
-.cta-note {
-  margin-top: 16px;
-  font-size: 12.5px;
-  color: rgba(255,255,255,.26);
+.cta-step {
+  background: rgba(255,255,255,.055);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: var(--radius-md);
+  padding: 18px 14px;
 }
+.cta-step b { display: block; color: #fff; font-size: 13px; margin-bottom: 5px; }
+.cta-step span { display: block; color: rgba(255,255,255,.38); font-size: 11px; line-height: 1.7; }
+.cta-note { margin-top: 16px; font-size: 12.5px; color: rgba(255,255,255,.28); }
 .cta-note span { color: var(--green); }
-.cta-glow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse 60% 75% at 50% 50%, rgba(201,168,76,.055) 0%, transparent 70%);
-}
+.cta-glow { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 60% 75% at 50% 50%, rgba(201,168,76,.09) 0%, transparent 70%); }
 .cta-section-inner { position: relative; z-index: 1; }
+
+/* ── STICKY CTA ─────────────────────────────────────── */
+.sticky-cta {
+  position: fixed;
+  inset-inline: 22px;
+  inset-block-end: 18px;
+  z-index: 260;
+  display: none;
+  justify-content: center;
+  pointer-events: none;
+}
+.sticky-cta.is-visible { display: flex; }
+.sticky-cta a {
+  pointer-events: auto;
+  width: min(420px, 100%);
+  border-radius: 18px;
+  padding: 14px 18px;
+  box-shadow: 0 18px 60px rgba(6,14,28,.35);
+}
 
 /* ── FOOTER ─────────────────────────────────────────── */
 footer {
   background: var(--navy-deep);
-  padding: 28px var(--page-px);
+  padding: 30px var(--page-px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   border-top: 1px solid rgba(255,255,255,.05);
 }
-.f-logo { font-family: var(--font-display); font-size: 20px; font-weight: 400; letter-spacing: 2px; }
+.f-logo { font-family: var(--font-display); font-size: 22px; font-weight: 400; letter-spacing: 2px; }
 .f-logo .n { color: var(--gold); }
-.f-logo .m { color: rgba(255,255,255,.3); }
-.f-copy { font-size: 11px; color: rgba(255,255,255,.18); letter-spacing: 0.4px; }
+.f-logo .m { color: rgba(255,255,255,.36); }
+.f-copy { font-size: 11px; color: rgba(255,255,255,.22); letter-spacing: 0.4px; }
 
-/* ── RESPONSIVE — Mobile First ──────────────────────── */
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .hero-inner { grid-template-columns: 1fr; text-align: center; }
+  .hero-copy, .hero-text { margin-inline: auto; }
+  .value-strip, .hero-ctas, .trust-strip { justify-content: center; margin-inline: auto; }
+  .hero-visual { min-height: 500px; max-width: 640px; width: 100%; margin-inline: auto; }
+  .nav-links { display: none; }
+}
 
-/* ≤ 480px — small phones */
-@media (max-width: 480px) {
-  :root {
-    --page-px: 18px;
-    --sp-xl:  52px;
-    --sp-2xl: 72px;
-  }
-
-  nav { height: 60px; }
+@media (max-width: 767px) {
+  .ba-wrap { grid-template-columns: 1fr; }
+  .ba-col { min-height: auto; }
+  .ba-arrow { min-height: 48px; transform: rotate(90deg); }
+  .ba-chaos { min-height: 190px; }
+  .ba-rec { grid-template-columns: 1fr; text-align: right; }
+  :root { --page-px: 20px; --sp-xl: 58px; --sp-2xl: 78px; }
+  nav { height: 64px; }
   .nav-sub { display: none; }
-  .nav-wordmark { font-size: 22px; }
-  .nav-cta { font-size: 12px; padding: 8px 16px; }
-
-  #hero { padding-block: calc(60px + 52px) 60px; }
-  .hero-badge { font-size: 9px; letter-spacing: 2px; padding: 5px 16px; margin-bottom: 28px; }
-
-  .trust-strip {
-    grid-template-columns: 1fr 1fr;
-    max-width: 100%;
-  }
-  .trust-strip .trust-item:last-child {
-    grid-column: 1 / -1;
-  }
-  .trust-num { font-size: 26px; }
-  .trust-lbl { font-size: 10px; }
-
+  .nav-wordmark { font-size: 23px; }
+  .nav-cta { padding: 9px 14px; font-size: 12px; }
+  #hero { padding-block: calc(64px + 46px) 58px; }
+  .hero-badge { margin-bottom: 22px; }
+  .hero-h1 { font-size: clamp(38px, 13vw, 58px); }
+  .hero-ctas { flex-direction: column; align-items: stretch; }
+  .hero-ctas .btn-primary, .hero-ctas .btn-ghost { width: 100%; }
+  .trust-strip { grid-template-columns: 1fr; }
+  .hero-visual { min-height: 520px; }
+  .chaos-card { width: 92%; inset-inline: 4%; }
+  .score-card { width: 86%; inset-inline-start: 0; }
+  .recommend-card { width: 92%; inset-inline-end: 4%; }
+  .neutral-card { inset-inline-start: 12px; }
+  .value-grid { grid-template-columns: 1fr; }
+  .value-card, .value-card:nth-child(2) { grid-column: auto; min-height: auto; }
   .problem-grid { grid-template-columns: 1fr; }
   .p-card--full { grid-column: 1; }
-
-  .ov-grid    { grid-template-columns: 1fr; }
-  .h-grid     { grid-template-columns: 1fr; }
-  .report-wrap { grid-template-columns: 1fr; gap: 36px; }
-
-  .steps-grid { grid-template-columns: 1fr; gap: 32px; }
+  .steps-grid { grid-template-columns: 1fr; gap: 34px; }
   .steps-line { display: none; }
-
+  .deliver-grid { grid-template-columns: 1fr; }
+  .report-wrap { grid-template-columns: 1fr; gap: 38px; }
   .rc-metrics { grid-template-columns: 1fr; }
-  .rc-rooms   { grid-template-columns: 1fr; }
-
-  footer { flex-direction: column; text-align: center; padding-block: 24px; }
+  .rc-bar-row { align-items: flex-start; flex-wrap: wrap; }
+  .rc-bar-label { width: 100%; text-align: right; }
+  .rc-bar-value { width: auto; }
+  .cta-steps { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; padding-block: 24px 96px; }
+  .sticky-cta.is-visible { display: flex; }
 }
 
-/* 481px – 767px — large phones / small tablets */
-@media (min-width: 481px) and (max-width: 767px) {
-  :root {
-    --page-px: 22px;
-    --sp-xl:   60px;
-  }
-  .problem-grid { grid-template-columns: 1fr; }
-  .p-card--full { grid-column: 1; }
-  .ov-grid  { grid-template-columns: 1fr; }
-  .h-grid   { grid-template-columns: 1fr; }
-  .report-wrap { grid-template-columns: 1fr; gap: 40px; }
-  .steps-grid  { grid-template-columns: 1fr; gap: 32px; }
-  .steps-line  { display: none; }
-  footer { flex-direction: column; text-align: center; }
-}
-
-/* 768px – 1023px — tablets */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .h-grid { grid-template-columns: 1fr 1fr; }
-  .ov-grid { grid-template-columns: 1fr 1fr; }
-  .ov-grid .ov-card:last-child { grid-column: 1 / -1; }
-  .report-wrap { grid-template-columns: 1fr; gap: 44px; }
-  .steps-grid  { grid-template-columns: repeat(3, 1fr); }
+  .ba-wrap { grid-template-columns: 1fr; }
+  .ba-arrow { min-height: 54px; transform: rotate(90deg); }
+  .value-grid { grid-template-columns: repeat(2,1fr); }
+  .value-card, .value-card:nth-child(2) { grid-column: auto; }
+  .deliver-grid, .report-wrap { grid-template-columns: 1fr; }
 }
 
-/* ≥ 1024px — desktop (full layout) */
-@media (min-width: 1024px) {
-  .report-wrap { grid-template-columns: 1fr 1.25fr; }
-}
-
-/* Shared ≤ 1023px */
-@media (max-width: 1023px) {
-  .p-card { padding: 28px; }
-  .h-card { padding: 26px 24px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .reveal { opacity: 1; transform: none; }
 }
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar" aria-hidden="true"></div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
 <!-- ═══════════════════════════════════════════════════
      NAV
 ═══════════════════════════════════════════════════ -->
 <nav>
-  <a href="#" class="nav-logo" aria-label="NestMatch — الصفحة الرئيسية">
+  <a href="#hero" class="nav-logo" aria-label="NestMatch — الصفحة الرئيسية">
     <div class="nav-wordmark"><span class="n">Nest</span><span class="m">Match</span></div>
-    <div class="nav-sub">Real Estate Intelligence</div>
+    <div class="nav-sub">Real Estate Decision Intelligence</div>
   </a>
-  <a href="https://wa.me/201000000000?text=مرحباً%20—%20عايز%20أعرف%20أفضل%20المتاح%20في%20ميزانيتي%20في%20مدينتي"
-     class="nav-cta" target="_blank" rel="noopener">
-    ابعتلنا واتساب
+
+  <div class="nav-links" aria-label="روابط الصفحة">
+    <a href="#value">القيمة</a>
+    <a href="#problem">المشكلة</a>
+    <a href="#how">طريقة العمل</a>
+    <a href="#report">التقرير</a>
+    <a href="#trust">الحياد</a>
+  </div>
+
+  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20ترشيحات%20NestMatch%20بناءً%20على%20ميزانيتي%20في%20مدينتي" class="nav-cta" target="_blank" rel="noopener">
+    ابدأ بميزانيتك
   </a>
 </nav>
-
 
 <!-- ═══════════════════════════════════════════════════
      HERO
@@ -889,419 +1162,609 @@ footer {
   <div class="hero-grid-overlay" aria-hidden="true"></div>
 
   <div class="hero-inner">
-    <div class="hero-badge" role="note">
-      <span class="badge-pulse" aria-hidden="true"></span>
-      بدون عمولة بيع
+    <div class="hero-copy">
+      <div class="hero-badge reveal" role="note">
+        <span class="badge-pulse" aria-hidden="true"></span>
+        Buyer-first · No sales commission
+      </div>
+
+      <h1 class="hero-h1 reveal reveal-delay-1" id="hero-h1">
+        بتدور على شقة في <em>مدينتي؟</em>
+      </h1>
+
+      <p class="hero-h2 reveal reveal-delay-2">
+        ابدأ بميزانيتك، ودعنا نرشّح لك أفضل المتاح.
+      </p>
+
+      <p class="hero-text reveal reveal-delay-3">
+        نحلّل السوق، نقارن الوحدات، ونرشّح لك أفضل الاختيارات من حيث القيمة الحقيقية، لا السعر فقط.
+      </p>
+
+      <div class="value-strip reveal reveal-delay-3" aria-label="قيم NestMatch الأساسية">
+        <span class="tag tag--light">رؤية أوسع للسوق</span>
+        <span class="tag tag--light">قيمة حقيقية</span>
+        <span class="tag tag--light">ترشيحات ذكية</span>
+        <span class="tag tag--light">وقت أقل</span>
+        <span class="tag tag--light">حياد كامل</span>
+      </div>
+
+      <div class="hero-ctas reveal reveal-delay-3">
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary" target="_blank" rel="noopener">
+          ابدأ بميزانيتك
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="#report" class="btn-ghost">
+          شاهد نموذج التقرير
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </a>
+      </div>
+
+      <div class="trust-strip reveal reveal-delay-3">
+        <div class="trust-item">
+          <span class="trust-num" data-count="7000">0</span>
+          <span class="trust-lbl">وحدة نشطة يتم تنظيمها وتحليلها</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-num">0%</span>
+          <span class="trust-lbl">عمولة بيع على قرارك</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-num">3</span>
+          <span class="trust-lbl">مخرجات واضحة: ترشيحات، تقارير، مقارنة</span>
+        </div>
+      </div>
     </div>
 
-    <h1 class="hero-h1" id="hero-h1">
-      تايه بين الإعلانات<br>وسماسرة كتير؟
-    </h1>
+    <div class="hero-visual reveal reveal-delay-2" aria-label="تصور تفاعلي يوضح تحويل فوضى السوق إلى ترشيحات واضحة">
+      <div class="decision-orbit"></div>
 
-    <p class="hero-h2">
-      قرار بملايين — <strong>محتاج بيانات حقيقية وتحليل</strong><br>
-      مش كلام بيبيع
-    </p>
-
-    <div class="hero-ctas">
-      <a href="https://wa.me/201271028216?text=مرحباً%20—%20عايز%20أعرف%20أفضل%20المتاح%20في%20ميزانيتي%20في%20مدينتي"
-         class="btn-primary" target="_blank" rel="noopener">
-        ابعتلنا على واتساب
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
-      <a href="tel:+201271028216" class="btn-ghost">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-        اتصل بينا
-      </a>
-    </div>
-
-    <div class="trust-strip">
-      <div class="trust-item">
-        <span class="trust-num">6,000+</span>
-        <span class="trust-lbl">وحدة محلّلة في قاعدة البيانات</span>
+      <div class="chaos-card tilt-card">
+        <div class="chaos-title"><span>السوق قبل التحليل</span><span style="color:var(--red)">مشتت</span></div>
+        <div class="chaos-grid">
+          <span class="chaos-pill">إعلانات كثيرة</span>
+          <span class="chaos-pill">بيانات ناقصة</span>
+          <span class="chaos-pill">أسعار متضاربة</span>
+          <span class="chaos-pill">مساحات معلنة</span>
+          <span class="chaos-pill">مقارنات صعبة</span>
+          <span class="chaos-pill">حياد غير واضح</span>
+        </div>
       </div>
-      <div class="trust-item">
-        <span class="trust-num" style="font-size:15px;letter-spacing:.5px;padding-top:8px;line-height:1.4;">تحليل مستقل</span>
-        <span class="trust-lbl">مبني على البيانات<br>مش على الصفقة</span>
+
+      <div class="score-card tilt-card">
+        <div class="score-title"><span>تحليل القيمة الحقيقية</span><span style="color:var(--gold)">NestMatch</span></div>
+        <div class="metric-line">
+          <div class="metric-meta"><span>صافي المساحة</span><span>88%</span></div>
+          <div class="metric-track"><div class="metric-fill" style="width:88%"></div></div>
+        </div>
+        <div class="metric-line">
+          <div class="metric-meta"><span>جودة الفيو</span><span>82%</span></div>
+          <div class="metric-track"><div class="metric-fill" style="width:82%"></div></div>
+        </div>
+        <div class="metric-line">
+          <div class="metric-meta"><span>كفاءة التوزيع</span><span>79%</span></div>
+          <div class="metric-track"><div class="metric-fill" style="width:79%"></div></div>
+        </div>
+        <div class="metric-line" style="margin-bottom:0">
+          <div class="metric-meta"><span>الموقع داخل المرحلة</span><span>74%</span></div>
+          <div class="metric-track"><div class="metric-fill" style="width:74%"></div></div>
+        </div>
       </div>
-      <div class="trust-item">
-        <span class="trust-num">0%</span>
-        <span class="trust-lbl">عمولة بيع</span>
+
+      <div class="recommend-card tilt-card">
+        <div class="recommend-title"><span>بعد التحليل</span><span style="color:var(--green)">قائمة مختصرة</span></div>
+        <div class="rec-row">
+          <div><div class="rec-name">ترشيح 1</div><div class="rec-reason">أفضل قيمة مقابل السعر</div></div>
+          <span class="rec-badge">الأقوى</span>
+        </div>
+        <div class="rec-row">
+          <div><div class="rec-name">ترشيح 2</div><div class="rec-reason">جودة سكن أعلى</div></div>
+          <span class="rec-badge">مناسب</span>
+        </div>
+        <div class="rec-row">
+          <div><div class="rec-name">ترشيح 3</div><div class="rec-reason">توازن مالي ومعماري</div></div>
+          <span class="rec-badge">واضح</span>
+        </div>
+      </div>
+
+      <div class="neutral-card tilt-card">
+        <div class="neutral-icon">✓</div>
+        <span>حياد كامل لصالح المشتري</span>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════════
+     VALUE CARDS
+═══════════════════════════════════════════════════ -->
+<section class="section section--white" id="value" aria-labelledby="value-title">
+  <div class="inner">
+    <header class="sec-hdr sec-hdr--center reveal">
+      <span class="sec-label">القيمة الأساسية</span>
+      <h2 class="sec-title" id="value-title">من سوق مشتت إلى قرار أوضح</h2>
+      <p class="sec-sub">نحوّل فوضى السوق إلى ترشيحات واضحة، مبنية على رؤية أوسع، تحليل للقيمة، وحياد كامل لصالح المشتري.</p>
+    </header>
+
+    <div class="value-grid">
+      <article class="value-card reveal tilt-card">
+        <span class="v-num">١</span>
+        <h3 class="v-title">رؤية أوضح للسوق المتاح</h3>
+        <p class="v-text">نجمع الوحدات المعروضة في مدينتي من مصادر متعددة، وننظمها في صورة واحدة واضحة، حتى نرشّح لك الأفضل بناءً على مقارنة أوسع، لا على إعلان منفرد أو ترشيح عشوائي.</p>
+      </article>
+
+      <article class="value-card reveal reveal-delay-1 tilt-card">
+        <span class="v-num">٢</span>
+        <h3 class="v-title">تحليل القيمة الحقيقية</h3>
+        <p class="v-text">مساحة العقد ليست معيارًا موضوعيًا للتقييم، وذلك لاختلاف نسب التحميل من نموذج لآخر، وبالتالي السعر لا يكشف القيمة الفعلية. لذلك نحلّل صافي المساحة، كفاءة التوزيع، جودة الفيو، التهوية، الإضاءة الطبيعية، التعرّض للشمس، والموقع داخل المرحلة، لنحدد القيمة الحقيقية لكل وحدة.</p>
+      </article>
+
+      <article class="value-card reveal reveal-delay-2 tilt-card">
+        <span class="v-num">٣</span>
+        <h3 class="v-title">ترشيحات مناسبة لك</h3>
+        <p class="v-text">نحوّل السوق المتاح إلى قائمة مختصرة من الاختيارات الأنسب لميزانيتك واحتياجك، بدل أن تضيع بين عشرات البدائل غير الواضحة.</p>
+      </article>
+
+      <article class="value-card reveal tilt-card">
+        <span class="v-num">٤</span>
+        <h3 class="v-title">وقت أقل ومعاينات أذكى</h3>
+        <p class="v-text">نختصر عليك أسابيع من البحث والمقارنة، ونقدّم لك قائمة واضحة من الاختيارات الأقوى، حتى تركّز معايناتك على الوحدات التي تستحق الزيارة فعلًا.</p>
+      </article>
+
+      <article class="value-card reveal reveal-delay-1 tilt-card">
+        <span class="v-num">٥</span>
+        <h3 class="v-title">حياد يحمي قرارك</h3>
+        <p class="v-text">لا نتقاضى عمولات على البيع. نجاحنا ليس في إتمام الصفقة، بل في مساعدتك على اختيار الوحدة الأنسب لك.</p>
+      </article>
+    </div>
+  </div>
+</section>
 
 <!-- ═══════════════════════════════════════════════════
      PROBLEM
 ═══════════════════════════════════════════════════ -->
-<section class="section section--white" id="problem" aria-labelledby="problem-title">
+<section class="section section--gray" id="problem" aria-labelledby="problem-title">
   <div class="inner">
-    <header class="sec-hdr">
+    <header class="sec-hdr reveal">
       <span class="sec-label">المشكلة</span>
-      <h2 class="sec-title" id="problem-title">ليه اختيار الشقة المناسبة بقى صعب؟</h2>
-      <p class="sec-sub">المشكلة مش في قلة الخيارات — في كثرتها وتشتتها وصعوبة التأكد من قيمتها الحقيقية</p>
+      <h2 class="sec-title" id="problem-title">السوق الحالي يترك المشتري أمام قرارات غير واضحة</h2>
     </header>
 
     <div class="problem-grid">
-      <div class="p-card p-card--dark">
+      <div class="p-card p-card--dark reveal">
         <span class="p-num" aria-hidden="true">٠١</span>
-        <h3 class="p-title">السوق مليان إعلانات متفرقة — والمتاح عندك مش محايد</h3>
-        <p class="p-text">الوحدات موزعة بين منصات وجروبات ومكاتب مختلفة — ومفيش صورة كاملة لكل المتاح. والمعلومات اللي بتوصلك عادةً بتيجي عن طريق وسيط هدفه إتمام الصفقة مش مصلحتك.</p>
+        <h3 class="p-title">سوق مشتت</h3>
+        <p class="p-text">المتاح موزع بين مصادر كثيرة، بدون صورة موحدة واضحة.</p>
       </div>
 
-      <div class="p-card">
+      <div class="p-card reveal reveal-delay-1">
         <span class="p-num" aria-hidden="true">٠٢</span>
-        <h3 class="p-title">المقارنة مستحيلة بمفردك</h3>
-        <p class="p-text">صعب تقارن بين مئات الشقق بكل المعايير المؤثرة على القرار — حتى لو البيانات متاحة.</p>
-        <div class="p-tags">
-          <span class="tag">صافي المساحة</span>
-          <span class="tag">جودة الفيو</span>
-          <span class="tag">الخصوصية</span>
-          <span class="tag">الاتجاه</span>
-          <span class="tag">الدور</span>
-          <span class="tag">المسافة من الخدمات</span>
-          <span class="tag">التحليل الحراري</span>
-          <span class="tag">التهوية</span>
-          <span class="tag">الإضاءة الطبيعية</span>
-        </div>
+        <h3 class="p-title">بيانات ناقصة</h3>
+        <p class="p-text">الإعلانات لا تعرض دائمًا التفاصيل التي تصنع القيمة الحقيقية.</p>
       </div>
 
-      <div class="p-card p-card--full" style="border-top: 2px solid rgba(201,168,76,.18); background: var(--gold-faint);">
-        <span class="p-num" aria-hidden="true" style="color: rgba(201,168,76,.3);">٠٣</span>
-        <h3 class="p-title" style="color: var(--navy);">قرار بملايين — مبني على معلومة ناقصة</h3>
-        <p class="p-text">معظم الناس بتتخذ قرار شراء شقة بناءً على الانطباع والكلام — مش على تحليل حقيقي للقيمة.</p>
+      <div class="p-card reveal reveal-delay-2">
+        <span class="p-num" aria-hidden="true">٠٣</span>
+        <h3 class="p-title">تقييم سطحي</h3>
+        <p class="p-text">المقارنة غالبًا تعتمد على السعر والمساحة المعلنة فقط.</p>
       </div>
-    </div>
-  </div>
-</section>
 
-
-<!-- ═══════════════════════════════════════════════════
-     OVERVIEW (SOLUTION SUMMARY)
-═══════════════════════════════════════════════════ -->
-<section class="section" style="background: var(--warm-100);" id="overview" aria-labelledby="ov-title">
-  <div class="inner">
-    <header class="sec-hdr">
-      <span class="sec-label">الحل</span>
-      <h2 class="sec-title" id="ov-title">تحليل مستقل — مش مجرد بحث</h2>
-    </header>
-
-    <div class="ov-grid">
-      <div class="ov-card">
-        <span class="ov-icon" aria-hidden="true">📊</span>
-        <h3 class="ov-title">رؤية السوق الكاملة</h3>
-        <p class="ov-text">من خلال قاعدة بيانات تضم 6,000 وحدة محللة — بنشوف كل المتاح مش جزء منه.</p>
+      <div class="p-card reveal reveal-delay-3">
+        <span class="p-num" aria-hidden="true">٠٤</span>
+        <h3 class="p-title">اختيار مرهق</h3>
+        <p class="p-text">بحث طويل، معاينات كثيرة، وصعوبة في الوصول للاختيار الأنسب.</p>
       </div>
-      <div class="ov-card">
-        <span class="ov-icon" aria-hidden="true">🎯</span>
-        <h3 class="ov-title">أفضل الخيارات في ميزانيتك</h3>
-        <p class="ov-text">بنوصلك لأفضل 20 شقة بناءً على أولوياتك — مع تقارير تفصيلية بالأسباب.</p>
-      </div>
-      <div class="ov-card">
-        <span class="ov-icon" aria-hidden="true">⚖️</span>
-        <h3 class="ov-title">حياد كامل بلا عمولة</h3>
-        <p class="ov-text">مصلحتنا في قرارك الصح — مش في إتمام الصفقة. بدون عمولة بيع.</p>
+
+      <div class="p-card p-card--full reveal" style="background:var(--gold-faint);border-top:2px solid rgba(201,168,76,.18);">
+        <span class="p-num" aria-hidden="true" style="color:rgba(201,168,76,.30);">٠٥</span>
+        <h3 class="p-title">حياد غائب</h3>
+        <p class="p-text">لا يوجد دائمًا طرف مستقل هدفه حماية قرار المشتري، لا إتمام الصفقة.</p>
       </div>
     </div>
   </div>
 </section>
 
-
 <!-- ═══════════════════════════════════════════════════
-     HIDDEN KNOWLEDGE
+     BEFORE / AFTER
 ═══════════════════════════════════════════════════ -->
-<section class="section section--dark" id="hidden" aria-labelledby="hidden-title">
-  <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 65% at 10% 50%, rgba(201,168,76,.045) 0%, transparent 65%);"></div>
+<section class="section section--dark" id="before-after" aria-labelledby="ba-title">
+  <div class="hero-grid-overlay" aria-hidden="true"></div>
   <div class="inner" style="position:relative;z-index:1;">
-    <header class="sec-hdr">
-      <span class="sec-label">اللي مش بتعرفه</span>
-      <h2 class="sec-title sec-title--light" id="hidden-title">تفاصيل بتأثر على قيمة قرارك</h2>
-      <p class="sec-sub sec-sub--light">في العقار، الفرق الحقيقي مش بيظهر دايماً في الإعلان</p>
+    <header class="sec-hdr sec-hdr--center reveal">
+      <span class="sec-label">قبل وبعد</span>
+      <h2 class="sec-title sec-title--light" id="ba-title">الفرق بين البحث وحدك واستخدام NestMatch</h2>
+      <p class="sec-sub sec-sub--light">نفس السوق، لكن التجربة مختلفة تمامًا عندما يتحول المتاح من فوضى إلى قرار منظم.</p>
     </header>
 
-    <div class="h-grid">
-      <!-- Card 1: Space -->
-      <div class="h-card">
-        <span class="h-label">المساحة</span>
-        <h3 class="h-title">مساحة العقد مش معيار للمقارنة</h3>
-        <p class="h-text">في مدينتي نماذج مساحتها في العقد أكبر — لكن صافي مساحتها الحقيقية أصغر.</p>
-        <div class="h-scale">
-          <div class="h-row">
-            <div class="h-dot" style="background:var(--red)"></div>
-            <span class="h-row-text">عقد كبير — صافي مساحة أصغر</span>
-          </div>
-          <div class="h-row">
-            <div class="h-dot" style="background:var(--green)"></div>
-            <span class="h-row-text">عقد أصغر — صافي المساحة أكبر</span>
-          </div>
+    <div class="ba-wrap reveal reveal-delay-1" aria-label="مقارنة بين البحث التقليدي وخدمة NestMatch">
+      <div class="ba-col ba-col--before">
+        <div class="ba-head">
+          <span class="ba-kicker">بدون NestMatch</span>
+          <h3>بحث طويل وقرار غير واضح</h3>
         </div>
+        <div class="ba-chaos" aria-hidden="true">
+          <span>إعلان ناقص</span>
+          <span>سعر مختلف</span>
+          <span>فيو غير مؤكد</span>
+          <span>مساحة عقد</span>
+          <span>عمولات</span>
+          <span>معاينات كثيرة</span>
+          <span>ترشيح عشوائي</span>
+          <span>قرار بالحدس</span>
+        </div>
+        <ul class="ba-list">
+          <li>مصادر كثيرة بدون صورة واحدة واضحة.</li>
+          <li>مقارنة صعبة بين وحدات غير مكتملة البيانات.</li>
+          <li>معاينات متكررة لا تضيف وضوحًا حقيقيًا.</li>
+          <li>قرار شراء مبني على الانطباع أكثر من التحليل.</li>
+        </ul>
       </div>
 
-      <!-- Card 2: View -->
-      <div class="h-card">
-        <span class="h-label">الفيو — 8–10% من سعر الشقة</span>
-        <h3 class="h-title">مش كل جاردن زي بعض</h3>
-        <p class="h-text">ومعيار أساسي في إعادة البيع.</p>
-        <div class="h-scale" style="margin-top:16px">
-          <div class="h-row">
-            <div class="h-dot" style="background:var(--red)"></div>
-            <span class="h-row-text">Narrow Garden ← الأضعف</span>
-          </div>
-          <div class="h-row">
-            <div class="h-dot" style="background:var(--orange)"></div>
-            <span class="h-row-text">Garden عادي</span>
-          </div>
-          <div class="h-row">
-            <div class="h-dot" style="background:var(--green)"></div>
-            <span class="h-row-text">Wide Garden ← الأقوى</span>
-          </div>
-          <div class="h-row" style="margin-top:4px">
-            <div class="h-dot" style="background:var(--gold)"></div>
-            <span class="h-row-text">فيو مفتوح = قيمة أعلى</span>
-          </div>
-        </div>
+      <div class="ba-arrow" aria-hidden="true">
+        <span></span>
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
       </div>
 
-      <!-- Card 3: Direction / Heat -->
-      <div class="h-card">
-        <span class="h-label">الاتجاه والتحليل الحراري</span>
-        <h3 class="h-title">بيفرق في حياتك كل يوم</h3>
-        <p class="h-text">مش بس اتجاه الهواء — الغرف بتختلف في درجة الحرارة بشكل كبير.</p>
-        <div class="h-rooms">
-          <div class="h-room">
-            <span class="h-room-name">درجة الحرارة صيفاً</span>
-            <span class="badge-sm badge-hot">مؤثر جداً</span>
-          </div>
-          <div class="h-room">
-            <span class="h-room-name">دخول الشمس</span>
-            <span class="badge-sm badge-warm">مؤثر</span>
-          </div>
-          <div class="h-room">
-            <span class="h-room-name">الإضاءة الطبيعية</span>
-            <span class="badge-sm badge-warm">مؤثر</span>
-          </div>
+      <div class="ba-col ba-col--after">
+        <div class="ba-head">
+          <span class="ba-kicker">مع NestMatch</span>
+          <h3>ترشيحات مختصرة بوضوح</h3>
         </div>
-        <p class="h-italic">غرفة نومك ممكن تبقى جنة أو جحيم — الاتجاه بيحدد</p>
-      </div>
-    </div>
-
-    <div class="h-warning">
-      <p class="h-warning-title">
-        ممكن <strong>تفوّت فرص أفضل</strong> — أو <strong>تخسر مئات الآلاف</strong> وأنت مش عارف
-      </p>
-      <p class="h-warning-sub">احصل على بيانات واشتري بناءً على مقارنة حقيقية — مش مجرد انطباعات</p>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════════════
-     REPORT
-═══════════════════════════════════════════════════ -->
-<section class="section" style="background: var(--warm-100);" id="report" aria-labelledby="report-title">
-  <div class="inner">
-    <header class="sec-hdr">
-      <span class="sec-label">التقارير</span>
-      <h2 class="sec-title" id="report-title">تقرير واضح لكل وحدة قبل القرار</h2>
-      <p class="sec-sub">بدلاً من الاعتماد على وصف الإعلان — تحصل على تحليل منظم يساعدك تفهم نقاط القوة والضعف في كل وحدة</p>
-      <div style="margin-top:22px;">
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfh8JNb-HuA3ZWxytHsrQakt5GODYgCl-DB96AoFIQJ4fr2mg/viewform?usp=header"
-           target="_blank" rel="noopener" class="btn-outline">
-          احصل على تقرير لوحدتك
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-        </a>
-      </div>
-    </header>
-
-    <div class="report-wrap">
-      <!-- Left: features list -->
-      <div>
-        <blockquote class="rep-quote">
-          التقرير مش بيهدف لبيع الوحدة —<br>
-          بيساعدك تفهمها بوضوح:<br>
-          هل تستحق سعرها؟ هل تناسب احتياجاتك؟<br>
-          هل في بدائل أفضل في السوق؟
-        </blockquote>
-        <div class="rep-features">
-          <div class="rf"><div class="rf-dot"></div><div>
-            <div class="rf-title">البيانات الأساسية والتفاصيل المالية</div>
-            <div class="rf-text">السعر والمدفوع والمتبقي والقيمة التحليلية للوحدة</div>
-          </div></div>
-          <div class="rf"><div class="rf-dot"></div><div>
-            <div class="rf-title">صافي المساحة وكفاءة التوزيع</div>
-            <div class="rf-text">المساحة الفعلية بعد خصم الجدران — مش الرقم في العقد</div>
-          </div></div>
-          <div class="rf"><div class="rf-dot"></div><div>
-            <div class="rf-title">الفيو المفتوح والخصوصية</div>
-            <div class="rf-text">نوع الفيو ومدى انفتاحه وأثره على القيمة وإعادة البيع</div>
-          </div></div>
-          <div class="rf"><div class="rf-dot"></div><div>
-            <div class="rf-title">التحليل الحراري لكل أوضة</div>
-            <div class="rf-text">درجة تعرض كل غرفة للشمس وأثره على جودة السكن</div>
-          </div></div>
-          <div class="rf"><div class="rf-dot"></div><div>
-            <div class="rf-title">القرب من الخدمات والموقع</div>
-            <div class="rf-text">المسافة الحقيقية من المدارس والتجاري والمداخل</div>
-          </div></div>
-          <div class="rf"><div class="rf-dot"></div><div>
-            <div class="rf-title">مقارنة بالبدائل المتاحة</div>
-            <div class="rf-text">خلاصة واضحة بأسباب الترشيح ونقاط القوة والضعف</div>
-          </div></div>
+        <div class="ba-shortlist" aria-hidden="true">
+          <div class="ba-rec"><b>ترشيح ١</b><span>أفضل قيمة مقابل السعر</span><em>الأقوى</em></div>
+          <div class="ba-rec"><b>ترشيح ٢</b><span>جودة سكن أعلى</span><em>مناسب</em></div>
+          <div class="ba-rec"><b>ترشيح ٣</b><span>توازن مالي ومعماري</span><em>واضح</em></div>
         </div>
-      </div>
-
-      <!-- Right: report card mock -->
-      <div class="rc" role="img" aria-label="نموذج تقرير NestMatch">
-        <div class="rc-head">
-          <span class="rc-head-label">Insight360 Report</span>
-          <span class="rc-head-badge">أفضل قيمة</span>
-        </div>
-        <div class="rc-body">
-          <div class="rc-ids">
-            <span class="rc-id">B <span>14</span></span>
-            <span class="rc-id">Group <span>143</span></span>
-            <span class="rc-id">Unit <span>21</span></span>
-          </div>
-
-          <span class="rc-section-label">البيانات الأساسية</span>
-          <div class="rc-metrics">
-            <div class="rc-metric">
-              <span class="rc-metric-label">مساحة العقد</span>
-              <span class="rc-metric-value">107 م²</span>
-            </div>
-            <div class="rc-metric">
-              <span class="rc-metric-label">صافي المساحة الحقيقية</span>
-              <span class="rc-metric-value c-green">87.38 م²</span>
-            </div>
-            <div class="rc-metric">
-              <span class="rc-metric-label">كفاءة التوزيع</span>
-              <span class="rc-metric-value c-green">81.66%</span>
-            </div>
-            <div class="rc-metric">
-              <span class="rc-metric-label">القيمة التحليلية</span>
-              <span class="rc-metric-value c-gold">5,812,011 ج</span>
-            </div>
-          </div>
-
-          <span class="rc-section-label">التحليل الحراري للغرف</span>
-          <div class="rc-rooms">
-            <div class="rc-room"><span class="rc-room-name">معيشة</span><span class="badge-sm badge-hot">حار</span></div>
-            <div class="rc-room"><span class="rc-room-name">غرفة نوم رئيسية</span><span class="badge-sm badge-warm">دافئ</span></div>
-            <div class="rc-room"><span class="rc-room-name">غرفة نوم ١</span><span class="badge-sm badge-hot">حار</span></div>
-            <div class="rc-room"><span class="rc-room-name">مطبخ</span><span class="badge-sm badge-cold">بارد</span></div>
-          </div>
-
-          <span class="rc-section-label">الفيو والموقع</span>
-          <div class="rc-bars">
-            <div class="rc-bar-row">
-              <span class="rc-bar-label">نوع الفيو</span>
-              <div class="rc-bar-track"><div class="rc-bar-fill g" style="width:90%"></div></div>
-              <span class="rc-bar-value" style="color:var(--green)">جاردن واسع</span>
-            </div>
-            <div class="rc-bar-row">
-              <span class="rc-bar-label">انفتاح الفيو</span>
-              <div class="rc-bar-track"><div class="rc-bar-fill g" style="width:85%"></div></div>
-              <span class="rc-bar-value" style="color:var(--green)">فيو مفتوح</span>
-            </div>
-            <div class="rc-bar-row">
-              <span class="rc-bar-label">الخدمات</span>
-              <div class="rc-bar-track"><div class="rc-bar-fill g" style="width:95%"></div></div>
-              <span class="rc-bar-value" style="color:var(--green)">أمام الوحدة</span>
-            </div>
-            <div class="rc-bar-row">
-              <span class="rc-bar-label">الخصوصية</span>
-              <div class="rc-bar-track"><div class="rc-bar-fill o" style="width:58%"></div></div>
-              <span class="rc-bar-value" style="color:var(--orange)">متوسطة</span>
-            </div>
-          </div>
-
-          <div class="rc-verdict">
-            <div class="rc-verdict-icon" aria-hidden="true">✓</div>
-            <p class="rc-verdict-text">
-              <strong>القيمة التحليلية: 5,812,011 ج</strong> — تحليل مالي كامل يشمل القيمة الحقيقية والمبالغ المتبقية
-            </p>
-          </div>
-        </div>
+        <ul class="ba-list">
+          <li>رؤية أوسع للسوق المتاح في صورة منظمة.</li>
+          <li>تحليل للقيمة الحقيقية لا السعر فقط.</li>
+          <li>قائمة مختصرة من البدائل التي تستحق المعاينة.</li>
+          <li>تقرير يوضح لماذا تختار وحدة دون أخرى.</li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
-
 
 <!-- ═══════════════════════════════════════════════════
      HOW IT WORKS
 ═══════════════════════════════════════════════════ -->
 <section class="section section--white" id="how" aria-labelledby="how-title">
   <div class="inner">
-    <header class="sec-hdr" style="text-align:center;">
-      <span class="sec-label">كيف تبدأ</span>
-      <h2 class="sec-title" id="how-title" style="margin-inline:auto;">٣ خطوات بس</h2>
+    <header class="sec-hdr sec-hdr--center reveal">
+      <span class="sec-label">طريقة العمل</span>
+      <h2 class="sec-title" id="how-title">كيف نرشّح لك أفضل المتاح؟</h2>
     </header>
 
-    <div class="steps-grid">
-      <div class="steps-line" aria-hidden="true"></div>
+    <div class="steps-wrap reveal">
+      <div class="steps-grid">
+        <div class="steps-line" aria-hidden="true"></div>
 
-      <div class="step">
-        <div class="step-circle"><span class="step-num">١</span></div>
-        <h3 class="step-title">قولنا ميزانيتك واللي بتدور عليه</h3>
-        <p class="step-text">بتخبرنا بالميزانية ونوع الوحدة وأهم أولوياتك في السكن أو الاستثمار</p>
-      </div>
+        <div class="step">
+          <div class="step-circle"><span class="step-num">١</span></div>
+          <h3 class="step-title">نفهم ميزانيتك واحتياجك</h3>
+          <p class="step-text">نبدأ بما يناسبك فعلًا: الميزانية، المساحة، طريقة الدفع، الأولويات، ونمط السكن المطلوب.</p>
+        </div>
 
-      <div class="step">
-        <div class="step-circle"><span class="step-num">٢</span></div>
-        <h3 class="step-title">بنحلل الخيارات المتاحة</h3>
-        <p class="step-text">بنراجع الوحدات المطابقة ونقيّمها ماليًا ومعماريًا وسكنيًا بناءً على بيانات واضحة</p>
-      </div>
+        <div class="step">
+          <div class="step-circle"><span class="step-num">٢</span></div>
+          <h3 class="step-title">نحلّل السوق ونقارن القيمة</h3>
+          <p class="step-text">نراجع المتاح داخل قاعدة البيانات، ونقارن السعر بالقيمة الفعلية لكل وحدة من حيث صافي المساحة، جودة السكن، الموقع، والفيو.</p>
+        </div>
 
-      <div class="step">
-        <div class="step-circle"><span class="step-num">٣</span></div>
-        <h3 class="step-title">بنرشحلك الأفضل بالأسباب</h3>
-        <p class="step-text">تحصل على قائمة مختصرة بأفضل الخيارات مع شرح واضح لأسباب الترشيح</p>
+        <div class="step">
+          <div class="step-circle"><span class="step-num">٣</span></div>
+          <h3 class="step-title">نرشّح أفضل الاختيارات</h3>
+          <p class="step-text">تستلم قائمة مختصرة من البدائل الأقوى، مع توضيح سبب ترشيح كل اختيار.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════════
+     DELIVERABLES
+═══════════════════════════════════════════════════ -->
+<section class="section section--gray" id="deliverables" aria-labelledby="deliver-title">
+  <div class="inner">
+    <div class="deliver-grid">
+      <header class="sec-hdr reveal">
+        <span class="sec-label">المخرجات</span>
+        <h2 class="sec-title" id="deliver-title">ماذا تستلم من NestMatch؟</h2>
+        <p class="sec-sub">الخدمة لا تعطيك أسماء وحدات فقط، بل تعطيك سبب الاختيار، تحليل كل ترشيح، ومقارنة واضحة بين البدائل.</p>
+      </header>
+
+      <div class="deliver-list">
+        <div class="deliver-item reveal tilt-card">
+          <div class="deliver-icon">١</div>
+          <div>
+            <h3 class="deliver-title">أفضل ترشيحات مناسبة لك</h3>
+            <p class="deliver-text">اختيارات قوية من حيث القيمة مقابل السعر، ومتوافقة مع ميزانيتك وتفضيلاتك.</p>
+          </div>
+        </div>
+
+        <div class="deliver-item reveal reveal-delay-1 tilt-card">
+          <div class="deliver-icon">٢</div>
+          <div>
+            <h3 class="deliver-title">تقرير مفصل لكل ترشيح</h3>
+            <p class="deliver-text">تحليل واضح لمعايير القيمة السوقية وجودة السكن لكل وحدة.</p>
+          </div>
+        </div>
+
+        <div class="deliver-item reveal reveal-delay-2 tilt-card">
+          <div class="deliver-icon">٣</div>
+          <div>
+            <h3 class="deliver-title">مقارنة بين جميع البدائل</h3>
+            <p class="deliver-text">تقرير يقارن بين الترشيحات ويوضح الفروق الأساسية، حتى تعرف لماذا تختار وحدة دون أخرى.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ═══════════════════════════════════════════════════
-     CTA
+     REPORT
 ═══════════════════════════════════════════════════ -->
-<section class="section section--navy" id="cta" style="position:relative;overflow:hidden;" aria-labelledby="cta-title">
+<section class="section section--white" id="report" aria-labelledby="report-title">
+  <div class="inner">
+    <header class="sec-hdr reveal">
+      <span class="sec-label">نموذج التقرير</span>
+      <h2 class="sec-title" id="report-title">شاهد كيف نرشّح ونقارن</h2>
+      <p class="sec-sub">يعرض تقرير NestMatch سبب ترشيح كل وحدة، ويوضح الفروق بين البدائل من حيث القيمة مقابل السعر، جودة السكن، صافي المساحة، الفيو، والموقع.</p>
+      <div style="margin-top:24px;">
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20مشاهدة%20نموذج%20تقرير%20NestMatch" target="_blank" rel="noopener" class="btn-outline">
+          شاهد نموذج التقرير
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <div class="report-wrap">
+      <div class="reveal">
+        <blockquote class="rep-quote">
+          التقرير لا يبيع لك وحدة؛ بل يوضح لك لماذا قد تكون هذه الوحدة مناسبة، ومتى يكون هناك بديل أفضل.
+        </blockquote>
+        <div class="rep-features">
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-title">تحليل القيمة مقابل السعر</div><div class="rf-text">مقارنة السعر بما تحصل عليه فعليًا من جودة سكن وموقع وصافي مساحة.</div></div></div>
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-title">صافي المساحة وكفاءة التوزيع</div><div class="rf-text">قراءة أعمق من مساحة العقد، لأن المساحة المعلنة وحدها لا تكشف القيمة.</div></div></div>
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-title">الفيو والخصوصية والموقع</div><div class="rf-text">توضيح الفروق الجوهرية التي تؤثر على جودة السكن وقابلية إعادة البيع.</div></div></div>
+          <div class="rf"><div class="rf-dot"></div><div><div class="rf-title">مقارنة بين البدائل</div><div class="rf-text">ليكون القرار مبنيًا على ترتيب واضح، لا على إعلان منفرد أو انطباع سريع.</div></div></div>
+        </div>
+      </div>
+
+      <div class="rc reveal reveal-delay-1" role="img" aria-label="نموذج تقرير NestMatch تفاعلي">
+        <div class="rc-head">
+          <span class="rc-head-label">NestMatch Report Preview</span>
+          <div class="rc-tabs" aria-label="اختيار ترشيح للمقارنة">
+            <button class="rc-tab is-active" data-report-tab="0">ترشيح ١</button>
+            <button class="rc-tab" data-report-tab="1">ترشيح ٢</button>
+            <button class="rc-tab" data-report-tab="2">ترشيح ٣</button>
+          </div>
+        </div>
+        <div class="rc-body">
+          <div class="rc-ids">
+            <span class="rc-id">المنطقة <span id="repB">B14</span></span>
+            <span class="rc-id">المساحة <span id="repArea">107م²</span></span>
+            <span class="rc-id">الميزانية <span id="repBudget">مناسبة</span></span>
+          </div>
+
+          <span class="rc-section-label">مؤشرات الترشيح</span>
+          <div class="rc-metrics">
+            <div class="rc-metric"><span class="rc-metric-label">القيمة مقابل السعر</span><span class="rc-metric-value c-green" id="repValue">قوية</span></div>
+            <div class="rc-metric"><span class="rc-metric-label">صافي المساحة</span><span class="rc-metric-value" id="repNet">أفضل استغلال</span></div>
+            <div class="rc-metric"><span class="rc-metric-label">الفيو والخصوصية</span><span class="rc-metric-value c-gold" id="repView">Wide Garden</span></div>
+            <div class="rc-metric"><span class="rc-metric-label">الموقع داخل المرحلة</span><span class="rc-metric-value" id="repLocation">قريب ومناسب</span></div>
+          </div>
+
+          <span class="rc-section-label">مقارنة مختصرة</span>
+          <div class="rc-bars">
+            <div class="rc-bar-row"><span class="rc-bar-label">القيمة</span><div class="rc-bar-track"><div class="rc-bar-fill g" id="barValue" style="--w:90%;width:90%"></div></div><span class="rc-bar-value" id="barValueText" style="color:var(--green)">90%</span></div>
+            <div class="rc-bar-row"><span class="rc-bar-label">جودة السكن</span><div class="rc-bar-track"><div class="rc-bar-fill" id="barQuality" style="--w:84%;width:84%"></div></div><span class="rc-bar-value" id="barQualityText" style="color:var(--gold)">84%</span></div>
+            <div class="rc-bar-row"><span class="rc-bar-label">الخصوصية</span><div class="rc-bar-track"><div class="rc-bar-fill o" id="barPrivacy" style="--w:72%;width:72%"></div></div><span class="rc-bar-value" id="barPrivacyText" style="color:var(--orange)">72%</span></div>
+          </div>
+
+          <div class="rc-verdict">
+            <div class="rc-verdict-icon" aria-hidden="true">✓</div>
+            <p class="rc-verdict-text" id="repVerdict"><strong>سبب الترشيح:</strong> هذا الاختيار يحقق توازنًا قويًا بين السعر، جودة السكن، وصافي المساحة مقارنة بالبدائل في نفس نطاق الميزانية.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     TRUST
+═══════════════════════════════════════════════════ -->
+<section class="section section--dark" id="trust" aria-labelledby="trust-title">
   <div class="cta-glow" aria-hidden="true"></div>
   <div class="inner cta-section-inner">
-    <div class="cta-wrap">
-      <h2 class="cta-title" id="cta-title">
-        ابدأ قرارك<br>ببيانات أوضح
-      </h2>
-      <p class="cta-sub">
-        قولنا ميزانيتك — وهنساعدك تعرف أفضل المتاح ليك بناءً على تحليل مستقل
-      </p>
+    <div class="trust-panel reveal">
+      <span class="sec-label">الثقة والحياد</span>
+      <h2 class="sec-title sec-title--light" id="trust-title">ثقة مبنية على الحياد</h2>
+      <p class="sec-sub sec-sub--light" style="margin-inline:auto;">لا نتقاضى عمولات على البيع. نحلّل السوق ونقارن البدائل لنرشّح ما يناسبك فعلًا، لا ما يدفعك لإتمام صفقة بعينها.</p>
+      <div class="trust-tags">
+        <span class="tag tag--light">لا عمولة بيع</span>
+        <span class="tag tag--light">ترشيحات مفسّرة</span>
+        <span class="tag tag--light">قرارك أولًا</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FINAL CTA
+═══════════════════════════════════════════════════ -->
+<section class="section section--navy" id="cta" aria-labelledby="cta-title">
+  <div class="cta-glow" aria-hidden="true"></div>
+  <div class="inner cta-section-inner">
+    <div class="cta-wrap reveal">
+      <h2 class="cta-title" id="cta-title">ابدأ بخطوة بسيطة</h2>
+      <p class="cta-sub">أخبرنا بميزانيتك واحتياجك الأساسي، وسنبدأ في تحليل المتاح داخل السوق لترشيح أفضل الاختيارات المناسبة لك.</p>
+
+      <div class="cta-steps">
+        <div class="cta-step"><b>١. حدّد ميزانيتك</b><span>أدخل نطاق الميزانية المناسب لك.</span></div>
+        <div class="cta-step"><b>٢. أخبرنا بما تحتاجه</b><span>المساحة، عدد الغرف، طريقة الدفع، وأهم تفضيلاتك.</span></div>
+        <div class="cta-step"><b>٣. استلم أفضل الترشيحات</b><span>نحلّل المتاح ونرسل لك قائمة مختصرة من الاختيارات الأقوى.</span></div>
+      </div>
+
       <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;">
-        <a href="https://wa.me/20127102821?text=مرحباً%20—%20عايز%20أعرف%20أفضل%20المتاح%20في%20ميزانيتي%20في%20مدينتي"
-           class="btn-primary" target="_blank" rel="noopener" style="min-width:200px;">
-          ابعتلنا على واتساب
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary" target="_blank" rel="noopener" style="min-width:210px;">
+          ابدأ بميزانيتك
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
         <a href="tel:+201271028216" class="btn-ghost">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-          اتصل بينا
+          اتصل بنا
         </a>
       </div>
-      <p class="cta-note">بدون عمولة بيع — <span>بدون التزام</span></p>
+      <p class="cta-note">بدون عمولة بيع — <span>قرارك أولًا</span></p>
     </div>
   </div>
 </section>
-
 
 <!-- ═══════════════════════════════════════════════════
      FOOTER
 ═══════════════════════════════════════════════════ -->
 <footer>
   <div class="f-logo" aria-label="NestMatch"><span class="n">Nest</span><span class="m">Match</span></div>
-  <p class="f-copy">مدينتي — القاهرة الجديدة &copy; 2025</p>
+  <p class="f-copy">قرار عقاري أوضح — مبني على تحليل القيمة الحقيقية</p>
 </footer>
 
+<div class="sticky-cta" id="stickyCta">
+  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary" target="_blank" rel="noopener">
+    ابدأ بميزانيتك
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+  </a>
+</div>
+
+<script>
+(function () {
+  const progressBar = document.getElementById('progressBar');
+  const stickyCta = document.getElementById('stickyCta');
+  const cursorGlow = document.getElementById('cursorGlow');
+
+  function updateProgress() {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+    if (scrollTop > window.innerHeight * 0.55) stickyCta.classList.add('is-visible');
+    else stickyCta.classList.remove('is-visible');
+  }
+
+  updateProgress();
+  window.addEventListener('scroll', updateProgress, { passive: true });
+
+  if (cursorGlow) {
+    window.addEventListener('mousemove', function (e) {
+      cursorGlow.style.left = e.clientX + 'px';
+      cursorGlow.style.top = e.clientY + 'px';
+    });
+  }
+
+  const revealEls = Array.from(document.querySelectorAll('.reveal'));
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -70px 0px' });
+
+  revealEls.forEach(function (el) { observer.observe(el); });
+
+  const counters = Array.from(document.querySelectorAll('[data-count]'));
+  const counterObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = Number(el.dataset.count || 0);
+      const duration = 1100;
+      const startTime = performance.now();
+      function tick(now) {
+        const p = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const value = Math.round(target * eased);
+        el.textContent = value.toLocaleString('en-US') + '+';
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      counterObserver.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(function (el) { counterObserver.observe(el); });
+
+  const tiltCards = Array.from(document.querySelectorAll('.tilt-card'));
+  tiltCards.forEach(function (card) {
+    card.addEventListener('mousemove', function (e) {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const midX = rect.width / 2;
+      const midY = rect.height / 2;
+      const rotateY = ((x - midX) / midX) * -3;
+      const rotateX = ((y - midY) / midY) * 3;
+      card.style.transform = 'perspective(900px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-4px)';
+    });
+    card.addEventListener('mouseleave', function () {
+      card.style.transform = '';
+    });
+  });
+
+  const reportData = [
+    {
+      b: 'B14', area: '107م²', budget: 'مناسبة', value: 'قوية', net: 'أفضل استغلال', view: 'Wide Garden', location: 'قريب ومناسب',
+      bars: [90, 84, 72],
+      verdict: '<strong>سبب الترشيح:</strong> هذا الاختيار يحقق توازنًا قويًا بين السعر، جودة السكن، وصافي المساحة مقارنة بالبدائل في نفس نطاق الميزانية.'
+    },
+    {
+      b: 'B12', area: '116م²', budget: 'أعلى قليلًا', value: 'متوسطة', net: 'جيد', view: 'Garden', location: 'موقع متوسط',
+      bars: [76, 88, 80],
+      verdict: '<strong>سبب الترشيح:</strong> هذا الاختيار أقوى من ناحية جودة السكن، لكنه يحتاج مقارنة مالية أدق لأنه أعلى قليلًا من الاختيار الأول.'
+    },
+    {
+      b: 'B11', area: '96م²', budget: 'أقل', value: 'مقبولة', net: 'تحميل أعلى', view: 'Street', location: 'أبعد نسبيًا',
+      bars: [68, 70, 62],
+      verdict: '<strong>سبب الترشيح:</strong> هذا الاختيار مناسب فقط إذا كانت الأولوية لتقليل الميزانية، لكنه أضعف من حيث الفيو والقيمة الإجمالية.'
+    }
+  ];
+
+  const tabs = Array.from(document.querySelectorAll('[data-report-tab]'));
+  const repB = document.getElementById('repB');
+  const repArea = document.getElementById('repArea');
+  const repBudget = document.getElementById('repBudget');
+  const repValue = document.getElementById('repValue');
+  const repNet = document.getElementById('repNet');
+  const repView = document.getElementById('repView');
+  const repLocation = document.getElementById('repLocation');
+  const repVerdict = document.getElementById('repVerdict');
+  const bars = [document.getElementById('barValue'), document.getElementById('barQuality'), document.getElementById('barPrivacy')];
+  const barTexts = [document.getElementById('barValueText'), document.getElementById('barQualityText'), document.getElementById('barPrivacyText')];
+
+  function setReport(index) {
+    const data = reportData[index];
+    tabs.forEach(function (tab, i) { tab.classList.toggle('is-active', i === index); });
+    repB.textContent = data.b;
+    repArea.textContent = data.area;
+    repBudget.textContent = data.budget;
+    repValue.textContent = data.value;
+    repNet.textContent = data.net;
+    repView.textContent = data.view;
+    repLocation.textContent = data.location;
+    repVerdict.innerHTML = data.verdict;
+    data.bars.forEach(function (val, i) {
+      bars[i].style.width = val + '%';
+      barTexts[i].textContent = val + '%';
+    });
+  }
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      setReport(Number(tab.dataset.reportTab));
+    });
+  });
+})();
+</script>
 </body>
 </html>
