@@ -1066,6 +1066,389 @@ footer {
 .f-logo .m { color: rgba(255,255,255,.36); }
 .f-copy { font-size: 11px; color: rgba(255,255,255,.22); letter-spacing: 0.4px; }
 
+
+
+/* ── FUTURE MOTION SYSTEM — ADDED ───────────────────── */
+:root {
+  --ease-out-expo: cubic-bezier(.16,1,.3,1);
+  --ease-soft: cubic-bezier(.22,1,.36,1);
+  --ease-elastic: cubic-bezier(.34,1.56,.64,1);
+  --motion-fast: 180ms;
+  --motion-med: 520ms;
+  --motion-slow: 980ms;
+  --mx: 50%;
+  --my: 50%;
+  --scroll-progress: 0;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .42;
+  background:
+    radial-gradient(circle at var(--mx) var(--my), rgba(201,168,76,.10), transparent 28%),
+    linear-gradient(115deg, rgba(13,31,60,.04), transparent 44%, rgba(201,168,76,.045));
+  transition: opacity var(--motion-med) ease;
+}
+
+.motion-safe .hero-grid-overlay {
+  animation: futureGridDrift 16s linear infinite;
+}
+@keyframes futureGridDrift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 56px 56px, 56px 56px; }
+}
+
+.decision-progress {
+  position: fixed;
+  inset-inline-start: 18px;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  z-index: 270;
+  display: grid;
+  gap: 10px;
+  pointer-events: none;
+}
+.dp-item {
+  --dot: rgba(255,255,255,.22);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(255,255,255,.36);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .4px;
+  writing-mode: horizontal-tb;
+  transition: color .25s ease, transform .25s ease;
+}
+.dp-item::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--dot);
+  box-shadow: 0 0 0 0 rgba(201,168,76,0);
+  transition: background .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+.dp-item.is-active {
+  color: var(--gold-light);
+  transform: translateX(4px);
+}
+.dp-item.is-active::before {
+  background: var(--gold);
+  transform: scale(1.25);
+  box-shadow: 0 0 0 7px rgba(201,168,76,.12), 0 0 22px rgba(201,168,76,.45);
+}
+
+.progress-bar {
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light), #fff3b6);
+  box-shadow: 0 0 22px rgba(201,168,76,.72);
+}
+
+nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,.08), transparent);
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+nav.is-scrolled::before { opacity: 1; }
+.nav-links a.is-active { color: #fff; }
+.nav-links a.is-active::after { transform: scaleX(1); }
+
+.hero-h1 {
+  text-wrap: balance;
+  text-shadow: 0 0 48px rgba(201,168,76,.12);
+}
+.motion-safe .hero-h1.reveal.is-visible,
+.motion-safe .sec-title.reveal.is-visible {
+  animation: maskRise 900ms var(--ease-out-expo) both;
+}
+@keyframes maskRise {
+  from { clip-path: inset(0 0 100% 0); transform: translateY(28px); filter: blur(8px); }
+  to   { clip-path: inset(0 0 0 0); transform: translateY(0); filter: blur(0); }
+}
+
+.hero-visual { perspective: 1100px; transform-style: preserve-3d; }
+.decision-orbit {
+  isolation: isolate;
+  box-shadow: 0 34px 120px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
+}
+.decision-orbit::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0 42%, rgba(255,255,255,.13) 50%, transparent 58% 100%);
+  transform: translateX(120%);
+  animation: orbitSweep 6s ease-in-out infinite;
+  opacity: .7;
+}
+@keyframes orbitSweep {
+  0%, 34% { transform: translateX(120%); }
+  52% { transform: translateX(-120%); }
+  100% { transform: translateX(-120%); }
+}
+
+.market-field {
+  position: absolute;
+  inset: 60px 24px 36px 24px;
+  border-radius: 32px;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .78;
+  transform: translateZ(-30px);
+}
+.market-field::before,
+.market-field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.market-field::before {
+  background:
+    radial-gradient(circle at 15% 18%, rgba(201,168,76,.38) 0 2px, transparent 3px),
+    radial-gradient(circle at 72% 24%, rgba(255,255,255,.36) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 42% 72%, rgba(122,167,255,.34) 0 2px, transparent 4px),
+    radial-gradient(circle at 84% 78%, rgba(29,158,117,.34) 0 2px, transparent 4px),
+    radial-gradient(circle at 24% 86%, rgba(216,90,48,.30) 0 2px, transparent 4px);
+  background-size: 150px 120px, 180px 140px, 170px 170px, 210px 160px, 190px 130px;
+  animation: dataCloud 18s linear infinite;
+}
+.market-field::after {
+  background: conic-gradient(from 180deg at 50% 50%, transparent, rgba(201,168,76,.08), transparent, rgba(122,167,255,.07), transparent);
+  mask-image: radial-gradient(circle at 50% 50%, #000 0 52%, transparent 70%);
+  animation: radarSpin 12s linear infinite;
+}
+@keyframes dataCloud {
+  from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
+  to { background-position: 300px 120px, -220px 160px, 160px -260px, -240px -120px, 210px 180px; }
+}
+@keyframes radarSpin { to { transform: rotate(1turn); } }
+
+.scan-line {
+  position: absolute;
+  inset-inline: 12%;
+  top: 50%;
+  height: 1px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,.92), transparent);
+  box-shadow: 0 0 24px rgba(201,168,76,.45);
+  animation: scanMove 3.7s ease-in-out infinite;
+}
+@keyframes scanMove {
+  0%,100% { transform: translateY(-160px); opacity: .08; }
+  45%,55% { opacity: .85; }
+  100% { transform: translateY(170px); }
+}
+
+.funnel-beam {
+  position: absolute;
+  inset-inline: 18%;
+  inset-block: 85px 88px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .36;
+  background: linear-gradient(180deg, transparent, rgba(201,168,76,.16), rgba(29,158,117,.10), transparent);
+  clip-path: polygon(7% 0, 93% 0, 65% 100%, 35% 100%);
+  filter: blur(.4px);
+  animation: beamBreath 4.8s ease-in-out infinite;
+}
+@keyframes beamBreath {
+  0%,100% { opacity: .18; transform: scaleX(.92); }
+  50% { opacity: .43; transform: scaleX(1.03); }
+}
+
+.engine-chip {
+  position: absolute;
+  z-index: 3;
+  top: 48%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(6,14,28,.72);
+  border: 1px solid rgba(201,168,76,.22);
+  color: rgba(255,255,255,.75);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 60px rgba(0,0,0,.24);
+}
+.engine-chip span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--green);
+  box-shadow: 0 0 18px rgba(29,158,117,.72);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.chaos-card, .score-card, .recommend-card, .neutral-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.motion-safe .chaos-card { animation: cardDriftA 6.5s ease-in-out infinite; }
+.motion-safe .score-card { animation: cardDriftB 7.2s ease-in-out infinite; }
+.motion-safe .recommend-card { animation: cardDriftC 7.8s ease-in-out infinite; }
+.motion-safe .neutral-card { animation: cardDriftD 6.8s ease-in-out infinite; }
+@keyframes cardDriftA { 0%,100%{translate:0 0;} 50%{translate:0 -8px;} }
+@keyframes cardDriftB { 0%,100%{translate:0 0;} 50%{translate:10px 6px;} }
+@keyframes cardDriftC { 0%,100%{translate:0 0;} 50%{translate:-6px -7px;} }
+@keyframes cardDriftD { 0%,100%{translate:0 0;} 50%{translate:8px -5px;} }
+
+.tilt-card { --shine-x: 50%; --shine-y: 50%; }
+.tilt-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--shine-x) var(--shine-y), rgba(255,255,255,.30), transparent 34%);
+  opacity: 0;
+  transition: opacity .25s ease;
+  z-index: 2;
+  mix-blend-mode: soft-light;
+}
+.tilt-card:hover::before { opacity: .8; }
+
+.value-card,
+.deliver-item,
+.p-card,
+.cta-step,
+.trust-item,
+.rc,
+.ba-col {
+  will-change: transform, opacity;
+}
+.value-card:hover .v-num,
+.deliver-item:hover .deliver-icon,
+.step:hover .step-num {
+  animation: microPop 520ms var(--ease-elastic) both;
+}
+@keyframes microPop {
+  0% { transform: scale(.92); }
+  55% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.ba-wrap { --ba-progress: 0; }
+.ba-col--before {
+  filter: blur(calc(var(--ba-progress) * 1px));
+  transform: translateY(calc(var(--ba-progress) * 8px));
+}
+.ba-col--after {
+  box-shadow: 0 24px 80px rgba(0,0,0,.16), 0 0 calc(var(--ba-progress) * 42px) rgba(29,158,117,.20);
+}
+.ba-arrow svg { animation: arrowPulse 2s ease-in-out infinite; }
+@keyframes arrowPulse {
+  0%,100% { transform: translateX(0); opacity: .65; }
+  50% { transform: translateX(-6px); opacity: 1; }
+}
+
+.steps-line::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--green));
+  box-shadow: 0 0 18px rgba(201,168,76,.42);
+  transition: width 900ms var(--ease-out-expo);
+}
+.steps-wrap.is-visible .steps-line::after { width: 100%; }
+
+.rc {
+  position: relative;
+  transform-style: preserve-3d;
+}
+.rc::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(201,168,76,.55), rgba(255,255,255,.06), rgba(29,158,117,.28));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: .72;
+}
+.rc-body { view-transition-name: reportBody; }
+.rc-tab { position: relative; overflow: hidden; }
+.rc-tab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(120%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
+  transition: transform .55s ease;
+}
+.rc-tab:hover::after { transform: translateX(-120%); }
+.rc-metric, .rc-verdict, .rc-id {
+  transition: transform .28s ease, background .28s ease, border-color .28s ease;
+}
+.rc-metric:hover,
+.rc-id:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.075);
+}
+.report-flash {
+  animation: reportFlash 520ms var(--ease-out-expo) both;
+}
+@keyframes reportFlash {
+  0% { opacity: .35; transform: translateY(10px) scale(.985); filter: blur(7px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+.btn-primary,
+.btn-ghost,
+.btn-outline,
+.nav-cta {
+  transform-style: preserve-3d;
+}
+.magnetic {
+  will-change: transform;
+}
+
+.sticky-cta a {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light), #fff2af);
+  animation: stickyBreath 2.8s ease-in-out infinite;
+}
+@keyframes stickyBreath {
+  0%,100% { box-shadow: 0 18px 60px rgba(6,14,28,.35), 0 0 0 rgba(201,168,76,0); }
+  50% { box-shadow: 0 18px 60px rgba(6,14,28,.35), 0 0 34px rgba(201,168,76,.38); }
+}
+
+[data-depth] { will-change: transform; }
+
+@media (max-width: 1100px) {
+  .decision-progress { display: none; }
+  .engine-chip { top: 47%; }
+}
+
+@media (max-width: 767px) {
+  .market-field { inset: 58px 8px 42px; opacity: .52; }
+  .engine-chip { font-size: 9px; padding: 8px 11px; top: 47%; }
+  .funnel-beam { inset-inline: 10%; }
+  .scan-line { inset-inline: 4%; }
+}
+
 /* ── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width: 1100px) {
   .hero-inner { grid-template-columns: 1fr; text-align: center; }
@@ -1128,9 +1511,16 @@ footer {
 }
 </style>
 </head>
-<body>
+<body class="motion-safe">
 <div class="progress-bar" id="progressBar" aria-hidden="true"></div>
 <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+<div class="decision-progress" id="decisionProgress" aria-label="مراحل تجربة NestMatch" aria-hidden="true">
+  <span class="dp-item is-active" data-track="hero">البداية</span>
+  <span class="dp-item" data-track="value">القيمة</span>
+  <span class="dp-item" data-track="before-after">التحويل</span>
+  <span class="dp-item" data-track="report">التقرير</span>
+  <span class="dp-item" data-track="cta">القرار</span>
+</div>
 
 <!-- ═══════════════════════════════════════════════════
      NAV
@@ -1149,7 +1539,7 @@ footer {
     <a href="#trust">الحياد</a>
   </div>
 
-  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20ترشيحات%20NestMatch%20بناءً%20على%20ميزانيتي%20في%20مدينتي" class="nav-cta" target="_blank" rel="noopener">
+  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20ترشيحات%20NestMatch%20بناءً%20على%20ميزانيتي%20في%20مدينتي" class="nav-cta magnetic" target="_blank" rel="noopener">
     ابدأ بميزانيتك
   </a>
 </nav>
@@ -1189,11 +1579,11 @@ footer {
       </div>
 
       <div class="hero-ctas reveal reveal-delay-3">
-        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary" target="_blank" rel="noopener">
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener">
           ابدأ بميزانيتك
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
-        <a href="#report" class="btn-ghost">
+        <a href="#report" class="btn-ghost magnetic">
           شاهد نموذج التقرير
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
         </a>
@@ -1217,6 +1607,10 @@ footer {
 
     <div class="hero-visual reveal reveal-delay-2" aria-label="تصور تفاعلي يوضح تحويل فوضى السوق إلى ترشيحات واضحة">
       <div class="decision-orbit"></div>
+      <div class="market-field" data-depth="-0.18" aria-hidden="true"></div>
+      <div class="funnel-beam" data-depth="-0.08" aria-hidden="true"></div>
+      <div class="scan-line" aria-hidden="true"></div>
+      <div class="engine-chip" aria-hidden="true"><span></span> Decision Engine Live</div>
 
       <div class="chaos-card tilt-card">
         <div class="chaos-title"><span>السوق قبل التحليل</span><span style="color:var(--red)">مشتت</span></div>
@@ -1512,7 +1906,7 @@ footer {
       <h2 class="sec-title" id="report-title">شاهد كيف نرشّح ونقارن</h2>
       <p class="sec-sub">يعرض تقرير NestMatch سبب ترشيح كل وحدة، ويوضح الفروق بين البدائل من حيث القيمة مقابل السعر، جودة السكن، صافي المساحة، الفيو، والموقع.</p>
       <div style="margin-top:24px;">
-        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20مشاهدة%20نموذج%20تقرير%20NestMatch" target="_blank" rel="noopener" class="btn-outline">
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20مشاهدة%20نموذج%20تقرير%20NestMatch" target="_blank" rel="noopener" class="btn-outline magnetic">
           شاهد نموذج التقرير
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
@@ -1609,11 +2003,11 @@ footer {
       </div>
 
       <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;">
-        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary" target="_blank" rel="noopener" style="min-width:210px;">
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener" style="min-width:210px;">
           ابدأ بميزانيتك
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
-        <a href="tel:+201271028216" class="btn-ghost">
+        <a href="tel:+201271028216" class="btn-ghost magnetic">
           اتصل بنا
         </a>
       </div>
@@ -1631,7 +2025,7 @@ footer {
 </footer>
 
 <div class="sticky-cta" id="stickyCta">
-  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary" target="_blank" rel="noopener">
+  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener">
     ابدأ بميزانيتك
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
   </a>
@@ -1639,131 +2033,333 @@ footer {
 
 <script>
 (function () {
-  const progressBar = document.getElementById('progressBar');
-  const stickyCta = document.getElementById('stickyCta');
-  const cursorGlow = document.getElementById('cursorGlow');
+  'use strict';
 
-  function updateProgress() {
+  const root = document.documentElement;
+  const body = document.body;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) body.classList.remove('motion-safe');
+
+  const qs = (selector, scope = document) => scope.querySelector(selector);
+  const qsa = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+  const progressBar = qs('#progressBar');
+  const stickyCta = qs('#stickyCta');
+  const cursorGlow = qs('#cursorGlow');
+  const nav = qs('nav');
+  const decisionProgress = qs('#decisionProgress');
+
+  let ticking = false;
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let glowX = mouseX;
+  let glowY = mouseY;
+
+  function updateGlobalScrollState() {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-    progressBar.style.width = progress + '%';
-    if (scrollTop > window.innerHeight * 0.55) stickyCta.classList.add('is-visible');
-    else stickyCta.classList.remove('is-visible');
+    const progress = docHeight > 0 ? clamp(scrollTop / docHeight, 0, 1) : 0;
+
+    root.style.setProperty('--scroll-progress', progress.toFixed(4));
+    if (progressBar) progressBar.style.width = (progress * 100) + '%';
+    if (stickyCta) stickyCta.classList.toggle('is-visible', scrollTop > window.innerHeight * 0.55);
+    if (nav) nav.classList.toggle('is-scrolled', scrollTop > 24);
+
+    updateActiveNavigation();
+    updateDecisionProgress();
+    updateBeforeAfterMotion();
+    updateHeroParallax();
+
+    ticking = false;
   }
 
-  updateProgress();
-  window.addEventListener('scroll', updateProgress, { passive: true });
+  function requestScrollUpdate() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(updateGlobalScrollState);
+    }
+  }
 
-  if (cursorGlow) {
-    window.addEventListener('mousemove', function (e) {
-      cursorGlow.style.left = e.clientX + 'px';
-      cursorGlow.style.top = e.clientY + 'px';
+  window.addEventListener('scroll', requestScrollUpdate, { passive: true });
+  window.addEventListener('resize', requestScrollUpdate, { passive: true });
+
+  function updateActiveNavigation() {
+    const sections = qsa('section[id]');
+    const navLinks = qsa('.nav-links a');
+    const y = window.scrollY + window.innerHeight * 0.32;
+    let activeId = 'hero';
+
+    sections.forEach((section) => {
+      const top = section.offsetTop;
+      const bottom = top + section.offsetHeight;
+      if (y >= top && y < bottom) activeId = section.id;
+    });
+
+    navLinks.forEach((link) => {
+      const id = (link.getAttribute('href') || '').replace('#', '');
+      link.classList.toggle('is-active', id === activeId);
     });
   }
 
-  const revealEls = Array.from(document.querySelectorAll('.reveal'));
-  const observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
+  function updateDecisionProgress() {
+    if (!decisionProgress) return;
+    const stages = ['hero', 'value', 'before-after', 'report', 'cta'];
+    const y = window.scrollY + window.innerHeight * 0.42;
+    let current = 'hero';
+
+    stages.forEach((id) => {
+      const section = qs('#' + id);
+      if (!section) return;
+      if (y >= section.offsetTop) current = id;
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -70px 0px' });
 
-  revealEls.forEach(function (el) { observer.observe(el); });
+    qsa('.dp-item', decisionProgress).forEach((item) => {
+      item.classList.toggle('is-active', item.dataset.track === current);
+    });
+  }
 
-  const counters = Array.from(document.querySelectorAll('[data-count]'));
-  const counterObserver = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
+  function updateBeforeAfterMotion() {
+    const wrap = qs('.ba-wrap');
+    if (!wrap) return;
+    const rect = wrap.getBoundingClientRect();
+    const start = window.innerHeight * 0.82;
+    const end = window.innerHeight * 0.18;
+    const p = clamp((start - rect.top) / (start - end), 0, 1);
+    wrap.style.setProperty('--ba-progress', p.toFixed(3));
+  }
+
+  function updateHeroParallax() {
+    if (prefersReducedMotion) return;
+    const hero = qs('#hero');
+    if (!hero) return;
+    const rect = hero.getBoundingClientRect();
+    const visible = rect.bottom > 0 && rect.top < window.innerHeight;
+    if (!visible) return;
+
+    const p = clamp((-rect.top) / Math.max(rect.height - window.innerHeight * 0.4, 1), 0, 1);
+    qsa('[data-depth]', hero).forEach((el) => {
+      const depth = Number(el.dataset.depth || 0);
+      const move = p * depth * 160;
+      el.style.transform = 'translate3d(0,' + move.toFixed(2) + 'px,0)';
+    });
+  }
+
+  function initCursorGlow() {
+    if (!cursorGlow || prefersReducedMotion) return;
+
+    window.addEventListener('mousemove', (event) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+      root.style.setProperty('--mx', mouseX + 'px');
+      root.style.setProperty('--my', mouseY + 'px');
+    }, { passive: true });
+
+    function animateGlow() {
+      glowX += (mouseX - glowX) * 0.12;
+      glowY += (mouseY - glowY) * 0.12;
+      cursorGlow.style.left = glowX + 'px';
+      cursorGlow.style.top = glowY + 'px';
+      requestAnimationFrame(animateGlow);
+    }
+    animateGlow();
+
+    qsa('a, button, .tilt-card, .rc-metric').forEach((el) => {
+      el.addEventListener('mouseenter', () => { cursorGlow.style.opacity = '.22'; });
+      el.addEventListener('mouseleave', () => { cursorGlow.style.opacity = '.12'; });
+    });
+  }
+
+  function initRevealAnimations() {
+    const revealEls = qsa('.reveal, .steps-wrap');
+    if (!('IntersectionObserver' in window) || prefersReducedMotion) {
+      revealEls.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -70px 0px' });
+
+    revealEls.forEach((el) => observer.observe(el));
+  }
+
+  function initCounters() {
+    const counters = qsa('[data-count]');
+    if (!counters.length) return;
+
+    const runCounter = (el) => {
       const target = Number(el.dataset.count || 0);
-      const duration = 1100;
+      const duration = prefersReducedMotion ? 1 : 1300;
       const startTime = performance.now();
       function tick(now) {
-        const p = Math.min((now - startTime) / duration, 1);
-        const eased = 1 - Math.pow(1 - p, 3);
-        const value = Math.round(target * eased);
+        const p = clamp((now - startTime) / duration, 0, 1);
+        const value = Math.round(target * easeOutCubic(p));
         el.textContent = value.toLocaleString('en-US') + '+';
         if (p < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
-      counterObserver.unobserve(el);
-    });
-  }, { threshold: 0.5 });
-  counters.forEach(function (el) { counterObserver.observe(el); });
+    };
 
-  const tiltCards = Array.from(document.querySelectorAll('.tilt-card'));
-  tiltCards.forEach(function (card) {
-    card.addEventListener('mousemove', function (e) {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const midX = rect.width / 2;
-      const midY = rect.height / 2;
-      const rotateY = ((x - midX) / midX) * -3;
-      const rotateX = ((y - midY) / midY) * 3;
-      card.style.transform = 'perspective(900px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-4px)';
-    });
-    card.addEventListener('mouseleave', function () {
-      card.style.transform = '';
-    });
-  });
-
-  const reportData = [
-    {
-      b: 'B14', area: '107م²', budget: 'مناسبة', value: 'قوية', net: 'أفضل استغلال', view: 'Wide Garden', location: 'قريب ومناسب',
-      bars: [90, 84, 72],
-      verdict: '<strong>سبب الترشيح:</strong> هذا الاختيار يحقق توازنًا قويًا بين السعر، جودة السكن، وصافي المساحة مقارنة بالبدائل في نفس نطاق الميزانية.'
-    },
-    {
-      b: 'B12', area: '116م²', budget: 'أعلى قليلًا', value: 'متوسطة', net: 'جيد', view: 'Garden', location: 'موقع متوسط',
-      bars: [76, 88, 80],
-      verdict: '<strong>سبب الترشيح:</strong> هذا الاختيار أقوى من ناحية جودة السكن، لكنه يحتاج مقارنة مالية أدق لأنه أعلى قليلًا من الاختيار الأول.'
-    },
-    {
-      b: 'B11', area: '96م²', budget: 'أقل', value: 'مقبولة', net: 'تحميل أعلى', view: 'Street', location: 'أبعد نسبيًا',
-      bars: [68, 70, 62],
-      verdict: '<strong>سبب الترشيح:</strong> هذا الاختيار مناسب فقط إذا كانت الأولوية لتقليل الميزانية، لكنه أضعف من حيث الفيو والقيمة الإجمالية.'
+    if (!('IntersectionObserver' in window)) {
+      counters.forEach(runCounter);
+      return;
     }
-  ];
 
-  const tabs = Array.from(document.querySelectorAll('[data-report-tab]'));
-  const repB = document.getElementById('repB');
-  const repArea = document.getElementById('repArea');
-  const repBudget = document.getElementById('repBudget');
-  const repValue = document.getElementById('repValue');
-  const repNet = document.getElementById('repNet');
-  const repView = document.getElementById('repView');
-  const repLocation = document.getElementById('repLocation');
-  const repVerdict = document.getElementById('repVerdict');
-  const bars = [document.getElementById('barValue'), document.getElementById('barQuality'), document.getElementById('barPrivacy')];
-  const barTexts = [document.getElementById('barValueText'), document.getElementById('barQualityText'), document.getElementById('barPrivacyText')];
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        runCounter(entry.target);
+        counterObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.5 });
 
-  function setReport(index) {
-    const data = reportData[index];
-    tabs.forEach(function (tab, i) { tab.classList.toggle('is-active', i === index); });
-    repB.textContent = data.b;
-    repArea.textContent = data.area;
-    repBudget.textContent = data.budget;
-    repValue.textContent = data.value;
-    repNet.textContent = data.net;
-    repView.textContent = data.view;
-    repLocation.textContent = data.location;
-    repVerdict.innerHTML = data.verdict;
-    data.bars.forEach(function (val, i) {
-      bars[i].style.width = val + '%';
-      barTexts[i].textContent = val + '%';
+    counters.forEach((el) => counterObserver.observe(el));
+  }
+
+  function initTiltCards() {
+    if (prefersReducedMotion || window.matchMedia('(hover: none)').matches) return;
+
+    qsa('.tilt-card').forEach((card) => {
+      card.addEventListener('mousemove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const px = x / rect.width;
+        const py = y / rect.height;
+        const rotateY = (px - 0.5) * -7;
+        const rotateX = (py - 0.5) * 7;
+
+        card.style.setProperty('--shine-x', (px * 100).toFixed(2) + '%');
+        card.style.setProperty('--shine-y', (py * 100).toFixed(2) + '%');
+        card.style.transform = 'perspective(950px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg) translateY(-6px)';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+        card.style.setProperty('--shine-x', '50%');
+        card.style.setProperty('--shine-y', '50%');
+      });
     });
   }
 
-  tabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      setReport(Number(tab.dataset.reportTab));
+  function initMagneticButtons() {
+    if (prefersReducedMotion || window.matchMedia('(hover: none)').matches) return;
+
+    qsa('.magnetic').forEach((el) => {
+      el.addEventListener('mousemove', (event) => {
+        const rect = el.getBoundingClientRect();
+        const x = event.clientX - rect.left - rect.width / 2;
+        const y = event.clientY - rect.top - rect.height / 2;
+        el.style.transform = 'translate3d(' + (x * 0.10).toFixed(2) + 'px,' + (y * 0.18).toFixed(2) + 'px,0) translateY(-2px)';
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = '';
+      });
     });
-  });
+  }
+
+  function initReportTabs() {
+    const reportData = [
+      {
+        b: 'B14', area: '107م²', budget: 'مناسبة', value: 'قوية', net: 'أفضل استغلال', view: 'Wide Garden', location: 'قريب ومناسب',
+        bars: [90, 84, 72],
+        verdict: '<strong>سبب الترشيح:</strong> هذا الاختيار يحقق توازنًا قويًا بين السعر، جودة السكن، وصافي المساحة مقارنة بالبدائل في نفس نطاق الميزانية.'
+      },
+      {
+        b: 'B12', area: '116م²', budget: 'أعلى قليلًا', value: 'متوسطة', net: 'جيد', view: 'Garden', location: 'موقع متوسط',
+        bars: [76, 88, 80],
+        verdict: '<strong>سبب الترشيح:</strong> هذا الاختيار أقوى من ناحية جودة السكن، لكنه يحتاج مقارنة مالية أدق لأنه أعلى قليلًا من الاختيار الأول.'
+      },
+      {
+        b: 'B11', area: '96م²', budget: 'أقل', value: 'مقبولة', net: 'تحميل أعلى', view: 'Street', location: 'أبعد نسبيًا',
+        bars: [68, 70, 62],
+        verdict: '<strong>سبب الترشيح:</strong> هذا الاختيار مناسب فقط إذا كانت الأولوية لتقليل الميزانية، لكنه أضعف من حيث الفيو والقيمة الإجمالية.'
+      }
+    ];
+
+    const tabs = qsa('[data-report-tab]');
+    if (!tabs.length) return;
+
+    const nodes = {
+      b: qs('#repB'), area: qs('#repArea'), budget: qs('#repBudget'), value: qs('#repValue'),
+      net: qs('#repNet'), view: qs('#repView'), location: qs('#repLocation'), verdict: qs('#repVerdict')
+    };
+    const bars = [qs('#barValue'), qs('#barQuality'), qs('#barPrivacy')];
+    const barTexts = [qs('#barValueText'), qs('#barQualityText'), qs('#barPrivacyText')];
+    const reportBody = qs('.rc-body');
+
+    function applyReport(index) {
+      const data = reportData[index];
+      tabs.forEach((tab, i) => tab.classList.toggle('is-active', i === index));
+      nodes.b.textContent = data.b;
+      nodes.area.textContent = data.area;
+      nodes.budget.textContent = data.budget;
+      nodes.value.textContent = data.value;
+      nodes.net.textContent = data.net;
+      nodes.view.textContent = data.view;
+      nodes.location.textContent = data.location;
+      nodes.verdict.innerHTML = data.verdict;
+
+      data.bars.forEach((val, i) => {
+        bars[i].style.width = '0%';
+        requestAnimationFrame(() => { bars[i].style.width = val + '%'; });
+        barTexts[i].textContent = val + '%';
+      });
+
+      if (reportBody && !prefersReducedMotion) {
+        reportBody.classList.remove('report-flash');
+        void reportBody.offsetWidth;
+        reportBody.classList.add('report-flash');
+      }
+    }
+
+    function setReport(index) {
+      if (document.startViewTransition && !prefersReducedMotion) {
+        document.startViewTransition(() => applyReport(index));
+      } else {
+        applyReport(index);
+      }
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => setReport(Number(tab.dataset.reportTab)));
+    });
+  }
+
+  function initSmoothAnchors() {
+    qsa('a[href^="#"]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const target = qs(link.getAttribute('href'));
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  function init() {
+    initCursorGlow();
+    initRevealAnimations();
+    initCounters();
+    initTiltCards();
+    initMagneticButtons();
+    initReportTabs();
+    initSmoothAnchors();
+    updateGlobalScrollState();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 </script>
 </body>
