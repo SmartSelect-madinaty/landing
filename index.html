@@ -6,7 +6,7 @@
 <title>NestMatch — ابدأ بميزانيتك</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
 <style>
 /* ── RESET ──────────────────────────────────────────── */
@@ -33,8 +33,9 @@ button, input, textarea { font: inherit; }
   --warm-100:    #EDE8DD;
   --warm-200:    #D8D0C1;
   --warm-400:    #A39A8A;
-  --warm-600:    #6E7684;
-  --warm-800:    #363B42;
+  --warm-600:    #5F6470;
+  --warm-700:    #474C56;
+  --warm-800:    #2E323A;
   --warm-900:    #181A1C;
 
   --green:  #1D9E75;
@@ -60,6 +61,16 @@ button, input, textarea { font: inherit; }
   --radius-xl: 34px;
   --shadow-soft: 0 24px 70px rgba(6,14,28,.12);
   --shadow-deep: 0 30px 90px rgba(6,14,28,.28);
+
+  --ease-out-expo: cubic-bezier(.16,1,.3,1);
+  --ease-soft: cubic-bezier(.22,1,.36,1);
+  --ease-elastic: cubic-bezier(.34,1.56,.64,1);
+  --motion-fast: 180ms;
+  --motion-med: 520ms;
+  --motion-slow: 980ms;
+  --mx: 50%;
+  --my: 50%;
+  --scroll-progress: 0;
 }
 
 /* ── BASE ───────────────────────────────────────────── */
@@ -67,23 +78,247 @@ body {
   font-family: var(--font-body);
   background: var(--warm-white);
   color: var(--warm-800);
-  line-height: 1.8;
+  line-height: 1.85;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection { background: rgba(201,168,76,.35); color: var(--navy-deep); }
 
+/* ════════════════════════════════════════════════════
+   SITE INTRO / PRELOADER
+   ════════════════════════════════════════════════════ */
+.site-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 38%, #14304f 0%, transparent 62%),
+    linear-gradient(160deg, #0a1830 0%, var(--navy-deep) 60%, #050b16 100%);
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 900ms var(--ease-out-expo), visibility 0s linear 900ms;
+  perspective: 1200px;
+}
+.site-intro.intro-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* halo glow behind the wordmark */
+.intro-halo {
+  position: absolute;
+  width: 760px;
+  height: 760px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(201,168,76,.20) 0%, rgba(201,168,76,.06) 38%, transparent 66%);
+  opacity: 0;
+  filter: blur(8px);
+  animation: introHalo 3.4s var(--ease-out-expo) forwards;
+}
+@keyframes introHalo {
+  0%   { opacity: 0; transform: scale(.7); }
+  35%  { opacity: 1; transform: scale(1); }
+  78%  { opacity: 1; transform: scale(1.04); }
+  100% { opacity: 0; transform: scale(1.12); }
+}
+
+/* faint drifting grid for depth */
+.intro-grid {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(circle at 50% 45%, #000 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 0%, transparent 70%);
+  opacity: .5;
+  animation: introGridDrift 8s linear infinite;
+}
+@keyframes introGridDrift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 60px 60px, 60px 60px; }
+}
+
+/* wordmark with subtle 3D depth + golden reveal */
+.intro-stage {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 0;
+  transform-style: preserve-3d;
+}
+.intro-wordmark {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(46px, 11vw, 104px);
+  letter-spacing: 3px;
+  line-height: 1;
+  display: inline-flex;
+  direction: ltr;
+  unicode-bidi: isolate;
+  transform-style: preserve-3d;
+  animation: introWordmark 2.6s var(--ease-out-expo) forwards;
+}
+.intro-wordmark .n { color: var(--gold); }
+.intro-wordmark .m { color: #fff; }
+@keyframes introWordmark {
+  0% {
+    opacity: 0;
+    transform: rotateX(34deg) translateY(46px) scale(.9);
+    filter: blur(14px);
+  }
+  55% {
+    opacity: 1;
+    transform: rotateX(-4deg) translateY(0) scale(1);
+    filter: blur(0);
+  }
+  78% { transform: rotateX(1.5deg) translateY(0) scale(1); }
+  100% { opacity: 1; transform: rotateX(0deg) translateY(0) scale(1); filter: blur(0); }
+}
+
+/* golden sheen sweeping across the wordmark */
+.intro-stage::after {
+  content: "";
+  position: absolute;
+  inset: -10% -30%;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,.42) 50%, transparent 62%);
+  transform: translateX(-130%);
+  animation: introSheen 2.4s var(--ease-out-expo) .55s forwards;
+  mix-blend-mode: overlay;
+}
+@keyframes introSheen {
+  0%   { transform: translateX(-130%); opacity: 0; }
+  30%  { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translateX(130%); opacity: 0; }
+}
+
+/* mirror reflection of the wordmark */
+.intro-reflection {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  margin-top: 0;
+  pointer-events: none;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(46px, 11vw, 104px);
+  letter-spacing: 3px;
+  line-height: 1;
+  display: inline-flex;
+  direction: ltr;
+  unicode-bidi: isolate;
+  transform: translate(-50%, clamp(12px, 2.2vw, 24px)) scaleY(-1);
+  opacity: 0;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.32), transparent 64%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.32), transparent 64%);
+  animation: introReflection 2.6s var(--ease-out-expo) forwards;
+}
+.intro-reflection .n { color: var(--gold); }
+.intro-reflection .m { color: #fff; }
+@keyframes introReflection {
+  0%  { opacity: 0; }
+  60% { opacity: .12; }
+  100% { opacity: .12; }
+}
+
+/* tagline — clear, calm, slow to appear, slow to leave */
+.intro-tagline {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(15px, 2.6vw, 21px);
+  color: rgba(255,255,255,.86);
+  letter-spacing: .5px;
+  text-align: center;
+  opacity: 0;
+  margin-top: -2px;
+  transform: translateY(6px);
+  animation: introTagline 2.4s var(--ease-out-expo) .9s forwards;
+}
+.intro-tagline::before {
+  content: "";
+  display: block;
+  width: 46px;
+  height: 2px;
+  margin: 0 auto 8px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  animation: introRule 1.4s var(--ease-out-expo) 1.05s forwards;
+}
+@keyframes introTagline {
+  0%   { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes introRule {
+  to { transform: scaleX(1); }
+}
+
+/* reduced motion: show a calm, instant intro then exit fast */
+@media (prefers-reduced-motion: reduce) {
+  .site-intro {
+    transition: opacity 300ms linear, visibility 0s linear 300ms;
+  }
+  .intro-halo,
+  .intro-grid,
+  .intro-stage::after,
+  .intro-reflection { display: none; }
+  .intro-wordmark,
+  .intro-tagline {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .intro-tagline::before { animation: none; transform: scaleX(1); }
+}
+
+/* page entrance once the intro completes */
+body:not(.intro-complete) {
+  overflow: hidden;
+  height: 100vh;
+}
+body.intro-complete main,
+body.intro-complete nav,
+body.intro-complete footer {
+  animation: pageRise 900ms var(--ease-out-expo) both;
+}
+@keyframes pageRise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.intro-complete main,
+  body.intro-complete nav,
+  body.intro-complete footer { animation: none; }
+  body:not(.intro-complete) { overflow: auto; height: auto; }
+}
+
 /* ── GLOBAL INTERACTION LAYERS ─────────────────────── */
 .progress-bar {
   position: fixed;
   inset-block-start: 0;
   inset-inline-start: 0;
-  height: 3px;
+  height: 4px;
   width: 0%;
   z-index: 500;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  box-shadow: 0 0 18px rgba(201,168,76,.55);
+  background: linear-gradient(90deg, var(--gold), var(--gold-light), #fff3b6);
+  box-shadow: 0 0 22px rgba(201,168,76,.72);
 }
 .cursor-glow {
   position: fixed;
@@ -99,6 +334,19 @@ body {
   transition: opacity .25s ease;
 }
 @media (hover: none) { .cursor-glow { display: none; } }
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .42;
+  background:
+    radial-gradient(circle at var(--mx) var(--my), rgba(201,168,76,.10), transparent 28%),
+    linear-gradient(115deg, rgba(13,31,60,.04), transparent 44%, rgba(201,168,76,.045));
+  transition: opacity var(--motion-med) ease;
+}
 
 /* ── UTILITY ────────────────────────────────────────── */
 .inner {
@@ -122,6 +370,7 @@ body {
 .reveal-delay-1 { transition-delay: .08s; }
 .reveal-delay-2 { transition-delay: .16s; }
 .reveal-delay-3 { transition-delay: .24s; }
+.reveal-delay-4 { transition-delay: .32s; }
 
 .sec-label {
   display: inline-flex;
@@ -144,21 +393,23 @@ body {
 }
 .sec-title {
   font-family: var(--font-display);
-  font-weight: 300;
-  line-height: 1.18;
-  letter-spacing: -0.6px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.4px;
   color: var(--navy);
-  margin-bottom: 14px;
-  font-size: clamp(34px, 4.8vw, 58px);
+  margin-bottom: 16px;
+  font-size: clamp(32px, 4.6vw, 56px);
+  text-wrap: balance;
+  text-shadow: 0 0 48px rgba(201,168,76,.10);
 }
 .sec-title--light { color: #fff; }
 .sec-sub {
-  font-size: 16px;
-  color: var(--warm-600);
-  line-height: 2;
-  max-width: 680px;
+  font-size: 17px;
+  color: var(--warm-700);
+  line-height: 1.95;
+  max-width: 700px;
 }
-.sec-sub--light { color: rgba(255,255,255,.52); }
+.sec-sub--light { color: rgba(255,255,255,.66); }
 .sec-hdr { margin-bottom: var(--sp-lg); }
 .sec-hdr--center { text-align: center; }
 .sec-hdr--center .sec-sub { margin-inline: auto; }
@@ -167,9 +418,9 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
-  padding: 6px 13px;
+  padding: 7px 14px;
   border-radius: 100px;
   background: rgba(13,31,60,.06);
   color: var(--navy);
@@ -177,8 +428,8 @@ body {
 }
 .tag--light {
   background: rgba(255,255,255,.08);
-  border-color: rgba(255,255,255,.12);
-  color: rgba(255,255,255,.78);
+  border-color: rgba(255,255,255,.14);
+  color: rgba(255,255,255,.82);
 }
 
 /* ── BUTTONS ────────────────────────────────────────── */
@@ -192,11 +443,12 @@ body {
   justify-content: center;
   gap: 10px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 800;
   border-radius: var(--radius-sm);
   cursor: pointer;
   white-space: nowrap;
+  transform-style: preserve-3d;
   transition: transform .18s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease, color .2s ease;
 }
 .btn-primary {
@@ -225,16 +477,16 @@ body {
 .btn-primary:hover { box-shadow: 0 18px 52px rgba(201,168,76,.38); }
 .btn-ghost {
   background: rgba(255,255,255,.04);
-  color: rgba(255,255,255,.72);
+  color: rgba(255,255,255,.78);
   padding: 14px 26px;
-  border: 1px solid rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.18);
 }
-.btn-ghost:hover { border-color: rgba(255,255,255,.35); color: #fff; }
+.btn-ghost:hover { border-color: rgba(255,255,255,.38); color: #fff; }
 .btn-outline {
   background: transparent;
   color: var(--navy);
   padding: 13px 30px;
-  border: 1.5px solid rgba(13,31,60,.28);
+  border: 1.5px solid rgba(13,31,60,.30);
 }
 .btn-outline:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
 
@@ -254,50 +506,97 @@ nav {
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid rgba(201,168,76,.12);
 }
-.nav-logo { display: flex; flex-direction: column; gap: 2px; }
-.nav-wordmark {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 400;
-  letter-spacing: 2.5px;
-  line-height: 1;
-}
-.nav-wordmark .n  { color: var(--gold); }
-.nav-wordmark .m  { color: #fff; }
-.nav-sub {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 3.2px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.26);
-  line-height: 1;
-}
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-.nav-links a {
-  position: relative;
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(255,255,255,.48);
-  transition: color .2s ease;
-}
-.nav-links a::after {
+nav::before {
   content: "";
   position: absolute;
-  inset-inline: 0;
-  inset-block-end: -7px;
-  height: 1px;
-  background: var(--gold);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform .25s ease;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,.08), transparent);
+  opacity: 0;
+  transition: opacity .35s ease;
 }
-.nav-links a:hover { color: #fff; }
-.nav-links a:hover::after { transform: scaleX(1); }
+nav.is-scrolled::before { opacity: 1; }
+.nav-logo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 1.7px;
+  line-height: .92;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.10),
+    0 2px 0 rgba(0,0,0,.28),
+    0 8px 18px rgba(0,0,0,.34),
+    0 0 22px rgba(201,168,76,.14);
+  transform: translateZ(0);
+}
+.nav-wordmark .n  {
+  color: var(--gold);
+  font-weight: inherit;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.18),
+    0 2px 0 rgba(91,66,12,.65),
+    0 9px 18px rgba(0,0,0,.36),
+    0 0 18px rgba(201,168,76,.26);
+}
+.nav-wordmark .m  {
+  color: #fff;
+  font-weight: inherit;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.18),
+    0 2px 0 rgba(0,0,0,.50),
+    0 9px 18px rgba(0,0,0,.34);
+}
+.nav-sub {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 1.75px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.58);
+  line-height: 1.05;
+}
+.nav-positioning {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 36px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255,255,255,.075), rgba(255,255,255,.025));
+  border: 1px solid rgba(201,168,76,.28);
+  color: rgba(255,255,255,.86);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 12px 34px rgba(0,0,0,.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 13.5px;
+  font-weight: 800;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+.nav-positioning::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 6px rgba(201,168,76,.10), 0 0 18px rgba(201,168,76,.45);
+  flex-shrink: 0;
+}
 .nav-cta {
+  position: relative;
+  z-index: 1;
   font-size: 13px;
   font-weight: 800;
   color: var(--navy-deep);
@@ -339,6 +638,14 @@ nav {
     linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
+}
+.motion-safe .hero-grid-overlay {
+  animation: futureGridDrift 22s linear infinite;
+}
+@keyframes futureGridDrift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 56px 56px, 56px 56px; }
 }
 .hero-inner {
   position: relative;
@@ -352,21 +659,6 @@ nav {
   align-items: center;
 }
 .hero-copy { max-width: 660px; }
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(201,168,76,.10);
-  border: 1px solid rgba(201,168,76,.28);
-  color: var(--gold);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  padding: 7px 18px;
-  border-radius: 100px;
-  margin-bottom: 30px;
-}
 .badge-pulse {
   width: 7px; height: 7px;
   border-radius: 50%;
@@ -379,27 +671,29 @@ nav {
 }
 .hero-h1 {
   font-family: var(--font-display);
-  font-weight: 300;
+  font-weight: 400;
   color: #fff;
-  line-height: 1.1;
-  letter-spacing: -0.7px;
-  margin-bottom: 18px;
-  font-size: clamp(42px, 6vw, 76px);
+  line-height: 1.12;
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+  font-size: clamp(42px, 6vw, 74px);
+  text-wrap: balance;
+  text-shadow: 0 0 48px rgba(201,168,76,.12);
 }
 .hero-h1 em { color: var(--gold); font-style: normal; }
 .hero-h2 {
   font-family: var(--font-body);
   font-weight: 700;
-  color: rgba(255,255,255,.82);
-  line-height: 1.9;
+  color: rgba(255,255,255,.90);
+  line-height: 1.8;
   margin-bottom: 16px;
-  font-size: clamp(17px, 2vw, 22px);
+  font-size: clamp(18px, 2vw, 23px);
 }
 .hero-text {
-  color: rgba(255,255,255,.52);
+  color: rgba(255,255,255,.66);
   max-width: 610px;
-  font-size: 16px;
-  line-height: 2;
+  font-size: 16.5px;
+  line-height: 1.95;
   margin-bottom: 28px;
 }
 .value-strip {
@@ -424,7 +718,7 @@ nav {
 .trust-item {
   position: relative;
   background: rgba(255,255,255,.055);
-  border: 1px solid rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.10);
   border-radius: var(--radius-md);
   padding: 20px 14px;
   overflow: hidden;
@@ -443,7 +737,7 @@ nav {
   display: block;
   font-family: var(--font-display);
   font-size: 34px;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--gold);
   line-height: 1;
   letter-spacing: -1px;
@@ -452,8 +746,8 @@ nav {
 .trust-lbl {
   position: relative;
   display: block;
-  font-size: 11px;
-  color: rgba(255,255,255,.45);
+  font-size: 11.5px;
+  color: rgba(255,255,255,.58);
   line-height: 1.65;
 }
 
@@ -461,6 +755,8 @@ nav {
 .hero-visual {
   position: relative;
   min-height: 560px;
+  perspective: 1100px;
+  transform-style: preserve-3d;
 }
 .decision-orbit {
   position: absolute;
@@ -468,9 +764,10 @@ nav {
   border-radius: 42px;
   background: rgba(255,255,255,.045);
   border: 1px solid rgba(255,255,255,.10);
-  box-shadow: var(--shadow-deep);
+  box-shadow: 0 34px 120px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
   backdrop-filter: blur(14px);
   overflow: hidden;
+  isolation: isolate;
 }
 .decision-orbit::before {
   content: "";
@@ -478,14 +775,31 @@ nav {
   inset: -1px;
   background: radial-gradient(circle at 75% 10%, rgba(201,168,76,.18), transparent 36%), radial-gradient(circle at 15% 85%, rgba(122,167,255,.12), transparent 38%);
 }
+.decision-orbit::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 0 42%, rgba(255,255,255,.10) 50%, transparent 58% 100%);
+  transform: translateX(120%);
+  animation: orbitSweep 9s ease-in-out infinite;
+  opacity: .55;
+}
+@keyframes orbitSweep {
+  0%, 42% { transform: translateX(120%); }
+  60% { transform: translateX(-120%); }
+  100% { transform: translateX(-120%); }
+}
 .chaos-card, .recommend-card, .score-card, .neutral-card {
   position: absolute;
   z-index: 2;
-  background: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.94);
   border: 1px solid rgba(255,255,255,.55);
   border-radius: 24px;
   box-shadow: 0 24px 60px rgba(0,0,0,.18);
   backdrop-filter: blur(16px);
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 .chaos-card {
   inset-block-start: 0;
@@ -515,16 +829,10 @@ nav {
   padding: 8px 9px;
   border-radius: 14px;
   background: var(--warm-100);
-  color: var(--warm-600);
+  color: var(--warm-700);
   font-size: 11px;
   font-weight: 700;
-  animation: floatSoft 4s ease-in-out infinite;
-}
-.chaos-pill:nth-child(2n) { animation-delay: .4s; }
-.chaos-pill:nth-child(3n) { animation-delay: .8s; }
-@keyframes floatSoft {
-  0%,100% { transform: translateY(0); opacity: .95; }
-  50% { transform: translateY(-5px); opacity: 1; }
+  text-align: center;
 }
 .score-card {
   inset-block-start: 150px;
@@ -533,7 +841,7 @@ nav {
   padding: 20px;
 }
 .metric-line { margin-bottom: 13px; }
-.metric-meta { display: flex; justify-content: space-between; margin-bottom: 5px; color: var(--warm-600); font-size: 11px; font-weight: 700; }
+.metric-meta { display: flex; justify-content: space-between; margin-bottom: 5px; color: var(--warm-700); font-size: 11px; font-weight: 700; }
 .metric-track { height: 5px; border-radius: 999px; background: var(--warm-100); overflow: hidden; }
 .metric-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--gold), var(--green)); transform-origin: right; animation: growBar 1.2s ease both; }
 @keyframes growBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
@@ -555,7 +863,7 @@ nav {
   border: 1px solid rgba(13,31,60,.06);
 }
 .rec-name { font-size: 12px; font-weight: 900; color: var(--navy); }
-.rec-reason { font-size: 10px; color: var(--warm-600); }
+.rec-reason { font-size: 10.5px; color: var(--warm-700); }
 .rec-badge { font-size: 10px; font-weight: 900; color: var(--green); background: rgba(29,158,117,.11); padding: 4px 8px; border-radius: 99px; }
 .neutral-card {
   inset-block-end: 6px;
@@ -577,22 +885,104 @@ nav {
   background: rgba(201,168,76,.16);
   color: var(--gold);
 }
+.motion-safe .chaos-card { animation: cardDriftA 8.5s ease-in-out infinite; }
+.motion-safe .score-card { animation: cardDriftB 9.2s ease-in-out infinite; }
+.motion-safe .recommend-card { animation: cardDriftC 9.8s ease-in-out infinite; }
+.motion-safe .neutral-card { animation: cardDriftD 8.8s ease-in-out infinite; }
+@keyframes cardDriftA { 0%,100%{translate:0 0;} 50%{translate:0 -6px;} }
+@keyframes cardDriftB { 0%,100%{translate:0 0;} 50%{translate:6px 4px;} }
+@keyframes cardDriftC { 0%,100%{translate:0 0;} 50%{translate:-5px -5px;} }
+@keyframes cardDriftD { 0%,100%{translate:0 0;} 50%{translate:5px -4px;} }
+
+/* hero ambient layers (calmed) */
+.market-field {
+  position: absolute;
+  inset: 60px 24px 36px 24px;
+  border-radius: 32px;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .5;
+  transform: translateZ(-30px);
+}
+.market-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 18%, rgba(201,168,76,.30) 0 2px, transparent 3px),
+    radial-gradient(circle at 72% 24%, rgba(255,255,255,.28) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 42% 72%, rgba(122,167,255,.26) 0 2px, transparent 4px),
+    radial-gradient(circle at 84% 78%, rgba(29,158,117,.26) 0 2px, transparent 4px),
+    radial-gradient(circle at 24% 86%, rgba(216,90,48,.22) 0 2px, transparent 4px);
+  background-size: 150px 120px, 180px 140px, 170px 170px, 210px 160px, 190px 130px;
+  animation: dataCloud 30s linear infinite;
+}
+@keyframes dataCloud {
+  from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
+  to { background-position: 200px 80px, -160px 110px, 120px -180px, -170px -90px, 150px 130px; }
+}
+.scan-line {
+  position: absolute;
+  inset-inline: 12%;
+  top: 50%;
+  height: 1px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,.70), transparent);
+  box-shadow: 0 0 22px rgba(201,168,76,.32);
+  animation: scanMove 6s ease-in-out infinite;
+}
+@keyframes scanMove {
+  0%,100% { transform: translateY(-150px); opacity: .06; }
+  45%,55% { opacity: .55; }
+  100% { transform: translateY(160px); }
+}
+.engine-chip {
+  position: absolute;
+  z-index: 3;
+  top: 48%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(6,14,28,.72);
+  border: 1px solid rgba(201,168,76,.22);
+  color: rgba(255,255,255,.78);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 60px rgba(0,0,0,.24);
+}
+.engine-chip span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--green);
+  box-shadow: 0 0 18px rgba(29,158,117,.72);
+  animation: pulse 1.8s ease-in-out infinite;
+}
 
 /* ── VALUE CARDS ───────────────────────────────────── */
 .value-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
+  gap: 14px;
 }
 .value-card {
   grid-column: span 2;
   position: relative;
   overflow: hidden;
-  min-height: 300px;
+  min-height: 268px;
   background: #fff;
   border: 1px solid rgba(13,31,60,.08);
   border-radius: var(--radius-lg);
-  padding: 30px;
+  padding: 30px 28px;
   box-shadow: 0 18px 50px rgba(6,14,28,.06);
   transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s ease, border-color .28s ease;
 }
@@ -624,19 +1014,19 @@ nav {
   color: var(--gold);
   font-family: var(--font-display);
   font-size: 22px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 .v-title {
   color: var(--navy);
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 900;
   margin-bottom: 12px;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 .v-text {
-  color: var(--warm-600);
-  font-size: 14px;
-  line-height: 2;
+  color: var(--warm-700);
+  font-size: 15px;
+  line-height: 1.95;
   position: relative;
   z-index: 1;
 }
@@ -644,41 +1034,51 @@ nav {
 /* ── PROBLEM SECTION ────────────────────────────────── */
 .problem-grid {
   display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap: 2px;
-  background: var(--warm-200);
-  border: 1px solid var(--warm-200);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
 }
 .p-card {
   background: #fff;
-  padding: 36px;
-  min-height: 230px;
+  border: 1px solid rgba(13,31,60,.08);
+  border-radius: var(--radius-lg);
+  padding: 30px 26px;
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 44px rgba(6,14,28,.05);
+  transition: transform .26s var(--ease-soft), box-shadow .26s ease, border-color .26s ease;
 }
-.p-card--dark { background: var(--navy); }
-.p-card--full { grid-column: 1 / -1; }
+.p-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 70px rgba(6,14,28,.12);
+  border-color: rgba(201,168,76,.34);
+}
+.p-card--dark { background: var(--navy); border-color: rgba(255,255,255,.08); }
 .p-num {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--gold-faint);
+  color: var(--gold);
   font-family: var(--font-display);
-  font-size: 48px;
-  font-weight: 300;
-  color: rgba(13,31,60,.10);
+  font-size: 22px;
+  font-weight: 500;
   line-height: 1;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
-.p-card--dark .p-num { color: rgba(201,168,76,.18); }
+.p-card--dark .p-num { background: rgba(201,168,76,.16); color: var(--gold-light); }
 .p-title {
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 900;
   color: var(--navy);
   margin-bottom: 10px;
-  line-height: 1.55;
+  line-height: 1.5;
 }
 .p-card--dark .p-title { color: #fff; }
-.p-text { font-size: 14px; color: var(--warm-600); line-height: 2; }
-.p-card--dark .p-text { color: rgba(255,255,255,.52); }
+.p-text { font-size: 15px; color: var(--warm-700); line-height: 1.9; }
+.p-card--dark .p-text { color: rgba(255,255,255,.66); }
 
 /* ── BEFORE / AFTER ─────────────────────────────────── */
 .ba-wrap {
@@ -686,6 +1086,7 @@ nav {
   grid-template-columns: 1fr auto 1fr;
   gap: 18px;
   align-items: stretch;
+  --ba-progress: 0;
 }
 .ba-col {
   min-height: 520px;
@@ -710,6 +1111,9 @@ nav {
 .ba-col--after::before {
   background: radial-gradient(circle at 78% 18%, rgba(29,158,117,.16), transparent 38%), radial-gradient(circle at 20% 85%, rgba(201,168,76,.12), transparent 42%);
 }
+.ba-col--after {
+  box-shadow: 0 24px 80px rgba(0,0,0,.16), 0 0 calc(var(--ba-progress) * 42px) rgba(29,158,117,.20);
+}
 .ba-head { position: relative; z-index: 2; margin-bottom: 24px; }
 .ba-kicker {
   display: inline-flex;
@@ -723,7 +1127,7 @@ nav {
   font-family: var(--font-display);
   font-size: clamp(28px, 3vw, 40px);
   color: #fff;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.25;
 }
 .ba-chaos {
@@ -741,23 +1145,23 @@ nav {
   padding: 7px 12px;
   border-radius: 999px;
   background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.11);
-  color: rgba(255,255,255,.58);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.68);
   font-size: 11px;
   font-weight: 800;
-  animation: baFloat 4s ease-in-out infinite;
+  animation: baFloat 6s ease-in-out infinite;
 }
 .ba-chaos span:nth-child(1) { top: 0; right: 0; }
-.ba-chaos span:nth-child(2) { top: 16px; left: 18px; animation-delay:.2s; }
-.ba-chaos span:nth-child(3) { top: 62px; right: 24%; animation-delay:.4s; }
-.ba-chaos span:nth-child(4) { top: 104px; right: 4px; animation-delay:.6s; }
-.ba-chaos span:nth-child(5) { top: 118px; left: 22px; animation-delay:.8s; }
-.ba-chaos span:nth-child(6) { top: 68px; left: 2px; animation-delay:1s; }
-.ba-chaos span:nth-child(7) { top: 142px; right: 34%; animation-delay:1.2s; }
-.ba-chaos span:nth-child(8) { top: 36px; right: 44%; animation-delay:1.4s; }
+.ba-chaos span:nth-child(2) { top: 16px; left: 18px; animation-delay:.3s; }
+.ba-chaos span:nth-child(3) { top: 62px; right: 24%; animation-delay:.6s; }
+.ba-chaos span:nth-child(4) { top: 104px; right: 4px; animation-delay:.9s; }
+.ba-chaos span:nth-child(5) { top: 118px; left: 22px; animation-delay:1.2s; }
+.ba-chaos span:nth-child(6) { top: 68px; left: 2px; animation-delay:1.5s; }
+.ba-chaos span:nth-child(7) { top: 142px; right: 34%; animation-delay:1.8s; }
+.ba-chaos span:nth-child(8) { top: 36px; right: 44%; animation-delay:2.1s; }
 @keyframes baFloat {
   0%,100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-7px) rotate(-1.5deg); }
+  50% { transform: translateY(-5px) rotate(-1deg); }
 }
 .ba-shortlist {
   position: relative;
@@ -779,8 +1183,8 @@ nav {
   transition: transform .25s ease, background .25s ease;
 }
 .ba-rec:hover { transform: translateX(-6px); background: rgba(255,255,255,.12); }
-.ba-rec b { color: #fff; font-size: 12px; }
-.ba-rec span { color: rgba(255,255,255,.56); font-size: 12px; }
+.ba-rec b { color: #fff; font-size: 12.5px; }
+.ba-rec span { color: rgba(255,255,255,.68); font-size: 12px; }
 .ba-rec em {
   font-style: normal;
   font-size: 10px;
@@ -795,9 +1199,9 @@ nav {
   z-index: 2;
   list-style: none;
   display: grid;
-  gap: 10px;
-  color: rgba(255,255,255,.55);
-  font-size: 13.5px;
+  gap: 11px;
+  color: rgba(255,255,255,.70);
+  font-size: 14px;
   line-height: 1.85;
 }
 .ba-list li {
@@ -831,7 +1235,11 @@ nav {
   background: rgba(201,168,76,.10);
   border: 1px solid rgba(201,168,76,.24);
 }
-.ba-arrow svg { position: relative; z-index: 1; }
+.ba-arrow svg { position: relative; z-index: 1; animation: arrowPulse 3s ease-in-out infinite; }
+@keyframes arrowPulse {
+  0%,100% { transform: translateX(0); opacity: .7; }
+  50% { transform: translateX(-5px); opacity: 1; }
+}
 
 /* ── HOW IT WORKS ───────────────────────────────────── */
 .steps-wrap { position: relative; }
@@ -849,6 +1257,17 @@ nav {
   background: linear-gradient(90deg, transparent, var(--warm-200), transparent);
   z-index: 0;
 }
+.steps-line::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--green));
+  box-shadow: 0 0 18px rgba(201,168,76,.42);
+  transition: width 900ms var(--ease-out-expo);
+}
+.steps-wrap.is-visible .steps-line::after { width: 100%; }
 .step {
   text-align: center;
   padding: 0 24px;
@@ -871,12 +1290,12 @@ nav {
 .step-num {
   font-family: var(--font-display);
   font-size: 30px;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--gold);
   line-height: 1;
 }
-.step-title { font-size: 16px; font-weight: 900; color: var(--navy); margin-bottom: 9px; line-height: 1.5; }
-.step-text { font-size: 13.5px; color: var(--warm-600); line-height: 1.9; }
+.step-title { font-size: 18px; font-weight: 900; color: var(--navy); margin-bottom: 10px; line-height: 1.5; }
+.step-text { font-size: 15px; color: var(--warm-700); line-height: 1.9; }
 
 /* ── DELIVERABLES ───────────────────────────────────── */
 .deliver-grid {
@@ -908,8 +1327,8 @@ nav {
   color: var(--gold);
   font-weight: 900;
 }
-.deliver-title { font-size: 17px; font-weight: 900; color: var(--navy); margin-bottom: 4px; }
-.deliver-text { font-size: 13.5px; line-height: 1.9; color: var(--warm-600); }
+.deliver-title { font-size: 18px; font-weight: 900; color: var(--navy); margin-bottom: 5px; }
+.deliver-text { font-size: 14.5px; line-height: 1.9; color: var(--warm-700); }
 
 /* ── REPORT PREVIEW ─────────────────────────────────── */
 .report-wrap {
@@ -920,10 +1339,10 @@ nav {
 }
 .rep-quote {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 22px;
   font-style: italic;
   color: var(--warm-800);
-  line-height: 1.9;
+  line-height: 1.85;
   border-inline-end: 2px solid var(--gold);
   padding-inline-end: 22px;
   margin-bottom: 30px;
@@ -931,8 +1350,8 @@ nav {
 .rep-features { display: flex; flex-direction: column; gap: 18px; }
 .rf { display: flex; gap: 14px; align-items: flex-start; }
 .rf-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 10px; }
-.rf-title { font-size: 14px; font-weight: 900; color: var(--navy); margin-bottom: 3px; }
-.rf-text { font-size: 13px; color: var(--warm-600); line-height: 1.8; }
+.rf-title { font-size: 15px; font-weight: 900; color: var(--navy); margin-bottom: 3px; }
+.rf-text { font-size: 14px; color: var(--warm-700); line-height: 1.8; }
 
 .rc {
   background: var(--navy);
@@ -940,6 +1359,22 @@ nav {
   overflow: hidden;
   box-shadow: var(--shadow-deep);
   border: 1px solid rgba(255,255,255,.08);
+  position: relative;
+  transform-style: preserve-3d;
+}
+.rc::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(201,168,76,.55), rgba(255,255,255,.06), rgba(29,158,117,.28));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: .72;
 }
 .rc-head {
   background: rgba(6,14,28,.72);
@@ -952,9 +1387,11 @@ nav {
 .rc-head-label { font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
 .rc-tabs { display: flex; gap: 7px; }
 .rc-tab {
+  position: relative;
+  overflow: hidden;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.05);
-  color: rgba(255,255,255,.50);
+  color: rgba(255,255,255,.60);
   padding: 5px 10px;
   border-radius: 99px;
   cursor: pointer;
@@ -962,21 +1399,40 @@ nav {
   font-weight: 900;
   transition: background .2s ease, color .2s ease;
 }
+.rc-tab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(120%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
+  transition: transform .55s ease;
+}
+.rc-tab:hover::after { transform: translateX(-120%); }
 .rc-tab.is-active { background: var(--green); border-color: var(--green); color: #fff; }
 .rc-body { padding: 24px; }
 .rc-ids { display: flex; gap: 7px; margin-bottom: 20px; flex-wrap: wrap; }
-.rc-id { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); color: rgba(255,255,255,.34); font-size: 11px; padding: 5px 11px; border-radius: var(--radius-sm); }
+.rc-id {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.46);
+  font-size: 11px;
+  padding: 5px 11px;
+  border-radius: var(--radius-sm);
+  transition: transform .28s ease, background .28s ease;
+}
+.rc-id:hover { transform: translateY(-2px); background: rgba(255,255,255,.075); }
 .rc-id span { color: var(--gold); font-weight: 900; margin-inline-end: 3px; }
-.rc-section-label { display: block; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.24); margin-bottom: 10px; }
+.rc-section-label { display: block; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.32); margin-bottom: 10px; }
 .rc-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: rgba(255,255,255,.05); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 18px; }
-.rc-metric { background: rgba(6,14,28,.62); padding: 13px 14px; }
-.rc-metric-label { display: block; font-size: 10px; color: rgba(255,255,255,.30); margin-bottom: 5px; }
+.rc-metric { background: rgba(6,14,28,.62); padding: 13px 14px; transition: transform .28s ease, background .28s ease; }
+.rc-metric:hover { transform: translateY(-2px); background: rgba(255,255,255,.075); }
+.rc-metric-label { display: block; font-size: 10px; color: rgba(255,255,255,.40); margin-bottom: 5px; }
 .rc-metric-value { display: block; font-size: 14px; font-weight: 900; color: #fff; }
 .rc-metric-value.c-green { color: var(--green); }
 .rc-metric-value.c-gold  { color: var(--gold); }
 .rc-bars { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
 .rc-bar-row { display: flex; align-items: center; gap: 10px; }
-.rc-bar-label { font-size: 11px; color: rgba(255,255,255,.38); width: 92px; flex-shrink: 0; text-align: end; }
+.rc-bar-label { font-size: 11px; color: rgba(255,255,255,.50); width: 92px; flex-shrink: 0; text-align: end; }
 .rc-bar-track { flex: 1; height: 4px; background: rgba(255,255,255,.08); border-radius: 2px; overflow: hidden; }
 .rc-bar-fill { height: 100%; border-radius: 2px; background: var(--gold); width: var(--w); transition: width .45s ease; }
 .rc-bar-fill.g { background: var(--green); }
@@ -984,8 +1440,13 @@ nav {
 .rc-bar-value { font-size: 11px; font-weight: 800; width: 72px; text-align: start; flex-shrink: 0; }
 .rc-verdict { background: rgba(201,168,76,.08); border: 1px solid rgba(201,168,76,.16); border-radius: var(--radius-md); padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
 .rc-verdict-icon { width: 28px; height: 28px; border-radius: 50%; background: rgba(201,168,76,.16); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 13px; font-weight: 900; flex-shrink: 0; }
-.rc-verdict-text { font-size: 12.5px; color: rgba(255,255,255,.54); line-height: 1.8; }
+.rc-verdict-text { font-size: 13px; color: rgba(255,255,255,.66); line-height: 1.8; }
 .rc-verdict-text strong { color: var(--gold); font-weight: 900; }
+.report-flash { animation: reportFlash 520ms var(--ease-out-expo) both; }
+@keyframes reportFlash {
+  0% { opacity: .35; transform: translateY(10px) scale(.985); filter: blur(7px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
 
 /* ── TRUST SECTION ──────────────────────────────────── */
 .trust-panel {
@@ -1005,29 +1466,30 @@ nav {
 .cta-wrap { max-width: 760px; margin-inline: auto; text-align: center; }
 .cta-title {
   font-family: var(--font-display);
-  font-weight: 300;
+  font-weight: 400;
   color: #fff;
   line-height: 1.16;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
   margin-bottom: 16px;
-  font-size: clamp(38px, 5.4vw, 68px);
+  font-size: clamp(36px, 5.2vw, 64px);
 }
-.cta-sub { font-size: 16px; color: rgba(255,255,255,.50); line-height: 2; margin-bottom: 34px; }
+.cta-sub { font-size: 17px; color: rgba(255,255,255,.66); line-height: 1.95; margin-bottom: 34px; }
 .cta-steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 32px;
 }
 .cta-step {
   background: rgba(255,255,255,.055);
-  border: 1px solid rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.10);
   border-radius: var(--radius-md);
-  padding: 18px 14px;
+  padding: 22px 18px;
+  text-align: start;
 }
-.cta-step b { display: block; color: #fff; font-size: 13px; margin-bottom: 5px; }
-.cta-step span { display: block; color: rgba(255,255,255,.38); font-size: 11px; line-height: 1.7; }
-.cta-note { margin-top: 16px; font-size: 12.5px; color: rgba(255,255,255,.28); }
+.cta-step b { display: block; color: #fff; font-size: 14.5px; margin-bottom: 7px; }
+.cta-step span { display: block; color: rgba(255,255,255,.56); font-size: 12.5px; line-height: 1.7; }
+.cta-note { margin-top: 16px; font-size: 13px; color: rgba(255,255,255,.42); }
 .cta-note span { color: var(--green); }
 .cta-glow { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 60% 75% at 50% 50%, rgba(201,168,76,.09) 0%, transparent 70%); }
 .cta-section-inner { position: relative; z-index: 1; }
@@ -1048,80 +1510,50 @@ nav {
   width: min(420px, 100%);
   border-radius: 18px;
   padding: 14px 18px;
-  box-shadow: 0 18px 60px rgba(6,14,28,.35);
+  background: linear-gradient(135deg, var(--gold), var(--gold-light), #fff2af);
+  animation: stickyBreath 3.4s ease-in-out infinite;
+}
+@keyframes stickyBreath {
+  0%,100% { box-shadow: 0 18px 60px rgba(6,14,28,.35), 0 0 0 rgba(201,168,76,0); }
+  50% { box-shadow: 0 18px 60px rgba(6,14,28,.35), 0 0 30px rgba(201,168,76,.34); }
 }
 
-/* ── FOOTER ─────────────────────────────────────────── */
-footer {
-  background: var(--navy-deep);
-  padding: 30px var(--page-px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  border-top: 1px solid rgba(255,255,255,.05);
-}
-.f-logo { font-family: var(--font-display); font-size: 22px; font-weight: 400; letter-spacing: 2px; }
-.f-logo .n { color: var(--gold); }
-.f-logo .m { color: rgba(255,255,255,.36); }
-.f-copy { font-size: 11px; color: rgba(255,255,255,.22); letter-spacing: 0.4px; }
-
-
-
-/* ── FUTURE MOTION SYSTEM — ADDED ───────────────────── */
-:root {
-  --ease-out-expo: cubic-bezier(.16,1,.3,1);
-  --ease-soft: cubic-bezier(.22,1,.36,1);
-  --ease-elastic: cubic-bezier(.34,1.56,.64,1);
-  --motion-fast: 180ms;
-  --motion-med: 520ms;
-  --motion-slow: 980ms;
-  --mx: 50%;
-  --my: 50%;
-  --scroll-progress: 0;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: .42;
-  background:
-    radial-gradient(circle at var(--mx) var(--my), rgba(201,168,76,.10), transparent 28%),
-    linear-gradient(115deg, rgba(13,31,60,.04), transparent 44%, rgba(201,168,76,.045));
-  transition: opacity var(--motion-med) ease;
-}
-
-.motion-safe .hero-grid-overlay {
-  animation: futureGridDrift 16s linear infinite;
-}
-@keyframes futureGridDrift {
-  from { background-position: 0 0, 0 0; }
-  to   { background-position: 56px 56px, 56px 56px; }
-}
-
+/* ── DECISION PROGRESS RAIL ─────────────────────────── */
 .decision-progress {
   position: fixed;
   inset-inline-start: 18px;
   inset-block-start: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-42%) translateX(-14px);
   z-index: 270;
   display: grid;
   gap: 10px;
+  padding: 14px 12px;
+  border-radius: 999px;
+  background: rgba(6,14,28,.34);
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 18px 60px rgba(0,0,0,.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 0;
   pointer-events: none;
+  transition: opacity .42s var(--ease-soft), transform .42s var(--ease-soft);
+}
+.decision-progress.is-visible {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  pointer-events: auto;
 }
 .dp-item {
   --dot: rgba(255,255,255,.22);
   display: flex;
   align-items: center;
   gap: 9px;
-  color: rgba(255,255,255,.36);
-  font-size: 10px;
+  color: rgba(255,255,255,.46);
+  font-size: 10.5px;
   font-weight: 900;
-  letter-spacing: .4px;
-  writing-mode: horizontal-tb;
+  letter-spacing: .2px;
+  line-height: 1.25;
+  cursor: pointer;
   transition: color .25s ease, transform .25s ease;
 }
 .dp-item::before {
@@ -1133,184 +1565,15 @@ body::before {
   box-shadow: 0 0 0 0 rgba(201,168,76,0);
   transition: background .25s ease, box-shadow .25s ease, transform .25s ease;
 }
-.dp-item.is-active {
-  color: var(--gold-light);
-  transform: translateX(4px);
-}
+.dp-item:hover { color: rgba(255,255,255,.86); transform: translateX(2px); }
+.dp-item.is-active { color: var(--gold-light); transform: translateX(4px); }
 .dp-item.is-active::before {
   background: var(--gold);
   transform: scale(1.25);
   box-shadow: 0 0 0 7px rgba(201,168,76,.12), 0 0 22px rgba(201,168,76,.45);
 }
 
-.progress-bar {
-  height: 4px;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light), #fff3b6);
-  box-shadow: 0 0 22px rgba(201,168,76,.72);
-}
-
-nav::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(201,168,76,.08), transparent);
-  opacity: 0;
-  transition: opacity .35s ease;
-}
-nav.is-scrolled::before { opacity: 1; }
-.nav-links a.is-active { color: #fff; }
-.nav-links a.is-active::after { transform: scaleX(1); }
-
-.hero-h1 {
-  text-wrap: balance;
-  text-shadow: 0 0 48px rgba(201,168,76,.12);
-}
-.motion-safe .hero-h1.reveal.is-visible,
-.motion-safe .sec-title.reveal.is-visible {
-  animation: maskRise 900ms var(--ease-out-expo) both;
-}
-@keyframes maskRise {
-  from { clip-path: inset(0 0 100% 0); transform: translateY(28px); filter: blur(8px); }
-  to   { clip-path: inset(0 0 0 0); transform: translateY(0); filter: blur(0); }
-}
-
-.hero-visual { perspective: 1100px; transform-style: preserve-3d; }
-.decision-orbit {
-  isolation: isolate;
-  box-shadow: 0 34px 120px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
-}
-.decision-orbit::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(115deg, transparent 0 42%, rgba(255,255,255,.13) 50%, transparent 58% 100%);
-  transform: translateX(120%);
-  animation: orbitSweep 6s ease-in-out infinite;
-  opacity: .7;
-}
-@keyframes orbitSweep {
-  0%, 34% { transform: translateX(120%); }
-  52% { transform: translateX(-120%); }
-  100% { transform: translateX(-120%); }
-}
-
-.market-field {
-  position: absolute;
-  inset: 60px 24px 36px 24px;
-  border-radius: 32px;
-  overflow: hidden;
-  z-index: 1;
-  pointer-events: none;
-  opacity: .78;
-  transform: translateZ(-30px);
-}
-.market-field::before,
-.market-field::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-}
-.market-field::before {
-  background:
-    radial-gradient(circle at 15% 18%, rgba(201,168,76,.38) 0 2px, transparent 3px),
-    radial-gradient(circle at 72% 24%, rgba(255,255,255,.36) 0 1.5px, transparent 3px),
-    radial-gradient(circle at 42% 72%, rgba(122,167,255,.34) 0 2px, transparent 4px),
-    radial-gradient(circle at 84% 78%, rgba(29,158,117,.34) 0 2px, transparent 4px),
-    radial-gradient(circle at 24% 86%, rgba(216,90,48,.30) 0 2px, transparent 4px);
-  background-size: 150px 120px, 180px 140px, 170px 170px, 210px 160px, 190px 130px;
-  animation: dataCloud 18s linear infinite;
-}
-.market-field::after {
-  background: conic-gradient(from 180deg at 50% 50%, transparent, rgba(201,168,76,.08), transparent, rgba(122,167,255,.07), transparent);
-  mask-image: radial-gradient(circle at 50% 50%, #000 0 52%, transparent 70%);
-  animation: radarSpin 12s linear infinite;
-}
-@keyframes dataCloud {
-  from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
-  to { background-position: 300px 120px, -220px 160px, 160px -260px, -240px -120px, 210px 180px; }
-}
-@keyframes radarSpin { to { transform: rotate(1turn); } }
-
-.scan-line {
-  position: absolute;
-  inset-inline: 12%;
-  top: 50%;
-  height: 1px;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(201,168,76,.92), transparent);
-  box-shadow: 0 0 24px rgba(201,168,76,.45);
-  animation: scanMove 3.7s ease-in-out infinite;
-}
-@keyframes scanMove {
-  0%,100% { transform: translateY(-160px); opacity: .08; }
-  45%,55% { opacity: .85; }
-  100% { transform: translateY(170px); }
-}
-
-.funnel-beam {
-  position: absolute;
-  inset-inline: 18%;
-  inset-block: 85px 88px;
-  z-index: 1;
-  pointer-events: none;
-  opacity: .36;
-  background: linear-gradient(180deg, transparent, rgba(201,168,76,.16), rgba(29,158,117,.10), transparent);
-  clip-path: polygon(7% 0, 93% 0, 65% 100%, 35% 100%);
-  filter: blur(.4px);
-  animation: beamBreath 4.8s ease-in-out infinite;
-}
-@keyframes beamBreath {
-  0%,100% { opacity: .18; transform: scaleX(.92); }
-  50% { opacity: .43; transform: scaleX(1.03); }
-}
-
-.engine-chip {
-  position: absolute;
-  z-index: 3;
-  top: 48%;
-  right: 50%;
-  transform: translate(50%, -50%);
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 9px 14px;
-  border-radius: 999px;
-  background: rgba(6,14,28,.72);
-  border: 1px solid rgba(201,168,76,.22);
-  color: rgba(255,255,255,.75);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 18px 60px rgba(0,0,0,.24);
-}
-.engine-chip span {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--green);
-  box-shadow: 0 0 18px rgba(29,158,117,.72);
-  animation: pulse 1.6s ease-in-out infinite;
-}
-
-.chaos-card, .score-card, .recommend-card, .neutral-card {
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-.motion-safe .chaos-card { animation: cardDriftA 6.5s ease-in-out infinite; }
-.motion-safe .score-card { animation: cardDriftB 7.2s ease-in-out infinite; }
-.motion-safe .recommend-card { animation: cardDriftC 7.8s ease-in-out infinite; }
-.motion-safe .neutral-card { animation: cardDriftD 6.8s ease-in-out infinite; }
-@keyframes cardDriftA { 0%,100%{translate:0 0;} 50%{translate:0 -8px;} }
-@keyframes cardDriftB { 0%,100%{translate:0 0;} 50%{translate:10px 6px;} }
-@keyframes cardDriftC { 0%,100%{translate:0 0;} 50%{translate:-6px -7px;} }
-@keyframes cardDriftD { 0%,100%{translate:0 0;} 50%{translate:8px -5px;} }
-
+/* ── MICRO-INTERACTIONS ─────────────────────────────── */
 .tilt-card { --shine-x: 50%; --shine-y: 50%; }
 .tilt-card::before {
   content: "";
@@ -1325,16 +1588,6 @@ nav.is-scrolled::before { opacity: 1; }
   mix-blend-mode: soft-light;
 }
 .tilt-card:hover::before { opacity: .8; }
-
-.value-card,
-.deliver-item,
-.p-card,
-.cta-step,
-.trust-item,
-.rc,
-.ba-col {
-  will-change: transform, opacity;
-}
 .value-card:hover .v-num,
 .deliver-item:hover .deliver-icon,
 .step:hover .step-num {
@@ -1345,149 +1598,393 @@ nav.is-scrolled::before { opacity: 1; }
   55% { transform: scale(1.12); }
   100% { transform: scale(1); }
 }
+.magnetic { will-change: transform; }
+[data-depth] { will-change: transform; }
 
-.ba-wrap { --ba-progress: 0; }
-.ba-col--before {
-  filter: blur(calc(var(--ba-progress) * 1px));
-  transform: translateY(calc(var(--ba-progress) * 8px));
+/* ── FOOTER ─────────────────────────────────────────── */
+footer {
+  background: var(--navy-deep);
+  padding: 30px var(--page-px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid rgba(255,255,255,.05);
 }
-.ba-col--after {
-  box-shadow: 0 24px 80px rgba(0,0,0,.16), 0 0 calc(var(--ba-progress) * 42px) rgba(29,158,117,.20);
-}
-.ba-arrow svg { animation: arrowPulse 2s ease-in-out infinite; }
-@keyframes arrowPulse {
-  0%,100% { transform: translateX(0); opacity: .65; }
-  50% { transform: translateX(-6px); opacity: 1; }
-}
+.f-logo { font-family: var(--font-display); font-size: 22px; font-weight: 400; letter-spacing: 2px; }
+.f-logo .n { color: var(--gold); }
+.f-logo .m { color: rgba(255,255,255,.40); }
+.f-copy { font-size: 11.5px; color: rgba(255,255,255,.30); letter-spacing: 0.4px; }
 
-.steps-line::after {
-  content: "";
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: 0;
-  width: 0%;
-  background: linear-gradient(90deg, var(--gold), var(--green));
-  box-shadow: 0 0 18px rgba(201,168,76,.42);
-  transition: width 900ms var(--ease-out-expo);
-}
-.steps-wrap.is-visible .steps-line::after { width: 100%; }
 
-.rc {
+
+/* ── UPDATED MOBILE-FIRST STRUCTURE ─────────────────── */
+#hero {
+  min-height: auto;
+  padding-block: calc(72px + 86px) 92px;
+}
+.hero-inner {
+  grid-template-columns: 1fr;
+  max-width: 920px;
+  text-align: center;
+}
+.hero-copy {
+  max-width: 780px;
+  margin-inline: auto;
+}
+.hero-text { margin-inline: auto; }
+.value-strip, .hero-ctas, .trust-strip {
+  justify-content: center;
+  margin-inline: auto;
+}
+.journey-visual {
   position: relative;
-  transform-style: preserve-3d;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  padding: 26px;
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at 85% 10%, rgba(201,168,76,.12), transparent 34%),
+    linear-gradient(135deg, rgba(13,31,60,.055), rgba(255,255,255,.72));
+  border: 1px solid rgba(13,31,60,.08);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
-.rc::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(201,168,76,.55), rgba(255,255,255,.06), rgba(29,158,117,.28));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  opacity: .72;
-}
-.rc-body { view-transition-name: reportBody; }
-.rc-tab { position: relative; overflow: hidden; }
-.rc-tab::after {
+.journey-visual::before {
   content: "";
   position: absolute;
   inset: 0;
-  transform: translateX(120%);
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
-  transition: transform .55s ease;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(13,31,60,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13,31,60,.035) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(to bottom, #000, transparent 92%);
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 92%);
 }
-.rc-tab:hover::after { transform: translateX(-120%); }
-.rc-metric, .rc-verdict, .rc-id {
-  transition: transform .28s ease, background .28s ease, border-color .28s ease;
+.journey-line {
+  position: absolute;
+  top: 64px;
+  inset-inline: 72px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(201,168,76,.15), var(--gold), rgba(29,158,117,.70));
+  box-shadow: 0 0 22px rgba(201,168,76,.24);
 }
-.rc-metric:hover,
-.rc-id:hover {
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.075);
+.journey-step {
+  position: relative;
+  z-index: 1;
+  min-height: 310px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+  padding: 24px 20px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(13,31,60,.08);
+  box-shadow: 0 18px 48px rgba(6,14,28,.06);
+  overflow: hidden;
 }
-.report-flash {
-  animation: reportFlash 520ms var(--ease-out-expo) both;
+.journey-step::after {
+  content: "";
+  position: absolute;
+  inset: auto -35px -55px auto;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(201,168,76,.10);
 }
-@keyframes reportFlash {
-  0% { opacity: .35; transform: translateY(10px) scale(.985); filter: blur(7px); }
-  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+.journey-step--featured {
+  background: linear-gradient(160deg, #fff, var(--gold-faint));
+  border-color: rgba(201,168,76,.34);
+  transform: translateY(-10px);
+}
+.journey-step--trust {
+  background: linear-gradient(160deg, #fff, rgba(29,158,117,.08));
+}
+.journey-num {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 1;
+  box-shadow: 0 14px 35px rgba(6,14,28,.18);
+}
+.journey-body h3 {
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+.journey-body p {
+  color: var(--warm-700);
+  font-size: 14.5px;
+  line-height: 1.9;
 }
 
-.btn-primary,
-.btn-ghost,
-.btn-outline,
-.nav-cta {
-  transform-style: preserve-3d;
+
+.proof-section {
+  padding-top: 0;
 }
-.magnetic {
-  will-change: transform;
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.proof-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 255px;
+  padding: 30px 26px;
+  border-radius: var(--radius-lg);
+  background: #fff;
+  border: 1px solid rgba(13,31,60,.08);
+  box-shadow: 0 18px 54px rgba(6,14,28,.06);
+}
+.proof-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -55px -80px auto;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: rgba(201,168,76,.10);
+}
+.proof-card--featured {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(201,168,76,.18), transparent 38%),
+    linear-gradient(160deg, #fff, var(--gold-faint));
+  border-color: rgba(201,168,76,.32);
+}
+.proof-num {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: baseline;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 64px);
+  line-height: 1;
+  margin-bottom: 22px;
+}
+.proof-word {
+  font-family: var(--font-body);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 900;
+  color: var(--navy);
+}
+.proof-card h3 {
+  position: relative;
+  z-index: 1;
+  color: var(--navy);
+  font-size: 19px;
+  font-weight: 900;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.proof-card p {
+  position: relative;
+  z-index: 1;
+  color: var(--warm-700);
+  font-size: 14.5px;
+  line-height: 1.9;
 }
 
-.sticky-cta a {
-  background: linear-gradient(135deg, var(--gold), var(--gold-light), #fff2af);
-  animation: stickyBreath 2.8s ease-in-out infinite;
+.proof-grid--dark .proof-card {
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.12);
+  box-shadow: 0 24px 80px rgba(0,0,0,.18);
+  backdrop-filter: blur(12px);
 }
-@keyframes stickyBreath {
-  0%,100% { box-shadow: 0 18px 60px rgba(6,14,28,.35), 0 0 0 rgba(201,168,76,0); }
-  50% { box-shadow: 0 18px 60px rgba(6,14,28,.35), 0 0 34px rgba(201,168,76,.38); }
+.proof-grid--dark .proof-card--featured {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(201,168,76,.22), transparent 38%),
+    rgba(255,255,255,.075);
+  border-color: rgba(201,168,76,.34);
+}
+.proof-grid--dark .proof-card h3 { color: #fff; }
+.proof-grid--dark .proof-card p { color: rgba(255,255,255,.66); }
+.proof-grid--dark .proof-word { color: #fff; }
+#trust .trust-tags { margin-top: 28px; }
+
+.criteria-matrix {
+  position: relative;
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(6, auto);
+  gap: 14px;
+}
+.criteria-core {
+  grid-column: 5 / 9;
+  grid-row: 3 / 5;
+  min-height: 190px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  box-shadow: var(--shadow-deep);
+  border: 1px solid rgba(201,168,76,.28);
+  z-index: 2;
+}
+.criteria-core span {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 40px);
+  color: var(--gold);
+  line-height: 1.15;
+}
+.criteria-core small {
+  color: rgba(255,255,255,.62);
+  font-size: 13px;
+}
+.criteria-item {
+  position: relative;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  background: #fff;
+  border: 1px solid rgba(13,31,60,.08);
+  box-shadow: 0 16px 46px rgba(6,14,28,.05);
+}
+.criteria-item span {
+  display: inline-flex;
+  margin-bottom: 12px;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 24px;
+}
+.criteria-item h3 {
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.criteria-item p {
+  color: var(--warm-700);
+  font-size: 14.5px;
+  line-height: 1.85;
+}
+.criteria-item.c1 { grid-column: 1 / 5; grid-row: 1 / 3; }
+.criteria-item.c2 { grid-column: 5 / 9; grid-row: 1 / 3; }
+.criteria-item.c3 { grid-column: 9 / 13; grid-row: 1 / 3; }
+.criteria-item.c4 { grid-column: 1 / 6; grid-row: 5 / 7; }
+.criteria-item.c5 { grid-column: 8 / 13; grid-row: 5 / 7; }
+
+@media (max-width: 900px) {
+  .journey-visual {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+  .journey-line {
+    top: 32px;
+    bottom: 32px;
+    inset-inline-start: 43px;
+    inset-inline-end: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, rgba(201,168,76,.15), var(--gold), rgba(29,158,117,.70));
+  }
+  .journey-step, .journey-step--featured {
+    min-height: auto;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto;
+    align-items: start;
+    transform: none;
+    padding: 20px 18px;
+  }
+  .journey-num { width: 48px; height: 48px; font-size: 24px; }
+  .proof-grid {
+    grid-template-columns: 1fr;
+  }
+  .proof-card {
+    min-height: auto;
+    padding: 24px 22px;
+  }
+  .proof-num {
+    margin-bottom: 16px;
+  }
+  .criteria-matrix {
+    min-height: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .criteria-core, .criteria-item.c1, .criteria-item.c2, .criteria-item.c3, .criteria-item.c4, .criteria-item.c5 {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .criteria-core {
+    min-height: auto;
+    border-radius: var(--radius-xl);
+    padding: 34px 22px;
+    order: -1;
+  }
 }
 
-[data-depth] { will-change: transform; }
-
+/* ════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════ */
 @media (max-width: 1100px) {
   .decision-progress { display: none; }
   .engine-chip { top: 47%; }
-}
-
-@media (max-width: 767px) {
-  .market-field { inset: 58px 8px 42px; opacity: .52; }
-  .engine-chip { font-size: 9px; padding: 8px 11px; top: 47%; }
-  .funnel-beam { inset-inline: 10%; }
-  .scan-line { inset-inline: 4%; }
-}
-
-/* ── RESPONSIVE ─────────────────────────────────────── */
-@media (max-width: 1100px) {
   .hero-inner { grid-template-columns: 1fr; text-align: center; }
   .hero-copy, .hero-text { margin-inline: auto; }
   .value-strip, .hero-ctas, .trust-strip { justify-content: center; margin-inline: auto; }
   .hero-visual { min-height: 500px; max-width: 640px; width: 100%; margin-inline: auto; }
-  .nav-links { display: none; }
+  .nav-positioning { max-width: 42vw; padding-inline: 14px; font-size: 12.5px; }
+  .problem-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 767px) {
+  :root { --page-px: 20px; --sp-xl: 56px; --sp-2xl: 74px; }
   .ba-wrap { grid-template-columns: 1fr; }
   .ba-col { min-height: auto; }
   .ba-arrow { min-height: 48px; transform: rotate(90deg); }
   .ba-chaos { min-height: 190px; }
   .ba-rec { grid-template-columns: 1fr; text-align: right; }
-  :root { --page-px: 20px; --sp-xl: 58px; --sp-2xl: 78px; }
+  .market-field { inset: 58px 8px 42px; opacity: .4; }
+  .engine-chip { font-size: 9px; padding: 8px 11px; top: 47%; }
+  .scan-line { inset-inline: 4%; }
   nav { height: 64px; }
-  .nav-sub { display: none; }
+  .nav-sub { font-size: 7.5px; letter-spacing: 1px; }
+  .nav-positioning { display: none; }
   .nav-wordmark { font-size: 23px; }
   .nav-cta { padding: 9px 14px; font-size: 12px; }
-  #hero { padding-block: calc(64px + 46px) 58px; }
-  .hero-badge { margin-bottom: 22px; }
-  .hero-h1 { font-size: clamp(38px, 13vw, 58px); }
+  #hero { padding-block: calc(64px + 42px) 54px; }
+  .hero-h1 { font-size: clamp(36px, 11vw, 52px); }
+  .hero-h2 { font-size: 17px; }
+  .hero-text { font-size: 15.5px; }
   .hero-ctas { flex-direction: column; align-items: stretch; }
   .hero-ctas .btn-primary, .hero-ctas .btn-ghost { width: 100%; }
   .trust-strip { grid-template-columns: 1fr; }
-  .hero-visual { min-height: 520px; }
+  .hero-visual { min-height: 510px; }
   .chaos-card { width: 92%; inset-inline: 4%; }
   .score-card { width: 86%; inset-inline-start: 0; }
   .recommend-card { width: 92%; inset-inline-end: 4%; }
   .neutral-card { inset-inline-start: 12px; }
   .value-grid { grid-template-columns: 1fr; }
   .value-card, .value-card:nth-child(2) { grid-column: auto; min-height: auto; }
+  .value-card { padding: 26px 22px; }
+  .v-title { font-size: 19px; }
+  .v-text { font-size: 14.5px; }
   .problem-grid { grid-template-columns: 1fr; }
-  .p-card--full { grid-column: 1; }
+  .p-card { padding: 24px 22px; }
+  .p-title { font-size: 18px; }
+  .p-text { font-size: 14.5px; }
   .steps-grid { grid-template-columns: 1fr; gap: 34px; }
   .steps-line { display: none; }
   .deliver-grid { grid-template-columns: 1fr; }
   .report-wrap { grid-template-columns: 1fr; gap: 38px; }
+  .rep-quote { font-size: 19px; }
   .rc-metrics { grid-template-columns: 1fr; }
   .rc-bar-row { align-items: flex-start; flex-wrap: wrap; }
   .rc-bar-label { width: 100%; text-align: right; }
@@ -1495,6 +1992,7 @@ nav.is-scrolled::before { opacity: 1; }
   .cta-steps { grid-template-columns: 1fr; }
   footer { flex-direction: column; text-align: center; padding-block: 24px 96px; }
   .sticky-cta.is-visible { display: flex; }
+  .intro-wordmark, .intro-reflection { letter-spacing: 1.5px; }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -1506,20 +2004,36 @@ nav.is-scrolled::before { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
 }
 </style>
 </head>
 <body class="motion-safe">
+
+<!-- ═══════════════════════════════════════════════════
+     SITE INTRO / PRELOADER
+═══════════════════════════════════════════════════ -->
+<div class="site-intro" id="siteIntro" role="status" aria-live="polite" aria-label="جارٍ تحميل موقع NestMatch">
+  <div class="intro-grid" aria-hidden="true"></div>
+  <div class="intro-halo" aria-hidden="true"></div>
+  <div class="intro-stage">
+    <div class="intro-wordmark"><span class="n">Nest</span><span class="m">Match</span></div>
+  </div>
+  <div class="intro-reflection" aria-hidden="true"><span class="n">Nest</span><span class="m">Match</span></div>
+  <p class="intro-tagline">أول مستشار عقاري حقيقي يعمل لصالح المشتري</p>
+</div>
+
 <div class="progress-bar" id="progressBar" aria-hidden="true"></div>
 <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 <div class="decision-progress" id="decisionProgress" aria-label="مراحل تجربة NestMatch" aria-hidden="true">
-  <span class="dp-item is-active" data-track="hero">البداية</span>
-  <span class="dp-item" data-track="value">القيمة</span>
-  <span class="dp-item" data-track="before-after">التحويل</span>
-  <span class="dp-item" data-track="report">التقرير</span>
-  <span class="dp-item" data-track="cta">القرار</span>
+  <a class="dp-item is-active" data-track="hero" href="#hero">البداية</a>
+  <a class="dp-item" data-track="problem" href="#problem">ألم السوق</a>
+  <a class="dp-item" data-track="value" href="#value">الحل</a>
+  <a class="dp-item" data-track="how" href="#how">كيف نعمل</a>
+  <a class="dp-item" data-track="criteria" href="#criteria">كيف نقيّم</a>
+  <a class="dp-item" data-track="deliverables" href="#deliverables">ماذا تستلم</a>
+  <a class="dp-item" data-track="trust" href="#trust">لماذا نثق</a>
 </div>
 
 <!-- ═══════════════════════════════════════════════════
@@ -1528,21 +2042,19 @@ nav.is-scrolled::before { opacity: 1; }
 <nav>
   <a href="#hero" class="nav-logo" aria-label="NestMatch — الصفحة الرئيسية">
     <div class="nav-wordmark"><span class="n">Nest</span><span class="m">Match</span></div>
-    <div class="nav-sub">Real Estate Decision Intelligence</div>
+    <div class="nav-sub">Property Decision Intelligence</div>
   </a>
 
-  <div class="nav-links" aria-label="روابط الصفحة">
-    <a href="#value">القيمة</a>
-    <a href="#problem">المشكلة</a>
-    <a href="#how">طريقة العمل</a>
-    <a href="#report">التقرير</a>
-    <a href="#trust">الحياد</a>
+  <div class="nav-positioning" aria-label="تمركز NestMatch">
+    مستشار عقاري مستقل يعمل لصالح المشتري
   </div>
 
   <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20ترشيحات%20NestMatch%20بناءً%20على%20ميزانيتي%20في%20مدينتي" class="nav-cta magnetic" target="_blank" rel="noopener">
     ابدأ بميزانيتك
   </a>
 </nav>
+
+<main>
 
 <!-- ═══════════════════════════════════════════════════
      HERO
@@ -1553,163 +2065,33 @@ nav.is-scrolled::before { opacity: 1; }
 
   <div class="hero-inner">
     <div class="hero-copy">
-      <div class="hero-badge reveal" role="note">
-        <span class="badge-pulse" aria-hidden="true"></span>
-        Buyer-first · No sales commission
-      </div>
-
       <h1 class="hero-h1 reveal reveal-delay-1" id="hero-h1">
         بتدور على شقة في <em>مدينتي؟</em>
       </h1>
 
       <p class="hero-h2 reveal reveal-delay-2">
-        ابدأ بميزانيتك، ودعنا نرشّح لك أفضل المتاح.
+        ابدأ بميزانيتك، ودعنا نرشّح لك أفضل الفرص المتاحة في السوق.
       </p>
 
-      <p class="hero-text reveal reveal-delay-3">
-        نحلّل السوق، نقارن الوحدات، ونرشّح لك أفضل الاختيارات من حيث القيمة الحقيقية، لا السعر فقط.
-      </p>
 
       <div class="value-strip reveal reveal-delay-3" aria-label="قيم NestMatch الأساسية">
         <span class="tag tag--light">رؤية أوسع للسوق</span>
-        <span class="tag tag--light">قيمة حقيقية</span>
-        <span class="tag tag--light">ترشيحات ذكية</span>
-        <span class="tag tag--light">وقت أقل</span>
-        <span class="tag tag--light">حياد كامل</span>
+        <span class="tag tag--light">تقييم موضوعي</span>
+        <span class="tag tag--light">فرص حقيقية</span>
+        <span class="tag tag--light">تفاوض لصالحك</span>
       </div>
 
       <div class="hero-ctas reveal reveal-delay-3">
-        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener">
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الفرص%20المتاحة%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener">
           ابدأ بميزانيتك
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
-        <a href="#report" class="btn-ghost magnetic">
-          شاهد نموذج التقرير
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        </a>
+
       </div>
 
-      <div class="trust-strip reveal reveal-delay-3">
-        <div class="trust-item">
-          <span class="trust-num" data-count="7000">0</span>
-          <span class="trust-lbl">وحدة نشطة يتم تنظيمها وتحليلها</span>
-        </div>
-        <div class="trust-item">
-          <span class="trust-num">0%</span>
-          <span class="trust-lbl">عمولة بيع على قرارك</span>
-        </div>
-        <div class="trust-item">
-          <span class="trust-num">3</span>
-          <span class="trust-lbl">مخرجات واضحة: ترشيحات، تقارير، مقارنة</span>
-        </div>
-      </div>
     </div>
 
-    <div class="hero-visual reveal reveal-delay-2" aria-label="تصور تفاعلي يوضح تحويل فوضى السوق إلى ترشيحات واضحة">
-      <div class="decision-orbit"></div>
-      <div class="market-field" data-depth="-0.18" aria-hidden="true"></div>
-      <div class="funnel-beam" data-depth="-0.08" aria-hidden="true"></div>
-      <div class="scan-line" aria-hidden="true"></div>
-      <div class="engine-chip" aria-hidden="true"><span></span> Decision Engine Live</div>
 
-      <div class="chaos-card tilt-card">
-        <div class="chaos-title"><span>السوق قبل التحليل</span><span style="color:var(--red)">مشتت</span></div>
-        <div class="chaos-grid">
-          <span class="chaos-pill">إعلانات كثيرة</span>
-          <span class="chaos-pill">بيانات ناقصة</span>
-          <span class="chaos-pill">أسعار متضاربة</span>
-          <span class="chaos-pill">مساحات معلنة</span>
-          <span class="chaos-pill">مقارنات صعبة</span>
-          <span class="chaos-pill">حياد غير واضح</span>
-        </div>
-      </div>
-
-      <div class="score-card tilt-card">
-        <div class="score-title"><span>تحليل القيمة الحقيقية</span><span style="color:var(--gold)">NestMatch</span></div>
-        <div class="metric-line">
-          <div class="metric-meta"><span>صافي المساحة</span><span>88%</span></div>
-          <div class="metric-track"><div class="metric-fill" style="width:88%"></div></div>
-        </div>
-        <div class="metric-line">
-          <div class="metric-meta"><span>جودة الفيو</span><span>82%</span></div>
-          <div class="metric-track"><div class="metric-fill" style="width:82%"></div></div>
-        </div>
-        <div class="metric-line">
-          <div class="metric-meta"><span>كفاءة التوزيع</span><span>79%</span></div>
-          <div class="metric-track"><div class="metric-fill" style="width:79%"></div></div>
-        </div>
-        <div class="metric-line" style="margin-bottom:0">
-          <div class="metric-meta"><span>الموقع داخل المرحلة</span><span>74%</span></div>
-          <div class="metric-track"><div class="metric-fill" style="width:74%"></div></div>
-        </div>
-      </div>
-
-      <div class="recommend-card tilt-card">
-        <div class="recommend-title"><span>بعد التحليل</span><span style="color:var(--green)">قائمة مختصرة</span></div>
-        <div class="rec-row">
-          <div><div class="rec-name">ترشيح 1</div><div class="rec-reason">أفضل قيمة مقابل السعر</div></div>
-          <span class="rec-badge">الأقوى</span>
-        </div>
-        <div class="rec-row">
-          <div><div class="rec-name">ترشيح 2</div><div class="rec-reason">جودة سكن أعلى</div></div>
-          <span class="rec-badge">مناسب</span>
-        </div>
-        <div class="rec-row">
-          <div><div class="rec-name">ترشيح 3</div><div class="rec-reason">توازن مالي ومعماري</div></div>
-          <span class="rec-badge">واضح</span>
-        </div>
-      </div>
-
-      <div class="neutral-card tilt-card">
-        <div class="neutral-icon">✓</div>
-        <span>حياد كامل لصالح المشتري</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════
-     VALUE CARDS
-═══════════════════════════════════════════════════ -->
-<section class="section section--white" id="value" aria-labelledby="value-title">
-  <div class="inner">
-    <header class="sec-hdr sec-hdr--center reveal">
-      <span class="sec-label">القيمة الأساسية</span>
-      <h2 class="sec-title" id="value-title">من سوق مشتت إلى قرار أوضح</h2>
-      <p class="sec-sub">نحوّل فوضى السوق إلى ترشيحات واضحة، مبنية على رؤية أوسع، تحليل للقيمة، وحياد كامل لصالح المشتري.</p>
-    </header>
-
-    <div class="value-grid">
-      <article class="value-card reveal tilt-card">
-        <span class="v-num">١</span>
-        <h3 class="v-title">رؤية أوضح للسوق المتاح</h3>
-        <p class="v-text">نجمع الوحدات المعروضة في مدينتي من مصادر متعددة، وننظمها في صورة واحدة واضحة، حتى نرشّح لك الأفضل بناءً على مقارنة أوسع، لا على إعلان منفرد أو ترشيح عشوائي.</p>
-      </article>
-
-      <article class="value-card reveal reveal-delay-1 tilt-card">
-        <span class="v-num">٢</span>
-        <h3 class="v-title">تحليل القيمة الحقيقية</h3>
-        <p class="v-text">مساحة العقد ليست معيارًا موضوعيًا للتقييم، وذلك لاختلاف نسب التحميل من نموذج لآخر، وبالتالي السعر لا يكشف القيمة الفعلية. لذلك نحلّل صافي المساحة، كفاءة التوزيع، جودة الفيو، التهوية، الإضاءة الطبيعية، التعرّض للشمس، والموقع داخل المرحلة، لنحدد القيمة الحقيقية لكل وحدة.</p>
-      </article>
-
-      <article class="value-card reveal reveal-delay-2 tilt-card">
-        <span class="v-num">٣</span>
-        <h3 class="v-title">ترشيحات مناسبة لك</h3>
-        <p class="v-text">نحوّل السوق المتاح إلى قائمة مختصرة من الاختيارات الأنسب لميزانيتك واحتياجك، بدل أن تضيع بين عشرات البدائل غير الواضحة.</p>
-      </article>
-
-      <article class="value-card reveal tilt-card">
-        <span class="v-num">٤</span>
-        <h3 class="v-title">وقت أقل ومعاينات أذكى</h3>
-        <p class="v-text">نختصر عليك أسابيع من البحث والمقارنة، ونقدّم لك قائمة واضحة من الاختيارات الأقوى، حتى تركّز معايناتك على الوحدات التي تستحق الزيارة فعلًا.</p>
-      </article>
-
-      <article class="value-card reveal reveal-delay-1 tilt-card">
-        <span class="v-num">٥</span>
-        <h3 class="v-title">حياد يحمي قرارك</h3>
-        <p class="v-text">لا نتقاضى عمولات على البيع. نجاحنا ليس في إتمام الصفقة، بل في مساعدتك على اختيار الوحدة الأنسب لك.</p>
-      </article>
-    </div>
   </div>
 </section>
 
@@ -1720,101 +2102,76 @@ nav.is-scrolled::before { opacity: 1; }
   <div class="inner">
     <header class="sec-hdr reveal">
       <span class="sec-label">المشكلة</span>
-      <h2 class="sec-title" id="problem-title">السوق الحالي يترك المشتري أمام قرارات غير واضحة</h2>
+      <h2 class="sec-title" id="problem-title">قرار بملايين لا يحتمل العشوائية</h2>
     </header>
 
     <div class="problem-grid">
-      <div class="p-card p-card--dark reveal">
+      <div class="p-card p-card--dark reveal tilt-card">
         <span class="p-num" aria-hidden="true">٠١</span>
-        <h3 class="p-title">سوق مشتت</h3>
-        <p class="p-text">المتاح موزع بين مصادر كثيرة، بدون صورة موحدة واضحة.</p>
+        <h3 class="p-title">سوق مشتت واختيار مرهق</h3>
+        <p class="p-text">عدد الوحدات المعروضة للبيع ضخم ومشتت وغير واضح، مما يجعل رحلة البحث طويلة ومرهقة.</p>
       </div>
 
-      <div class="p-card reveal reveal-delay-1">
+      <div class="p-card reveal reveal-delay-1 tilt-card">
         <span class="p-num" aria-hidden="true">٠٢</span>
-        <h3 class="p-title">بيانات ناقصة</h3>
-        <p class="p-text">الإعلانات لا تعرض دائمًا التفاصيل التي تصنع القيمة الحقيقية.</p>
+        <h3 class="p-title">غياب معايير التقييم والمقارنة</h3>
+        <p class="p-text">عند غياب معايير موضوعية للتقييم والمقارنة، يسيطر التسويق والانطباع على قرار الشراء؛ فتظهر وحدات مبالغ في سعرها، وفرص حقيقية يصعب اكتشافها.</p>
       </div>
 
-      <div class="p-card reveal reveal-delay-2">
+      <div class="p-card reveal reveal-delay-2 tilt-card">
         <span class="p-num" aria-hidden="true">٠٣</span>
-        <h3 class="p-title">تقييم سطحي</h3>
-        <p class="p-text">المقارنة غالبًا تعتمد على السعر والمساحة المعلنة فقط.</p>
-      </div>
-
-      <div class="p-card reveal reveal-delay-3">
-        <span class="p-num" aria-hidden="true">٠٤</span>
-        <h3 class="p-title">اختيار مرهق</h3>
-        <p class="p-text">بحث طويل، معاينات كثيرة، وصعوبة في الوصول للاختيار الأنسب.</p>
-      </div>
-
-      <div class="p-card p-card--full reveal" style="background:var(--gold-faint);border-top:2px solid rgba(201,168,76,.18);">
-        <span class="p-num" aria-hidden="true" style="color:rgba(201,168,76,.30);">٠٥</span>
-        <h3 class="p-title">حياد غائب</h3>
-        <p class="p-text">لا يوجد دائمًا طرف مستقل هدفه حماية قرار المشتري، لا إتمام الصفقة.</p>
+        <h3 class="p-title">مصلحة المشتري غائبة</h3>
+        <p class="p-text">في السوق التقليدي، قد تتأثر الترشيحات بالعمولة أو بسرعة إتمام الصفقة، لا بجودة القرار نفسه.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════
-     BEFORE / AFTER
+     VALUE JOURNEY
 ═══════════════════════════════════════════════════ -->
-<section class="section section--dark" id="before-after" aria-labelledby="ba-title">
-  <div class="hero-grid-overlay" aria-hidden="true"></div>
-  <div class="inner" style="position:relative;z-index:1;">
+<section class="section section--white" id="value" aria-labelledby="value-title">
+  <div class="inner">
     <header class="sec-hdr sec-hdr--center reveal">
-      <span class="sec-label">قبل وبعد</span>
-      <h2 class="sec-title sec-title--light" id="ba-title">الفرق بين البحث وحدك واستخدام NestMatch</h2>
-      <p class="sec-sub sec-sub--light">نفس السوق، لكن التجربة مختلفة تمامًا عندما يتحول المتاح من فوضى إلى قرار منظم.</p>
+      <span class="sec-label">الحل</span>
+      <h2 class="sec-title" id="value-title">من سوق مشتت إلى قرار واضح</h2>
+      <p class="sec-sub">نحوّل فوضى السوق إلى ترشيحات واضحة، مبنية على رؤية أوسع، تحليل حقيقي للقيمة، وحياد كامل لصالح المشتري — ثم نساندك في التفاوض للوصول إلى أفضل صفقة ممكنة.</p>
     </header>
 
-    <div class="ba-wrap reveal reveal-delay-1" aria-label="مقارنة بين البحث التقليدي وخدمة NestMatch">
-      <div class="ba-col ba-col--before">
-        <div class="ba-head">
-          <span class="ba-kicker">بدون NestMatch</span>
-          <h3>بحث طويل وقرار غير واضح</h3>
-        </div>
-        <div class="ba-chaos" aria-hidden="true">
-          <span>إعلان ناقص</span>
-          <span>سعر مختلف</span>
-          <span>فيو غير مؤكد</span>
-          <span>مساحة عقد</span>
-          <span>عمولات</span>
-          <span>معاينات كثيرة</span>
-          <span>ترشيح عشوائي</span>
-          <span>قرار بالحدس</span>
-        </div>
-        <ul class="ba-list">
-          <li>مصادر كثيرة بدون صورة واحدة واضحة.</li>
-          <li>مقارنة صعبة بين وحدات غير مكتملة البيانات.</li>
-          <li>معاينات متكررة لا تضيف وضوحًا حقيقيًا.</li>
-          <li>قرار شراء مبني على الانطباع أكثر من التحليل.</li>
-        </ul>
-      </div>
+    <div class="journey-visual reveal reveal-delay-1" aria-label="رحلة NestMatch من فوضى السوق إلى قرار واضح">
+      <div class="journey-line" aria-hidden="true"></div>
 
-      <div class="ba-arrow" aria-hidden="true">
-        <span></span>
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      </div>
+      <article class="journey-step tilt-card">
+        <span class="journey-num">١</span>
+        <div class="journey-body">
+          <h3>رؤية أوضح لجميع المعروض بالسوق</h3>
+          <p>قاعدة بيانات مدارة بالذكاء الاصطناعي، تضم أكثر من 90% من المتاح بالسوق، تمنحنا صورة أوسع وتضمن وصولك إلى أفضل الفرص المتاحة.</p>
+        </div>
+      </article>
 
-      <div class="ba-col ba-col--after">
-        <div class="ba-head">
-          <span class="ba-kicker">مع NestMatch</span>
-          <h3>ترشيحات مختصرة بوضوح</h3>
+      <article class="journey-step journey-step--featured tilt-card">
+        <span class="journey-num">٢</span>
+        <div class="journey-body">
+          <h3>أفضل الفرص طبقًا لميزانيتك وتفضيلاتك</h3>
+          <p>نقيّم الوحدات بمعايير موضوعية تحدد القيمة السوقية وجودة السكن، نميّز الوحدات المبالغ في سعرها ونكشف لك أفضل الفرص طبقًا لميزانيتك واحتياجك.</p>
         </div>
-        <div class="ba-shortlist" aria-hidden="true">
-          <div class="ba-rec"><b>ترشيح ١</b><span>أفضل قيمة مقابل السعر</span><em>الأقوى</em></div>
-          <div class="ba-rec"><b>ترشيح ٢</b><span>جودة سكن أعلى</span><em>مناسب</em></div>
-          <div class="ba-rec"><b>ترشيح ٣</b><span>توازن مالي ومعماري</span><em>واضح</em></div>
+      </article>
+
+      <article class="journey-step tilt-card">
+        <span class="journey-num">٣</span>
+        <div class="journey-body">
+          <h3>وقت أقل ومعاينات أذكى</h3>
+          <p>نختصر لك أسابيع من البحث والمقارنة، ونوجّه معايناتك نحو الوحدات التي تستحق زيارتك.</p>
         </div>
-        <ul class="ba-list">
-          <li>رؤية أوسع للسوق المتاح في صورة منظمة.</li>
-          <li>تحليل للقيمة الحقيقية لا السعر فقط.</li>
-          <li>قائمة مختصرة من البدائل التي تستحق المعاينة.</li>
-          <li>تقرير يوضح لماذا تختار وحدة دون أخرى.</li>
-        </ul>
-      </div>
+      </article>
+
+      <article class="journey-step journey-step--trust tilt-card">
+        <span class="journey-num">٤</span>
+        <div class="journey-body">
+          <h3>نمثّل مصلحتك كمشتري</h3>
+          <p>نتفاوض لصالحك، ولا نتقاضى عمولات على البيع. نجاحنا ليس في إتمام الصفقة، بل في مساعدتك على اختيار الوحدة الأنسب لك.</p>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -1826,7 +2183,7 @@ nav.is-scrolled::before { opacity: 1; }
   <div class="inner">
     <header class="sec-hdr sec-hdr--center reveal">
       <span class="sec-label">طريقة العمل</span>
-      <h2 class="sec-title" id="how-title">كيف نرشّح لك أفضل المتاح؟</h2>
+      <h2 class="sec-title" id="how-title">كيف نعمل لصالحك؟</h2>
     </header>
 
     <div class="steps-wrap reveal">
@@ -1841,16 +2198,66 @@ nav.is-scrolled::before { opacity: 1; }
 
         <div class="step">
           <div class="step-circle"><span class="step-num">٢</span></div>
-          <h3 class="step-title">نحلّل السوق ونقارن القيمة</h3>
-          <p class="step-text">نراجع المتاح داخل قاعدة البيانات، ونقارن السعر بالقيمة الفعلية لكل وحدة من حيث صافي المساحة، جودة السكن، الموقع، والفيو.</p>
+          <h3 class="step-title">نحلّل السوق ونرشّح أفضل الفرص المتاحة</h3>
+          <p class="step-text">نعتمد على قاعدة بيانات مدارة بالذكاء الاصطناعي، ونظام تقييم معياري يحدد القيمة السوقية وجودة السكن، لنقدّم لك قائمة بأفضل الفرص المتاحة بالسوق، مرتّبة حسب تفضيلاتك.</p>
         </div>
 
         <div class="step">
           <div class="step-circle"><span class="step-num">٣</span></div>
-          <h3 class="step-title">نرشّح أفضل الاختيارات</h3>
-          <p class="step-text">تستلم قائمة مختصرة من البدائل الأقوى، مع توضيح سبب ترشيح كل اختيار.</p>
+          <h3 class="step-title">نتفاوض لصالحك</h3>
+          <p class="step-text">بعد المقارنة وتحديد الفرصة الأفضل، نتفاوض لصالحك للوصول إلى أفضل صفقة ممكنة، مع الحفاظ على مصلحتك كمشتري.</p>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     EVALUATION CRITERIA
+═══════════════════════════════════════════════════ -->
+<section class="section section--gray" id="criteria" aria-labelledby="criteria-title">
+  <div class="inner">
+    <header class="sec-hdr reveal">
+      <span class="sec-label">معايير التقييم</span>
+      <h2 class="sec-title" id="criteria-title">كيف نقيّم كل وحدة؟</h2>
+      <p class="sec-sub">نقيّم كل وحدة من خلال معايير موضوعية تجمع بين القيمة السوقية وجودة السكن، حتى لا يكون القرار مبنيًا على المساحة أو الانطباع فقط.</p>
+    </header>
+
+    <div class="criteria-matrix reveal reveal-delay-1" aria-label="معايير تقييم الوحدات في NestMatch">
+      <div class="criteria-core">
+        <span>القيمة الحقيقية</span>
+        <small>سعر عادل + جودة سكن</small>
+      </div>
+
+      <article class="criteria-item c1 tilt-card">
+        <span>٠١</span>
+        <h3>صافي المساحة</h3>
+        <p>نقيس المساحة الفعلية القابلة للاستخدام، وليس مساحة العقد فقط.</p>
+      </article>
+
+      <article class="criteria-item c2 tilt-card">
+        <span>٠٢</span>
+        <h3>كفاءة توزيع صافي المساحة</h3>
+        <p>نقيّم مدى كفاءة استغلال المساحة الداخلية، ومدى توافق التوزيع مع احتياجك وتفضيلاتك.</p>
+      </article>
+
+      <article class="criteria-item c3 tilt-card">
+        <span>٠٣</span>
+        <h3>جودة الفيو</h3>
+        <p>نقيّم نوع الفيو واتساعه وتأثيره على جودة السكن، لأن الفيو قد يمثّل من 8% إلى 10% من قيمة الوحدة.</p>
+      </article>
+
+      <article class="criteria-item c4 tilt-card">
+        <span>٠٤</span>
+        <h3>الخصوصية والدور والموقع</h3>
+        <p>نقيّم مستوى الخصوصية، والدور، وموقع الوحدة داخل المرحلة، لأن هذه العوامل لا تؤثر فقط على جودة السكن، بل على القيمة السوقية وقابلية إعادة البيع.</p>
+      </article>
+
+      <article class="criteria-item c5 tilt-card">
+        <span>٠٥</span>
+        <h3>التهوية والإضاءة والراحة الحرارية</h3>
+        <p>نقيّم التهوية، والإضاءة الطبيعية، وتأثير الشمس والحرارة داخل الوحدة، لأنها عوامل أساسية في جودة السكن اليومي.</p>
+      </article>
     </div>
   </div>
 </section>
@@ -1858,37 +2265,29 @@ nav.is-scrolled::before { opacity: 1; }
 <!-- ═══════════════════════════════════════════════════
      DELIVERABLES
 ═══════════════════════════════════════════════════ -->
-<section class="section section--gray" id="deliverables" aria-labelledby="deliver-title">
+<section class="section section--white" id="deliverables" aria-labelledby="deliver-title">
   <div class="inner">
     <div class="deliver-grid">
       <header class="sec-hdr reveal">
         <span class="sec-label">المخرجات</span>
         <h2 class="sec-title" id="deliver-title">ماذا تستلم من NestMatch؟</h2>
-        <p class="sec-sub">الخدمة لا تعطيك أسماء وحدات فقط، بل تعطيك سبب الاختيار، تحليل كل ترشيح، ومقارنة واضحة بين البدائل.</p>
+        <p class="sec-sub">الخدمة لا تعطيك أسماء وحدات فقط، بل تعطيك نتيجة عملية تساعدك على اتخاذ قرار أوضح: قائمة مختصرة، مقارنة موضوعية، ودعم تفاوضي عند اختيار الفرصة الأفضل.</p>
       </header>
 
       <div class="deliver-list">
         <div class="deliver-item reveal tilt-card">
           <div class="deliver-icon">١</div>
           <div>
-            <h3 class="deliver-title">أفضل ترشيحات مناسبة لك</h3>
-            <p class="deliver-text">اختيارات قوية من حيث القيمة مقابل السعر، ومتوافقة مع ميزانيتك وتفضيلاتك.</p>
+            <h3 class="deliver-title">قائمة الترشيحات</h3>
+            <p class="deliver-text">قائمة مختصرة بأفضل الفرص المناسبة لميزانيتك واحتياجك، تشمل مقارنة موضوعية بين الترشيحات وفقًا لمعايير التقييم، وتوضح الفروق الجوهرية بينها لتمنحك صورة أوضح قبل اتخاذ القرار.</p>
           </div>
         </div>
 
         <div class="deliver-item reveal reveal-delay-1 tilt-card">
           <div class="deliver-icon">٢</div>
           <div>
-            <h3 class="deliver-title">تقرير مفصل لكل ترشيح</h3>
-            <p class="deliver-text">تحليل واضح لمعايير القيمة السوقية وجودة السكن لكل وحدة.</p>
-          </div>
-        </div>
-
-        <div class="deliver-item reveal reveal-delay-2 tilt-card">
-          <div class="deliver-icon">٣</div>
-          <div>
-            <h3 class="deliver-title">مقارنة بين جميع البدائل</h3>
-            <p class="deliver-text">تقرير يقارن بين الترشيحات ويوضح الفروق الأساسية، حتى تعرف لماذا تختار وحدة دون أخرى.</p>
+            <h3 class="deliver-title">دعم تفاوضي</h3>
+            <p class="deliver-text">مساندة في التفاوض بعد تحديد الفرصة الأفضل، للوصول إلى أفضل صفقة ممكنة.</p>
           </div>
         </div>
       </div>
@@ -1897,91 +2296,41 @@ nav.is-scrolled::before { opacity: 1; }
 </section>
 
 <!-- ═══════════════════════════════════════════════════
-     REPORT
-═══════════════════════════════════════════════════ -->
-<section class="section section--white" id="report" aria-labelledby="report-title">
-  <div class="inner">
-    <header class="sec-hdr reveal">
-      <span class="sec-label">نموذج التقرير</span>
-      <h2 class="sec-title" id="report-title">شاهد كيف نرشّح ونقارن</h2>
-      <p class="sec-sub">يعرض تقرير NestMatch سبب ترشيح كل وحدة، ويوضح الفروق بين البدائل من حيث القيمة مقابل السعر، جودة السكن، صافي المساحة، الفيو، والموقع.</p>
-      <div style="margin-top:24px;">
-        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20مشاهدة%20نموذج%20تقرير%20NestMatch" target="_blank" rel="noopener" class="btn-outline magnetic">
-          شاهد نموذج التقرير
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-        </a>
-      </div>
-    </header>
-
-    <div class="report-wrap">
-      <div class="reveal">
-        <blockquote class="rep-quote">
-          التقرير لا يبيع لك وحدة؛ بل يوضح لك لماذا قد تكون هذه الوحدة مناسبة، ومتى يكون هناك بديل أفضل.
-        </blockquote>
-        <div class="rep-features">
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-title">تحليل القيمة مقابل السعر</div><div class="rf-text">مقارنة السعر بما تحصل عليه فعليًا من جودة سكن وموقع وصافي مساحة.</div></div></div>
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-title">صافي المساحة وكفاءة التوزيع</div><div class="rf-text">قراءة أعمق من مساحة العقد، لأن المساحة المعلنة وحدها لا تكشف القيمة.</div></div></div>
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-title">الفيو والخصوصية والموقع</div><div class="rf-text">توضيح الفروق الجوهرية التي تؤثر على جودة السكن وقابلية إعادة البيع.</div></div></div>
-          <div class="rf"><div class="rf-dot"></div><div><div class="rf-title">مقارنة بين البدائل</div><div class="rf-text">ليكون القرار مبنيًا على ترتيب واضح، لا على إعلان منفرد أو انطباع سريع.</div></div></div>
-        </div>
-      </div>
-
-      <div class="rc reveal reveal-delay-1" role="img" aria-label="نموذج تقرير NestMatch تفاعلي">
-        <div class="rc-head">
-          <span class="rc-head-label">NestMatch Report Preview</span>
-          <div class="rc-tabs" aria-label="اختيار ترشيح للمقارنة">
-            <button class="rc-tab is-active" data-report-tab="0">ترشيح ١</button>
-            <button class="rc-tab" data-report-tab="1">ترشيح ٢</button>
-            <button class="rc-tab" data-report-tab="2">ترشيح ٣</button>
-          </div>
-        </div>
-        <div class="rc-body">
-          <div class="rc-ids">
-            <span class="rc-id">المنطقة <span id="repB">B14</span></span>
-            <span class="rc-id">المساحة <span id="repArea">107م²</span></span>
-            <span class="rc-id">الميزانية <span id="repBudget">مناسبة</span></span>
-          </div>
-
-          <span class="rc-section-label">مؤشرات الترشيح</span>
-          <div class="rc-metrics">
-            <div class="rc-metric"><span class="rc-metric-label">القيمة مقابل السعر</span><span class="rc-metric-value c-green" id="repValue">قوية</span></div>
-            <div class="rc-metric"><span class="rc-metric-label">صافي المساحة</span><span class="rc-metric-value" id="repNet">أفضل استغلال</span></div>
-            <div class="rc-metric"><span class="rc-metric-label">الفيو والخصوصية</span><span class="rc-metric-value c-gold" id="repView">Wide Garden</span></div>
-            <div class="rc-metric"><span class="rc-metric-label">الموقع داخل المرحلة</span><span class="rc-metric-value" id="repLocation">قريب ومناسب</span></div>
-          </div>
-
-          <span class="rc-section-label">مقارنة مختصرة</span>
-          <div class="rc-bars">
-            <div class="rc-bar-row"><span class="rc-bar-label">القيمة</span><div class="rc-bar-track"><div class="rc-bar-fill g" id="barValue" style="--w:90%;width:90%"></div></div><span class="rc-bar-value" id="barValueText" style="color:var(--green)">90%</span></div>
-            <div class="rc-bar-row"><span class="rc-bar-label">جودة السكن</span><div class="rc-bar-track"><div class="rc-bar-fill" id="barQuality" style="--w:84%;width:84%"></div></div><span class="rc-bar-value" id="barQualityText" style="color:var(--gold)">84%</span></div>
-            <div class="rc-bar-row"><span class="rc-bar-label">الخصوصية</span><div class="rc-bar-track"><div class="rc-bar-fill o" id="barPrivacy" style="--w:72%;width:72%"></div></div><span class="rc-bar-value" id="barPrivacyText" style="color:var(--orange)">72%</span></div>
-          </div>
-
-          <div class="rc-verdict">
-            <div class="rc-verdict-icon" aria-hidden="true">✓</div>
-            <p class="rc-verdict-text" id="repVerdict"><strong>سبب الترشيح:</strong> هذا الاختيار يحقق توازنًا قويًا بين السعر، جودة السكن، وصافي المساحة مقارنة بالبدائل في نفس نطاق الميزانية.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════
-     TRUST
+     TRUST + PROOF
 ═══════════════════════════════════════════════════ -->
 <section class="section section--dark" id="trust" aria-labelledby="trust-title">
   <div class="cta-glow" aria-hidden="true"></div>
   <div class="inner cta-section-inner">
-    <div class="trust-panel reveal">
-      <span class="sec-label">الثقة والحياد</span>
-      <h2 class="sec-title sec-title--light" id="trust-title">ثقة مبنية على الحياد</h2>
-      <p class="sec-sub sec-sub--light" style="margin-inline:auto;">لا نتقاضى عمولات على البيع. نحلّل السوق ونقارن البدائل لنرشّح ما يناسبك فعلًا، لا ما يدفعك لإتمام صفقة بعينها.</p>
-      <div class="trust-tags">
-        <span class="tag tag--light">لا عمولة بيع</span>
-        <span class="tag tag--light">ترشيحات مفسّرة</span>
-        <span class="tag tag--light">قرارك أولًا</span>
-      </div>
+    <header class="sec-hdr sec-hdr--center reveal">
+      <span class="sec-label">أرقام توضّح الفرق</span>
+      <h2 class="sec-title sec-title--light" id="trust-title">ثقة مبنية على وضوح وحياد</h2>
+      <p class="sec-sub sec-sub--light" style="margin-inline:auto;">نضع السوق في صورة أوضح، ونبني الترشيحات على بيانات وتحليل، لا على الانطباع أو مصلحة إتمام الصفقة. نمثّل مصلحتك كمشتري: نحلّل السوق ونقارن البدائل ونتفاوض لصالحك، دون عمولات بيع تجعل هدفنا إتمام الصفقة بدل جودة القرار.</p>
+    </header>
+
+    <div class="proof-grid proof-grid--dark reveal reveal-delay-1" aria-label="أرقام توضّح فرق NestMatch وثقته">
+      <article class="proof-card proof-card--featured tilt-card">
+        <span class="proof-num"><span data-count="90" data-prefix="+">0</span></span>
+        <h3>من الوحدات المعروضة</h3>
+        <p>داخل قاعدة بيانات مدارة بالذكاء الاصطناعي، لتمنحنا صورة أوسع عن السوق المتاح.</p>
+      </article>
+
+      <article class="proof-card tilt-card">
+        <span class="proof-num">0%</span>
+        <h3>عمولة بيع</h3>
+        <p>لأننا نمثّل مصلحة المشتري، لا مصلحة إتمام الصفقة بأي ثمن.</p>
+      </article>
+
+      <article class="proof-card tilt-card">
+        <span class="proof-num proof-word">رحلة أوضح</span>
+        <h3>من الميزانية إلى القرار</h3>
+        <p>من ميزانيتك واحتياجك إلى ترشيحات مختصرة ودعم تفاوضي للوصول لأفضل صفقة ممكنة.</p>
+      </article>
+    </div>
+
+    <div class="trust-tags reveal reveal-delay-2">
+      <span class="tag tag--light">لا عمولة بيع</span>
+      <span class="tag tag--light">ترشيحات مفسّرة</span>
+      <span class="tag tag--light">قرارك أولًا</span>
     </div>
   </div>
 </section>
@@ -1994,16 +2343,16 @@ nav.is-scrolled::before { opacity: 1; }
   <div class="inner cta-section-inner">
     <div class="cta-wrap reveal">
       <h2 class="cta-title" id="cta-title">ابدأ بخطوة بسيطة</h2>
-      <p class="cta-sub">أخبرنا بميزانيتك واحتياجك الأساسي، وسنبدأ في تحليل المتاح داخل السوق لترشيح أفضل الاختيارات المناسبة لك.</p>
+      <p class="cta-sub">أخبرنا بميزانيتك واحتياجك الأساسي، وسنبدأ في تحليل المتاح داخل السوق لترشيح أفضل الفرص المناسبة لك.</p>
 
       <div class="cta-steps">
         <div class="cta-step"><b>١. حدّد ميزانيتك</b><span>أدخل نطاق الميزانية المناسب لك.</span></div>
         <div class="cta-step"><b>٢. أخبرنا بما تحتاجه</b><span>المساحة، عدد الغرف، طريقة الدفع، وأهم تفضيلاتك.</span></div>
-        <div class="cta-step"><b>٣. استلم أفضل الترشيحات</b><span>نحلّل المتاح ونرسل لك قائمة مختصرة من الاختيارات الأقوى.</span></div>
+        <div class="cta-step"><b>٣. استلم أفضل الترشيحات</b><span>نحلّل المتاح ونرسل لك قائمة مختصرة من أفضل الفرص المناسبة لك.</span></div>
       </div>
 
       <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;">
-        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener" style="min-width:210px;">
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الفرص%20المتاحة%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener" style="min-width:210px;">
           ابدأ بميزانيتك
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
@@ -2016,6 +2365,8 @@ nav.is-scrolled::before { opacity: 1; }
   </div>
 </section>
 
+</main>
+
 <!-- ═══════════════════════════════════════════════════
      FOOTER
 ═══════════════════════════════════════════════════ -->
@@ -2025,7 +2376,7 @@ nav.is-scrolled::before { opacity: 1; }
 </footer>
 
 <div class="sticky-cta" id="stickyCta">
-  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الترشيحات%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener">
+  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الفرص%20المتاحة%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener">
     ابدأ بميزانيتك
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
   </a>
@@ -2044,6 +2395,38 @@ nav.is-scrolled::before { opacity: 1; }
   const qsa = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+  /* ── SITE INTRO ──────────────────────────────────── */
+  function initSiteIntro() {
+    const intro = qs('#siteIntro');
+    if (!intro) {
+      body.classList.add('intro-complete');
+      return;
+    }
+
+    const finish = () => {
+      if (body.classList.contains('intro-complete')) return;
+      intro.classList.add('intro-hidden');
+      body.classList.add('intro-complete');
+      window.scrollTo(0, 0);
+      // remove from DOM after the fade so it never blocks interaction
+      window.setTimeout(() => {
+        if (intro && intro.parentNode) intro.parentNode.removeChild(intro);
+      }, 1000);
+    };
+
+    if (prefersReducedMotion) {
+      window.setTimeout(finish, 600);
+      return;
+    }
+
+    // visible long enough to read the tagline calmly (~3.4s)
+    window.setTimeout(finish, 3400);
+    // hard safety fallback in case timers are throttled
+    window.setTimeout(() => {
+      if (!body.classList.contains('intro-complete')) finish();
+    }, 6000);
+  }
 
   const progressBar = qs('#progressBar');
   const stickyCta = qs('#stickyCta');
@@ -2066,6 +2449,7 @@ nav.is-scrolled::before { opacity: 1; }
     if (progressBar) progressBar.style.width = (progress * 100) + '%';
     if (stickyCta) stickyCta.classList.toggle('is-visible', scrollTop > window.innerHeight * 0.55);
     if (nav) nav.classList.toggle('is-scrolled', scrollTop > 24);
+    if (decisionProgress) decisionProgress.classList.toggle('is-visible', scrollTop > window.innerHeight * 0.20);
 
     updateActiveNavigation();
     updateDecisionProgress();
@@ -2105,7 +2489,7 @@ nav.is-scrolled::before { opacity: 1; }
 
   function updateDecisionProgress() {
     if (!decisionProgress) return;
-    const stages = ['hero', 'value', 'before-after', 'report', 'cta'];
+    const stages = ['hero', 'problem', 'value', 'how', 'criteria', 'deliverables', 'trust'];
     const y = window.scrollY + window.innerHeight * 0.42;
     let current = 'hero';
 
@@ -2141,7 +2525,7 @@ nav.is-scrolled::before { opacity: 1; }
     const p = clamp((-rect.top) / Math.max(rect.height - window.innerHeight * 0.4, 1), 0, 1);
     qsa('[data-depth]', hero).forEach((el) => {
       const depth = Number(el.dataset.depth || 0);
-      const move = p * depth * 160;
+      const move = p * depth * 140;
       el.style.transform = 'translate3d(0,' + move.toFixed(2) + 'px,0)';
     });
   }
@@ -2196,12 +2580,14 @@ nav.is-scrolled::before { opacity: 1; }
 
     const runCounter = (el) => {
       const target = Number(el.dataset.count || 0);
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '%';
       const duration = prefersReducedMotion ? 1 : 1300;
       const startTime = performance.now();
       function tick(now) {
         const p = clamp((now - startTime) / duration, 0, 1);
         const value = Math.round(target * easeOutCubic(p));
-        el.textContent = value.toLocaleString('en-US') + '+';
+        el.textContent = prefix + value.toLocaleString('en-US') + suffix;
         if (p < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
@@ -2233,8 +2619,8 @@ nav.is-scrolled::before { opacity: 1; }
         const y = event.clientY - rect.top;
         const px = x / rect.width;
         const py = y / rect.height;
-        const rotateY = (px - 0.5) * -7;
-        const rotateX = (py - 0.5) * 7;
+        const rotateY = (px - 0.5) * -6;
+        const rotateX = (py - 0.5) * 6;
 
         card.style.setProperty('--shine-x', (px * 100).toFixed(2) + '%');
         card.style.setProperty('--shine-y', (py * 100).toFixed(2) + '%');
@@ -2345,12 +2731,12 @@ nav.is-scrolled::before { opacity: 1; }
   }
 
   function init() {
+    initSiteIntro();
     initCursorGlow();
     initRevealAnimations();
     initCounters();
     initTiltCards();
     initMagneticButtons();
-    initReportTabs();
     initSmoothAnchors();
     updateGlobalScrollState();
   }
