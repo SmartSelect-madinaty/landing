@@ -1708,7 +1708,7 @@ footer {
 .journey-visual {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 16px;
   padding: 26px;
   border-radius: var(--radius-xl);
@@ -1769,6 +1769,14 @@ footer {
 }
 .journey-step--trust {
   background: linear-gradient(160deg, #fff, rgba(29,158,117,.08));
+}
+.journey-step--commission {
+  background: linear-gradient(160deg, #fff, var(--gold-faint));
+  border-color: rgba(201,168,76,.34);
+}
+.journey-step--commission .journey-num {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--navy-deep);
 }
 .journey-num {
   width: 52px;
@@ -2204,7 +2212,7 @@ footer {
     <header class="sec-hdr sec-hdr--center reveal">
       <span class="sec-label">الحل</span>
       <h2 class="sec-title" id="value-title">من سوق مشتت إلى قرار واضح</h2>
-      <p class="sec-sub">نحوّل فوضى السوق إلى ترشيحات واضحة، مبنية على رؤية أوسع، تحليل حقيقي للقيمة، وحياد كامل لصالح المشتري — ثم نساندك في التفاوض للوصول إلى أفضل صفقة ممكنة.</p>
+      <p class="sec-sub">نحوّل فوضى السوق إلى ترشيحات واضحة، مبنية على رؤية أوسع، تحليل حقيقي للقيمة، وتحيّز كامل لصالح المشتري — ثم نساندك في التفاوض للوصول إلى أفضل صفقة ممكنة.</p>
     </header>
 
     <div class="journey-visual reveal reveal-delay-1" aria-label="رحلة NestMatch من فوضى السوق إلى قرار واضح">
@@ -2238,7 +2246,15 @@ footer {
         <span class="journey-num">٤</span>
         <div class="journey-body">
           <h3>نمثّل مصلحتك كمشتري</h3>
-          <p>نتفاوض لصالحك، ولا نتقاضى عمولات على البيع. نجاحنا ليس في إتمام الصفقة، بل في مساعدتك على اختيار الوحدة الأنسب لك.</p>
+          <p>نتفاوض لصالحك بعد تحديد الفرصة الأفضل، ونساندك للوصول إلى صفقة مناسبة دون ضغط أو استعجال في القرار.</p>
+        </div>
+      </article>
+
+      <article class="journey-step journey-step--commission tilt-card">
+        <span class="journey-num">٥</span>
+        <div class="journey-body">
+          <h3>0% عمولة — تحيّز كامل لصالح المشتري</h3>
+          <p>لا نتقاضى أي عمولات؛ تركيزنا على مصلحتك وجودة قرارك، لا على إتمام الصفقة فقط.</p>
         </div>
       </article>
     </div>
