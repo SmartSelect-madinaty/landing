@@ -6,7 +6,7 @@
 
 <title>NestMatch — ابدأ بميزانيتك</title>
 
-<meta name="description" content="NestMatch مستشار عقاري مستقل يعمل لصالح المشتري. نحلّل السوق ونقيّم الوحدات لنرشّح لك أفضل الفرص المناسبة لميزانيتك واحتياجك، ثم نتفاوض لصالحك." />
+<meta name="description" content="NestMatch أول مستشار عقاري حقيقى يعمل لصالح المشتري. نحلّل السوق ونقيّم الوحدات لنرشّح لك أفضل الفرص المناسبة لميزانيتك واحتياجك، ثم نتفاوض لصالحك ." />
 <meta name="keywords" content="NestMatch, عقارات مدينتي, شراء شقة في مدينتي, مستشار عقاري مستقل, تحليل عقاري, أفضل قيمة مقابل سعر, Property Decision Intelligence" />
 <meta name="author" content="NestMatch" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -484,6 +484,20 @@ body::before {
   border-color: rgba(255,255,255,.14);
   color: rgba(255,255,255,.82);
 }
+.tag--commission {
+  background: linear-gradient(135deg, rgba(201,168,76,.22), rgba(255,255,255,.07));
+  border-color: rgba(201,168,76,.42);
+  color: var(--gold-light);
+  box-shadow: 0 10px 30px rgba(201,168,76,.12), inset 0 1px 0 rgba(255,255,255,.08);
+}
+.tag--commission::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--gold);
+  box-shadow: 0 0 0 5px rgba(201,168,76,.10), 0 0 16px rgba(201,168,76,.42);
+}
 
 /* ── BUTTONS ────────────────────────────────────────── */
 .btn-primary,
@@ -749,6 +763,7 @@ nav.is-scrolled::before { opacity: 1; }
   line-height: 1.95;
   margin-bottom: 28px;
 }
+
 .value-strip {
   display: flex;
   flex-wrap: wrap;
@@ -2132,6 +2147,7 @@ footer {
         <span class="tag tag--light">تقييم موضوعي</span>
         <span class="tag tag--light">فرص حقيقية</span>
         <span class="tag tag--light">تفاوض لصالحك</span>
+        <span class="tag tag--light tag--commission">0% عمولة</span>
       </div>
 
       <div class="hero-ctas reveal reveal-delay-3">
