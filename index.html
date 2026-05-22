@@ -6,7 +6,7 @@
 
 <title>NestMatch — ابدأ بميزانيتك</title>
 
-<meta name="description" content="NestMatch أول مستشار عقاري حقيقى يعمل لصالح المشتري. نحلّل السوق ونقيّم الوحدات لنرشّح لك أفضل الفرص المناسبة لميزانيتك واحتياجك، ثم نتفاوض لصالحك ." />
+<meta name="description" content="NestMatch أول مستشار عقاري حقيقى يعمل لصالح المشتري. نحلّل السوق ونقيّم الوحدات لنرشّح لك أفضل الفرص المتوافقة مع ميزانيتك واحتياجك، ثم نتفاوض لصالحك ." />
 <meta name="keywords" content="NestMatch, عقارات مدينتي, شراء شقة في مدينتي, مستشار عقاري مستقل, تحليل عقاري, أفضل قيمة مقابل سعر, Property Decision Intelligence" />
 <meta name="author" content="NestMatch" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -20,7 +20,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="NestMatch" />
 <meta property="og:title" content="NestMatch — ابدأ بميزانيتك" />
-<meta property="og:description" content="مستشار عقاري مستقل يعمل لصالح المشتري. نحلّل السوق ونقيّم الوحدات لنرشّح لك أفضل الفرص المناسبة لميزانيتك واحتياجك، ثم نتفاوض لصالحك." />
+<meta property="og:description" content="مستشار عقاري مستقل يعمل لصالح المشتري. نحلّل السوق ونقيّم الوحدات لنرشّح لك أفضل الفرص المتوافقة مع ميزانيتك واحتياجك، ثم نتفاوض لصالحك." />
 <meta property="og:url" content="https://nestmatch.net/" />
 <meta property="og:image" content="https://nestmatch.net/nestmatch_assets/nestmatch-og.png" />
 <meta property="og:image:secure_url" content="https://nestmatch.net/nestmatch_assets/nestmatch-og.png" />
@@ -32,7 +32,7 @@
 <!-- Twitter / X Preview -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="NestMatch — ابدأ بميزانيتك" />
-<meta name="twitter:description" content="نحلّل السوق ونقيّم الوحدات، لنرشّح لك أفضل الفرص المناسبة لميزانيتك واحتياجك، ثم نتفاوض لصالحك." />
+<meta name="twitter:description" content="نحلّل السوق ونقيّم الوحدات، لنرشّح لك أفضل الفرص المتوافقة مع ميزانيتك واحتياجك، ثم نتفاوض لصالحك." />
 <meta name="twitter:image" content="https://nestmatch.net/nestmatch_assets/nestmatch-og.png" />
 
 <script type="application/ld+json">
@@ -43,7 +43,7 @@
   "url": "https://nestmatch.net/",
   "logo": "https://nestmatch.net/nestmatch_assets/nestmatch-og.png",
   "image": "https://nestmatch.net/nestmatch_assets/nestmatch-og.png",
-  "description": "NestMatch مستشار عقاري مستقل يعمل لصالح المشتري. نحلّل السوق ونقيّم الوحدات لنرشّح أفضل الفرص المناسبة لميزانية واحتياج المشتري، ثم نتفاوض لصالحه.",
+  "description": "NestMatch مستشار عقاري مستقل يعمل لصالح المشتري. نحلّل السوق ونقيّم الوحدات لنرشّح أفضل الفرص المتوافقة مع ميزانية واحتياج المشتري، ثم نتفاوض لصالحه.",
   "areaServed": {
     "@type": "Place",
     "name": "Madinaty, Egypt"
@@ -1804,6 +1804,213 @@ footer {
   line-height: 1.9;
 }
 
+/* ── SERVICES SECTION ───────────────────────────────── */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+.service-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid rgba(13,31,60,.08);
+  border-radius: var(--radius-xl);
+  padding: clamp(28px, 3.4vw, 42px);
+  box-shadow: 0 22px 70px rgba(6,14,28,.08);
+  transition: transform .28s var(--ease-soft), box-shadow .28s ease, border-color .28s ease;
+}
+.service-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 32px 92px rgba(6,14,28,.15);
+  border-color: rgba(201,168,76,.36);
+}
+.service-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -70px -100px auto;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: rgba(201,168,76,.10);
+  pointer-events: none;
+}
+.service-card--search {
+  background:
+    radial-gradient(circle at 86% 12%, rgba(13,31,60,.06), transparent 38%),
+    #fff;
+}
+.service-card--featured {
+  background:
+    radial-gradient(circle at 86% 12%, rgba(201,168,76,.18), transparent 38%),
+    linear-gradient(160deg, #fff, var(--gold-faint));
+  border-color: rgba(201,168,76,.38);
+}
+.service-badge {
+  align-self: flex-start;
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 16px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--navy-deep);
+  font-size: 12px;
+  font-weight: 900;
+  box-shadow: 0 14px 34px rgba(201,168,76,.24);
+}
+.service-badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--navy-deep);
+  opacity: .72;
+}
+.service-topline {
+  position: relative;
+  z-index: 1;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.service-title {
+  position: relative;
+  z-index: 1;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.2vw, 52px);
+  font-weight: 400;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.service-for {
+  position: relative;
+  z-index: 1;
+  color: var(--navy);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.85;
+  margin-bottom: 14px;
+}
+.service-for--strong {
+  font-size: 17px;
+}
+.service-text {
+  position: relative;
+  z-index: 1;
+  color: var(--warm-700);
+  font-size: 15px;
+  line-height: 1.95;
+  margin-bottom: 14px;
+}
+.service-note {
+  position: relative;
+  z-index: 1;
+  padding: 13px 15px;
+  border-radius: var(--radius-md);
+  background: rgba(13,31,60,.06);
+  border: 1px solid rgba(13,31,60,.08);
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.75;
+  margin-bottom: 18px;
+}
+.service-outcome {
+  position: relative;
+  z-index: 1;
+  margin: 10px 0 14px;
+  padding: 18px 18px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(13,31,60,.035);
+  border: 1px solid rgba(13,31,60,.07);
+}
+.service-outcome-title {
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+.service-outcome-list {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  color: var(--warm-700);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.service-outcome-list li {
+  position: relative;
+  padding-inline-start: 20px;
+}
+.service-outcome-list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 5px rgba(201,168,76,.10);
+}
+.service-list {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  margin: 6px 0 26px;
+  color: var(--warm-700);
+  font-size: 14.5px;
+  line-height: 1.75;
+}
+.service-list li {
+  position: relative;
+  padding-inline-start: 22px;
+}
+.service-list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 11px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 5px rgba(201,168,76,.10);
+}
+.service-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+}
+.service-btn {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  width: fit-content;
+}
+.service-actions .service-btn {
+  margin-top: 0;
+}
+.service-btn--secondary {
+  background: rgba(255,255,255,.48);
+}
 
 .proof-section {
   padding-top: 0;
@@ -1957,6 +2164,20 @@ footer {
 .criteria-item.c5 { grid-column: 8 / 13; grid-row: 5 / 7; }
 
 @media (max-width: 900px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  .service-card {
+    min-height: auto;
+  }
+  .service-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .service-actions .service-btn,
+  .service-btn {
+    width: 100%;
+  }
   .journey-visual {
     grid-template-columns: 1fr;
     padding: 18px;
@@ -2105,10 +2326,10 @@ footer {
 <div class="decision-progress" id="decisionProgress" aria-label="مراحل تجربة NestMatch" aria-hidden="true">
   <a class="dp-item is-active" data-track="hero" href="#hero">البداية</a>
   <a class="dp-item" data-track="problem" href="#problem">ألم السوق</a>
+  <a class="dp-item" data-track="services" href="#services">الخدمات</a>
   <a class="dp-item" data-track="value" href="#value">الحل</a>
   <a class="dp-item" data-track="how" href="#how">كيف نعمل</a>
   <a class="dp-item" data-track="criteria" href="#criteria">كيف نقيّم</a>
-  <a class="dp-item" data-track="deliverables" href="#deliverables">ماذا تستلم</a>
   <a class="dp-item" data-track="trust" href="#trust">لماذا نثق</a>
 </div>
 
@@ -2125,7 +2346,7 @@ footer {
     مستشار عقاري مستقل يعمل لصالح المشتري
   </div>
 
-  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20ترشيحات%20NestMatch%20بناءً%20على%20ميزانيتي%20في%20مدينتي" class="nav-cta magnetic" target="_blank" rel="noopener">
+  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20خدمة%20ترشيح%20أفضل%20الاختيارات%20لشقة%20في%20مدينتي" class="nav-cta magnetic" target="_blank" rel="noopener">
     ابدأ بميزانيتك
   </a>
 </nav>
@@ -2159,9 +2380,13 @@ footer {
       </div>
 
       <div class="hero-ctas reveal reveal-delay-3">
-        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الفرص%20المتاحة%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener">
-          ابدأ بميزانيتك
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20خدمة%20ترشيح%20أفضل%20الاختيارات%20لشقة%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener">
+          ترشيح أفضل الاختيارات
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+
+        <a href="#how" class="btn-ghost magnetic">
+          اعرف كيف نساعدك
         </a>
 
       </div>
@@ -2246,7 +2471,7 @@ footer {
         <span class="journey-num">٤</span>
         <div class="journey-body">
           <h3>0% عمولة — تفاوض لصالحك</h3>
-          <p>لا نتقاضى أي عمولات على البيع؛ لذلك نعمل بتحيّز كامل لصالحك كمشتري. نشاركك رحلة البحث من تحليل البدائل وترشيح الأنسب، ثم نتفاوض لصالحك للوصول إلى أفضل صفقة ممكنة.</p>
+          <p>لا نتقاضى أي عمولات على البيع؛ لذلك نعمل بتحيّز كامل لصالحك كمشتري. نشاركك عملية الاختيار من تحليل البدائل وترشيح الأنسب، ثم نتفاوض لصالحك للوصول إلى أفضل صفقة ممكنة.</p>
         </div>
       </article>
     </div>
@@ -2261,6 +2486,7 @@ footer {
     <header class="sec-hdr sec-hdr--center reveal">
       <span class="sec-label">طريقة العمل</span>
       <h2 class="sec-title" id="how-title">كيف نعمل لصالحك؟</h2>
+      <p class="sec-sub">نفس المنهج التحليلي، لكن المسار يختلف حسب مرحلتك: ترشيح أفضل الاختيارات من السوق، أو مقارنة مركّزة بين وحدات محددة.</p>
     </header>
 
     <div class="steps-wrap reveal">
@@ -2275,14 +2501,14 @@ footer {
 
         <div class="step">
           <div class="step-circle"><span class="step-num">٢</span></div>
-          <h3 class="step-title">نحلّل السوق ونرشّح أفضل الفرص المتاحة</h3>
-          <p class="step-text">نعتمد على قاعدة بيانات مدارة بالذكاء الاصطناعي، ونظام تقييم معياري يحدد القيمة السوقية وجودة السكن، لنقدّم لك قائمة بأفضل الفرص المتاحة بالسوق، مرتّبة حسب تفضيلاتك.</p>
+          <h3 class="step-title">نحلّل السوق أو الوحدات المختارة</h3>
+          <p class="step-text">في خدمة الترشيح نحلّل السوق المتاح ونرشّح أفضل الاختيارات، وفي خدمة المقارنة نحلّل الوحدات التي أرسلتها ونكشف الفروق الحقيقية بينها.</p>
         </div>
 
         <div class="step">
           <div class="step-circle"><span class="step-num">٣</span></div>
-          <h3 class="step-title">نتفاوض لصالحك</h3>
-          <p class="step-text">بعد المقارنة وتحديد الفرصة الأفضل، نتفاوض لصالحك للوصول إلى أفضل صفقة ممكنة، مع الحفاظ على مصلحتك كمشتري.</p>
+          <h3 class="step-title">نوضّح القرار ثم نتفاوض لصالحك</h3>
+          <p class="step-text">نساعدك على معرفة الوحدة الأقوى ولماذا، ثم ندعمك في التفاوض عند الحاجة، دون عمولة بيع تؤثر على مصلحتك كمشتري.</p>
         </div>
       </div>
     </div>
@@ -2340,34 +2566,51 @@ footer {
 </section>
 
 <!-- ═══════════════════════════════════════════════════
-     DELIVERABLES
+     SERVICES
 ═══════════════════════════════════════════════════ -->
-<section class="section section--white" id="deliverables" aria-labelledby="deliver-title">
+<section class="section section--white" id="services" aria-labelledby="services-title">
   <div class="inner">
-    <div class="deliver-grid">
-      <header class="sec-hdr reveal">
-        <span class="sec-label">المخرجات</span>
-        <h2 class="sec-title" id="deliver-title">ماذا تستلم من NestMatch؟</h2>
-        <p class="sec-sub">الخدمة لا تعطيك أسماء وحدات فقط، بل تعطيك نتيجة عملية تساعدك على اتخاذ قرار أوضح: قائمة مختصرة، مقارنة موضوعية، ودعم تفاوضي عند اختيار الفرصة الأفضل.</p>
-      </header>
+    <header class="sec-hdr sec-hdr--center reveal">
+      <span class="sec-label">الخدمات</span>
+      <h2 class="sec-title" id="services-title">اختر مسارك نحو قرار أوضح</h2>
+      <p class="sec-sub">مساران واضحان حسب مرحلتك: ترشيح أفضل الاختيارات من السوق، أو مقارنة مركّزة بين وحدات محددة.</p>
+    </header>
 
-      <div class="deliver-list">
-        <div class="deliver-item reveal tilt-card">
-          <div class="deliver-icon">١</div>
-          <div>
-            <h3 class="deliver-title">قائمة الترشيحات</h3>
-            <p class="deliver-text">قائمة مختصرة بأفضل الفرص المناسبة لميزانيتك واحتياجك، تشمل مقارنة موضوعية بين الترشيحات وفقًا لمعايير التقييم، وتوضح الفروق الجوهرية بينها لتمنحك صورة أوضح قبل اتخاذ القرار.</p>
-          </div>
+    <div class="services-grid reveal reveal-delay-1" aria-label="خدمات NestMatch">
+      <article class="service-card service-card--search tilt-card">
+        <div class="service-topline">لمن يريد اختصار البحث</div>
+        <h3 class="service-title">ترشيح أفضل الاختيارات</h3>
+        <p class="service-text">نحلّل السوق المتاح ونختصره لك في أقوى الاختيارات المتوافقة مع ميزانيتك واحتياجك، بدل أن تضيع بين عشرات البدائل.</p>
+
+        <div class="service-outcome" aria-label="مخرجات خدمة ترشيح أفضل الاختيارات">
+          <div class="service-outcome-title">ما الذي ستحصل عليه؟</div>
+          <ul class="service-outcome-list">
+            <li>قائمة مختصرة بأفضل الاختيارات</li>
+            <li>توجيه للمعاينات الأهم</li>
+            <li>دعم في القرار والتفاوض</li>
+          </ul>
         </div>
 
-        <div class="deliver-item reveal reveal-delay-1 tilt-card">
-          <div class="deliver-icon">٢</div>
-          <div>
-            <h3 class="deliver-title">دعم تفاوضي</h3>
-            <p class="deliver-text">مساندة في التفاوض بعد تحديد الفرصة الأفضل، للوصول إلى أفضل صفقة ممكنة.</p>
-          </div>
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20خدمة%20ترشيح%20أفضل%20الاختيارات%20لشقة%20في%20مدينتي" class="btn-outline magnetic service-btn" target="_blank" rel="noopener">ترشيح أفضل الاختيارات</a>
+      </article>
+
+      <article class="service-card service-card--compare service-card--featured tilt-card">
+        <div class="service-topline">عندما تكون محتارًا بين بدائل</div>
+        <h3 class="service-title">المقارنة بين الوحدات</h3>
+        <p class="service-text">لو معروض عليك أكثر من وحدة، نطبّق منهج التقييم الخاص بـ NestMatch لنكشف الفروق الحقيقية ونوضح أي وحدة تمثل قرارًا أفضل.</p>
+        <p class="service-note"><strong>مقارنة مجانية بين أول وحدتين فقط.</strong><br>ما بعدها ضمن خدمة المقارنة المدفوعة.</p>
+
+        <div class="service-outcome" aria-label="مخرجات خدمة المقارنة بين الوحدات">
+          <div class="service-outcome-title">ما الذي ستحصل عليه؟</div>
+          <ul class="service-outcome-list">
+            <li>مقارنة واضحة بين البدائل</li>
+            <li>فروق جوهرية لا تظهر من الإعلان</li>
+            <li>توصية تساعدك على قرار أوضح</li>
+          </ul>
         </div>
-      </div>
+
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20مقارنة%20واضحة%20بين%20وحدات%20معروضة%20عليّ%20في%20مدينتي" class="btn-primary magnetic service-btn" target="_blank" rel="noopener">اطلب مقارنة واضحة</a>
+      </article>
     </div>
   </div>
 </section>
@@ -2398,7 +2641,7 @@ footer {
       </article>
 
       <article class="proof-card tilt-card">
-        <span class="proof-num proof-word">رحلة أوضح</span>
+        <span class="proof-num proof-word">قرار أوضح</span>
         <h3>من الميزانية إلى القرار</h3>
         <p>من ميزانيتك واحتياجك إلى ترشيحات مختصرة ودعم تفاوضي للوصول لأفضل صفقة ممكنة.</p>
       </article>
@@ -2419,25 +2662,24 @@ footer {
   <div class="cta-glow" aria-hidden="true"></div>
   <div class="inner cta-section-inner">
     <div class="cta-wrap reveal">
-      <h2 class="cta-title" id="cta-title">ابدأ بخطوة بسيطة</h2>
-      <p class="cta-sub">أخبرنا بميزانيتك واحتياجك الأساسي، وسنبدأ في تحليل المتاح داخل السوق لترشيح أفضل الفرص المناسبة لك.</p>
+      <h2 class="cta-title" id="cta-title">اختر الخطوة المناسبة الآن</h2>
+      <p class="cta-sub">احصل على أقوى الاختيارات إذا كنت لا تعرف من أين تبدأ، أو اطلب مقارنة واضحة إذا كانت لديك بدائل وتحتاج قرارًا أوضح.</p>
 
       <div class="cta-steps">
-        <div class="cta-step"><b>١. حدّد ميزانيتك</b><span>أدخل نطاق الميزانية المناسب لك.</span></div>
-        <div class="cta-step"><b>٢. أخبرنا بما تحتاجه</b><span>المساحة، عدد الغرف، طريقة الدفع، وأهم تفضيلاتك.</span></div>
-        <div class="cta-step"><b>٣. استلم أفضل الترشيحات</b><span>نحلّل المتاح ونرسل لك قائمة مختصرة من أفضل الفرص المناسبة لك.</span></div>
+        <div class="cta-step"><b>١. ترشيح أفضل الاختيارات</b><span>لمن يريد قائمة مختصرة من أقوى الوحدات بدل التشتت بين البدائل.</span></div>
+        <div class="cta-step"><b>٢. مقارنة واضحة</b><span>لمن لديه وحدات معروضة عليه ويريد كشف الفروق الحقيقية بينها.</span></div>
+        <div class="cta-step"><b>٣. قرار وتفاوض</b><span>نساعدك على فهم القرار الأفضل ونقاط التفاوض الممكنة.</span></div>
       </div>
 
       <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;">
-        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الفرص%20المتاحة%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener" style="min-width:210px;">
-          ابدأ بميزانيتك
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20خدمة%20ترشيح%20أفضل%20الاختيارات%20لشقة%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener" style="min-width:240px;">
+          ترشيح أفضل الاختيارات
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
-        <a href="tel:+201271028216" class="btn-ghost magnetic">
-          اتصل بنا
+        <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20مقارنة%20واضحة%20بين%20وحدات%20معروضة%20عليّ%20في%20مدينتي" class="btn-ghost magnetic" target="_blank" rel="noopener">
+          اطلب مقارنة واضحة
         </a>
       </div>
-      <p class="cta-note">بدون عمولة بيع — <span>قرارك أولًا</span></p>
     </div>
   </div>
 </section>
@@ -2453,8 +2695,8 @@ footer {
 </footer>
 
 <div class="sticky-cta" id="stickyCta">
-  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20أن%20أبدأ%20بميزانيتي%20وأحصل%20على%20أفضل%20الفرص%20المتاحة%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener">
-    ابدأ بميزانيتك
+  <a href="https://wa.me/201271028216?text=مرحباً%20—%20أريد%20خدمة%20ترشيح%20أفضل%20الاختيارات%20لشقة%20في%20مدينتي" class="btn-primary magnetic" target="_blank" rel="noopener">
+    ترشيح أفضل الاختيارات
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
   </a>
 </div>
@@ -2566,7 +2808,7 @@ footer {
 
   function updateDecisionProgress() {
     if (!decisionProgress) return;
-    const stages = ['hero', 'problem', 'value', 'how', 'criteria', 'deliverables', 'trust'];
+    const stages = ['hero', 'problem', 'services', 'value', 'how', 'criteria', 'trust'];
     const y = window.scrollY + window.innerHeight * 0.42;
     let current = 'hero';
 
